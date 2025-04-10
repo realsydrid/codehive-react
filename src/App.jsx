@@ -1,7 +1,15 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import HomePage from "./pages/HomePage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
+import TradeMainPage from "./pages/trade/TradeMainPage.jsx";
+import TradeOrderPage from "./pages/trade/TradeMainPage.jsx";
+import TradeAskingPricePage from "./pages/trade/TradeAskingPricePage.jsx";
+import TradeChartPage from "./pages/trade/TradeChartPage.jsx";
+import TradePricePage from "./pages/trade/TradePricePage.jsx";
+import TradeInfoPage from "./pages/trade/TradeInfoPage.jsx";
 import './App.css';
+
+
 
 function App() {
 
@@ -12,15 +20,15 @@ function App() {
                 <Route element={<MainLayout/>}>
                     <Route path="/" element={<HomePage/>}/> {/*홈*/}
 
-                    {/*/!*trade*!/*/}
-                    {/*<Route path="/trade">*/}
-                    {/*    <Route index element={<TradeMainPage/>}/> /!*거래소 메인페이지에서 원화,보유,관심*!/*/}
-                    {/*    <Route path="order/:market" element={<TradeOrderPage/>}/> /!*오더페이지에서 매수 매도 내역 구현*!/*/}
-                    {/*    <Route path="asking-price/:market" element={<TradeAskingPricePage/>}/> /!*호가*!/*/}
-                    {/*    <Route path="chart/:market" element={<TradeChartPage/>}/> /!*차트*!/*/}
-                    {/*    <Route path="price/:market" element={<TradePricePage/>}/> /!*시세*!/*/}
-                    {/*    <Route path="info/:market" element={<TradeInfoPage/>}/> /!*정보*!/*/}
-                    {/*</Route>*/}
+                    {/*trade*/}
+                    <Route path="/trade">
+                        <Route index element={<TradeMainPage/>}/> {/*거래소 메인페이지에서 원화,보유,관심*/}
+                        <Route path="order/:market" element={<TradeOrderPage/>}/> {/*오더페이지에서 매수 매도 내역 구현*/}
+                        <Route path="asking-price/:market" element={<TradeAskingPricePage/>}/> {/*호가*/}
+                        <Route path="chart/:market" element={<TradeChartPage/>}/> {/*차트*/}
+                        <Route path="price/:market" element={<TradePricePage/>}/> {/*시세*/}
+                        <Route path="info/:market" element={<TradeInfoPage/>}/> {/*정보*/}
+                    </Route>
 
                     {/*/!*asset*!/*/}
                     {/*<Route path="/asset">*/}
