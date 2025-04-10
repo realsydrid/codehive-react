@@ -1,16 +1,12 @@
 import {Link} from "react-router-dom";
+import AssetNavBar from "./AssetNavBar.jsx";
 
 export default function AssetHistoryPage() {
     return (
         <>
+            <AssetNavBar />
             <h1>거래내역</h1>
-            <nav>
-                <ul>
-                    <li><Link to="/asset/my-asset">보유자산</Link></li>
-                    <li><Link to="/asset/history">거래내역</Link></li>
-                    <li><Link to="/asset/pending-orders">미체결</Link></li>
-                </ul>
-            </nav>
+
         </>
     )
 }
