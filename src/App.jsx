@@ -27,10 +27,12 @@ import UsersProfilePage from "./pages/users/UsersProfilePage.jsx";
 import UsersProfileFollowingsPage from "./pages/users/UsersProfileFollowingsPage.jsx";
 import UsersProfileFollowersPage from "./pages/users/UsersProfileFollowersPage.jsx";
 import UsersProfileBoardsPage from "./pages/users/UsersProfileBoardsPage.jsx";
+import SettingsMainPage from "./pages/settings/SettingsMainPage.jsx";
 
 
 
 function App() {
+
 
 
     return (
@@ -68,12 +70,7 @@ function App() {
                         <Route path="search" element={<CommunitySearchPage/>}/>
                     </Route>
 
-                    {/*news*/}
-                    {/*    <Route path="posts/:postNo" element={<CommunityPostDetailPage/>}/>*/}
-                    {/*    <Route path="posts/:postNo/modify" element={<CommunityPostModifyPage/>}/>*/}
-                    {/*    <Route path="search" element={<CommunitySearchPage/>}/>*/}
-                    {/*</Route>*/}
-
+                    {/*/!*news*!/*/}
                     {/*<Route path="/news">*/}
                     {/*    <Route index element={<NewsMainPage/>}/> /!*뉴스메인(전체뉴스,암호화폐,해외증시,환율/금리)*!/*/}
 
@@ -89,29 +86,24 @@ function App() {
                     {/*</Route>*/}
 
 
-                    {/*/!*settings*!/*/}
+                    {/*settings*/}
                     <Route path="/settings">
+                        <Route index element={<SettingsMainPage/>}/>
                     {/*    /!*고객센터*!/*/}
                     {/*    <Route path="support">*/}
                     {/*        <Route index element={<SettingsSupportMainPage/>}/> /!*고객센터메인*!/*/}
-                    {/*settings*/}
-                    {/*<Route path="/settings">*/}
-                    {/*    <Route index element={<SettingsMainPage/>}/>*/}
-                        {/*고객센터*/}
-                        {/*<Route path="support">*/}
-                        {/*    <Route index element={<SettingsSupportMainPage/>}/> /!*고객센터메인*!/*/}
 
-                        {/*    <Route path="notice">*/}
-                        {/*        <Route index element={<SettingsSupportNoticeMainPage/>}/> /!*공지사항메인*!/*/}
-                        {/*        <Route path=":noticeNo" element={<SettingsSupportNoticeDetailPage/>}/> /!*공지사항디테일*!/*/}
-                        {/*        <Route path="search" element={<SettingsSupportNoticeSearchPage/>}/> /!*공지사항검색결과*!/*/}
-                        {/*    </Route>*/}
+                    {/*        <Route path="notice">*/}
+                    {/*            <Route index element={<SettingsSupportNoticeMainPage/>}/> /!*공지사항메인*!/*/}
+                    {/*            <Route path=":noticeNo" element={<SettingsSupportNoticeDetailPage/>}/> /!*공지사항디테일*!/*/}
+                    {/*            <Route path="search" element={<SettingsSupportNoticeSearchPage/>}/> /!*공지사항검색결과*!/*/}
+                    {/*        </Route>*/}
 
-                        {/*    <Route path="faq">*/}
-                        {/*        <Route index element={<SettingsSupportFaqMainPage/>}/> /!*자주묻는질문메인*!/*/}
-                        {/*        <Route path=":faqNo" element={<SettingsSupportFaqDetailPage/>}/> /!*자주묻는질문디테일*!/*/}
-                        {/*        <Route path="search" element={<SettingsSupportFaqSearchPage/>}/> /!*자주묻는질문검색결과*!/*/}
-                        {/*    </Route>*/}
+                    {/*        <Route path="faq">*/}
+                    {/*            <Route index element={<SettingsSupportFaqMainPage/>}/> /!*자주묻는질문메인*!/*/}
+                    {/*            <Route path=":faqNo" element={<SettingsSupportFaqDetailPage/>}/> /!*자주묻는질문디테일*!/*/}
+                    {/*            <Route path="search" element={<SettingsSupportFaqSearchPage/>}/> /!*자주묻는질문검색결과*!/*/}
+                    {/*        </Route>*/}
 
                     {/*        <Route path="qna">*/}
                     {/*            <Route path="write" element={<SettingsQnaWritePage/>}/> /!*1:1문의작성하기*!/*/}
@@ -119,38 +111,19 @@ function App() {
                     {/*            <Route path=":qeustionNo" element={<SettingsQnaQuestionDetailPage/>}/> /!*문의내역디테일*!/*/}
                     {/*        </Route>*/}
                     {/*    </Route>*/}
-                        {/*알림*/}
+                    {/*    /!*알림*!/*/}
                         <Route path="notifications">
                             <Route index element={<SettingsNotificationsPage/>}/> {/*알림설정*/}
                             <Route path="volatility" element={<SettingsNotificationsVolatilityPage/>}/> {/*시세변동알림목록*/}
                             <Route path="target-price" element={<SettingsNotificationsTargetPricePage/>}/> {/*지정가변동알림목록*/}
                         </Route>
-                        {/*내정보*/}
+                    {/*    /!*내정보*!/*/}
                         <Route path="my-info" element={<SettingsMyInfoPage/>}/>
-                        {/*개인정보취급방침*/}
+                    {/*    /!*개인정보취급방침*!/*/}
                         <Route path="privacy-policy" element={<SettingsPrivacyPolicyPage/>}/>
-                        {/*이용약관*/}
+                    {/*    /!*이용약관*!/*/}
                         <Route path="terms" element={<SettingsTermsPage/>}/>
                     </Route>
-                        {/*    <Route path="qna">*/}
-                        {/*        <Route path="write" element={<SettingsQnaWritePage/>}/> /!*1:1문의작성하기*!/*/}
-                        {/*        <Route path="history" element={<SettingsQnaHistoryPage/>}/> /!*문의내역(답변대기,답변완료)*!/*/}
-                        {/*        <Route path=":questionNo" element={<SettingsQnaQuestionDetailPage/>}/> /!*문의내역디테일*!/*/}
-                        {/*    </Route>*/}
-                        {/*</Route>*/}
-                        {/*/!*알림*!/*/}
-                        {/*<Route path="notifications">*/}
-                        {/*    <Route index element={<SettingsNotificationsPage/>}/> /!*알림설정*!/*/}
-                        {/*    <Route path="volatility" element={<SettingsNotificationsVolatilityPage/>}/> /!*시세변동알림목록*!/*/}
-                        {/*    <Route path="target-price" element={<SettingsNotificationsTargetPricePage/>}/> /!*지정가변동알림목록*!/*/}
-                        {/*</Route>*/}
-                        {/*/!*내정보*!/*/}
-                        {/*<Route path="my-info" element={<SettingsMyInfoPage/>}/>*/}
-                        {/*/!*개인정보취급방침*!/*/}
-                        {/*<Route path="privacy-policy" element={<SettingsPrivacyPolicyPage/>}/>*/}
-                        {/*/!*이용약관*!/*/}
-                        {/*<Route path="terms" element={<SettingsTermsPage/>}/>*/}
-                    {/*</Route>*/}
 
 
                     {/*users*/}
