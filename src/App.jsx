@@ -8,7 +8,10 @@ import NewsFearGreedIndexPage from "./pages/news/NewsFearGreedIndexPage.jsx";
 import NewsKimchiPremiumPage from "./pages/news/NewsKimchiPremiumPage.jsx";
 import AssetHistoryPage from "./pages/asset/AssetHistoryPage.jsx";
 import AssetPendingOrdersPage from "./pages/asset/AssetPendingOrdersPage.jsx";
-import FuturesMainPage from "./pages/news/FuturesMainPage.jsx";
+import FuturesMainPage from "./pages/news/futures/FuturesMainPage.jsx";
+import FuturesLiquidationsPage from "./pages/news/futures/FuturesLiquidationsPage.jsx";
+import FuturesLongShortPage from "./pages/news/futures/FuturesLongShortPage.jsx";
+import FuturesOpenInterestPage from "./pages/news/futures/FuturesOpenInterestPage.jsx";
 
 function App() {
 
@@ -57,9 +60,9 @@ function App() {
                         <Route path="futures">
                             <Route index element={<FuturesMainPage/>}/> {/*선물메인페이지(진입메뉴페이지)*/}
 
-                    {/*        <Route path="liquidations" element={<FuturesLiquidationsPage/>}/> /!*강제청산비율*!/*/}
-                    {/*        <Route path="long-short" element={<FuturesLongShortPage/>}/> /!*롱숏비율*!/*/}
-                    {/*        <Route path="open-interest" element={<FuturesOpenInterestPage/>}/> /!*미결제약정*!/*/}
+                            <Route path="liquidations" element={<FuturesLiquidationsPage/>}/> {/*강제청산비율*/}
+                            <Route path="long-short" element={<FuturesLongShortPage/>}/> {/*롱숏비율*/}
+                            <Route path="open-interest" element={<FuturesOpenInterestPage/>}/> {/*미결제약정*/}
                         </Route>
                     </Route>
 

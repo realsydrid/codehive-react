@@ -2,7 +2,7 @@ import NewsFearGreedIndexPage from "./NewsFearGreedIndexPage.jsx";
 import NewsKimchiPremiumPage from "./NewsKimchiPremiumPage.jsx";
 import React from "react";
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
-import FuturesMainPage from "./FuturesMainPage.jsx";
+import FuturesMainPage from "./futures/FuturesMainPage.jsx";
 
 export default function NewsMainPage() {
     return (

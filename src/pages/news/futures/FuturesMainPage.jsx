@@ -13,7 +13,15 @@ export default function FuturesMainPage() {
                     <li><Link to="/news/futures">선물</Link></li>
                 </ul>
             </nav>
-            
+            <table>
+                <tbody>
+                    <tr>
+                        <td><Link to="/news/futures/liquidations">강제청산비율</Link></td>
+                        <td><Link to="/news/futures/long-short">롱&숏 비율</Link></td>
+                        <td><Link to="/news/futures/open-interest">미결제약정</Link></td>
+                    </tr>
+                </tbody>
+            </table>
         </>
     )
 }
