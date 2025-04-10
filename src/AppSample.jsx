@@ -2,6 +2,16 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import HomePage from "./pages/HomePage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import './App.css';
+import CommunityFreePostsPage from "./pages/community/CommunityFreePostsPage.jsx";
+import CommunityChartPostsPage from "./pages/community/CommunityChartPostsPage.jsx";
+import CommunityPnlPostsPage from "./pages/community/CommunityPnlPostsPage.jsx";
+import CommunityPostDetailPage from "./pages/community/CommunityPostDetailPage.jsx";
+import CommunityPostModifyPage from "./pages/community/CommunityPostModifyPage.jsx";
+import CommunitySearchPage from "./pages/community/CommunitySearchPage.jsx";
+
+function CommunityExpertPostsPage() {
+    return null;
+}
 
 function AppSample() {
 

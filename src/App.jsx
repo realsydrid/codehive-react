@@ -8,6 +8,13 @@ import TradeChartPage from "./pages/trade/TradeChartPage.jsx";
 import TradePricePage from "./pages/trade/TradePricePage.jsx";
 import TradeInfoPage from "./pages/trade/TradeInfoPage.jsx";
 import './App.css';
+import CommunityFreePostsPage from "./pages/community/CommunityFreePostsPage.jsx";
+import CommunityChartPostsPage from "./pages/community/CommunityChartPostsPage.jsx";
+import CommunityPnlPostsPage from "./pages/community/CommunityPnlPostsPage.jsx";
+import CommunityPostDetailPage from "./pages/community/CommunityPostDetailPage.jsx";
+import CommunityPostModifyPage from "./pages/community/CommunityPostModifyPage.jsx";
+import CommunitySearchPage from "./pages/community/CommunitySearchPage.jsx";
+import CommunityExpertPostsPage from "./pages/community/CommunityExpertPostsPage.jsx";
 import UsersProfilePage from "./pages/users/UsersProfilePage.jsx";
 import UsersProfileFollowingsPage from "./pages/users/UsersProfileFollowingsPage.jsx";
 import UsersProfileFollowersPage from "./pages/users/UsersProfileFollowersPage.jsx";
@@ -41,12 +48,17 @@ function App() {
                     {/*    <Route path="pending-orders" element={<AssetPendingOrdersPage/>}/>/!*미체결*!/*/}
                     {/*</Route>*/}
 
-                    {/*/!*community*!/*/}
-                    {/*<Route path="/community">*/}
-                    {/*    <Route path="free" element={<CommunityFreePostsPage/>}/>*/}
-                    {/*    <Route path="chart" element={<CommunityChartPostsPage/>}/>*/}
-                    {/*    <Route path="expert" element={<CommunityExpertPostsPage/>}/>*/}
-                    {/*    <Route path="pnl" element={<CommunityPnlPostsPage/>}/>*/}
+                    {/*community*/}
+                    <Route path="/community">
+                        <Route path="free" element={<CommunityFreePostsPage/>}/>
+                        <Route path="chart" element={<CommunityChartPostsPage/>}/>
+                        <Route path="expert" element={<CommunityExpertPostsPage/>}/>
+                        <Route path="pnl" element={<CommunityPnlPostsPage/>}/>
+
+                        <Route path="posts/:postNo" element={<CommunityPostDetailPage/>}/>
+                        <Route path="posts/:postNo/modify" element={<CommunityPostModifyPage/>}/>
+                        <Route path="search" element={<CommunitySearchPage/>}/>
+                    </Route>
 
                     {/*news*/}
                     {/*    <Route path="posts/:postNo" element={<CommunityPostDetailPage/>}/>*/}
