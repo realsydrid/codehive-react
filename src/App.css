@@ -88,7 +88,7 @@
 
 }
 
-#communityNavbar {
+#communityNavbar, #newsNavBar, #assetNavBar {
   position: fixed;
   top: 4rem;
   left: 0;
@@ -97,17 +97,17 @@
   box-sizing: border-box;
   background-color: rgba(0, 128, 0, 0.38);
 }
-#communityNavbar ul {
+#communityNavbar ul, #newsNavBar ul, #assetNavBar ul {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   width: 80%;
 }
-#communityNavbar li {
+#communityNavbar li, #newsNavBar li, #assetNavBar li {
   list-style: none;
 }
-#communityNavbar li a {
+#communityNavbar li a , #newsNavBar li a, #assetNavBar li a {
   font-size: 1.2rem;
   font-weight: bold;
 }
