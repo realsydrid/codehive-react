@@ -2,7 +2,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import HomePage from "./pages/HomePage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import TradeMainPage from "./pages/trade/TradeMainPage.jsx";
-import TradeOrderPage from "./pages/trade/TradeMainPage.jsx";
+import TradeOrderPage from "./pages/trade/TradeOrderPage.jsx";
 import TradeAskingPricePage from "./pages/trade/TradeAskingPricePage.jsx";
 import TradeChartPage from "./pages/trade/TradeChartPage.jsx";
 import TradePricePage from "./pages/trade/TradePricePage.jsx";
