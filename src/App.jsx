@@ -18,8 +18,7 @@ import SettingsSupportFaqDetailPage from "./pages/settings/support/faq/SettingsS
 import SettingsSupportFaqSearchPage from "./pages/settings/support/faq/SettingsSupportFaqSearchPage.jsx";
 import SettingsSupportQnaWritePage from "./pages/settings/support/qna/SettingsSupportQnaWritePage.jsx";
 import SettingsSupportQnaHistoryPage from "./pages/settings/support/qna/SettingsSupportQnaHistoryPage.jsx";
-import SettingsSupportQnaQuestionDetailPage
-    from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
+import SettingsSupportQnaQuestionDetailPage from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
 
 
 
