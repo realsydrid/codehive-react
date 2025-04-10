@@ -2,15 +2,15 @@ import {Link} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 
 export default function SettingsSupportNoticeMainPage() {
-    const {data:notices}=useQuery({
-        queryKey: "notices",
-        staleTime: 1000*60*5,
-        cacheTime: 1000*60*10,
-        retry: 1
-        queryFn: async ()=> {
-            const URL=""
-        }
-    });
+    // const {data:notices}=useQuery({
+    //     queryKey: "notices",
+    //     staleTime: 1000*60*5,
+    //     cacheTime: 1000*60*10,
+    //     retry: 1
+    //     queryFn: async ()=> {
+    //         const URL=""
+    //     }
+    // });
     return (
         <>
             <h1>공지사항</h1>햣
