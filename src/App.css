@@ -47,8 +47,18 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 3rem;
+  height: 4rem;
   background-color: pink;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 10px 0;
+  box-sizing: border-box;
+}
+
+
+#topNavbar div:nth-child(1) a img {
+  width: 70%;
 }
 
 #bottomNavbar{
@@ -59,5 +69,21 @@
   width: 100%;
   height: 3rem;
   background-color: pink;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+
+}
+
+#bottomNavbar ul{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
+#bottomNavbar li{
+  font-size: 1.2rem;
+  list-style: none;
 
 }

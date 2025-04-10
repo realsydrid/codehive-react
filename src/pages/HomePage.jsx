@@ -10,6 +10,8 @@ export default function HomePage() {
                 <li><Link to={"/community/free"}>커뮤니티</Link></li>
                 <li><Link to={"/news"}>뉴스</Link></li>
             </ul>
+
+            <Link to={"/settings"}>설정</Link>
         </>
     )
 }
