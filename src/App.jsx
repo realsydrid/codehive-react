@@ -2,6 +2,14 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import HomePage from "./pages/HomePage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import './App.css';
+import SettingsNotificationsPage from "./pages/settings/notifications/SettingsNotificationsPage.jsx";
+import SettingsNotificationsVolatilityPage
+    from "./pages/settings/notifications/SettingsNotificationsVolatilityPage.jsx";
+import SettingsNotificationsTargetPricePage
+    from "./pages/settings/notifications/SettingsNotificationsTargetPricePage.jsx";
+import SettingsMyInfoPage from "./pages/settings/SettingsMyInfoPage.jsx";
+import SettingsPrivacyPolicyPage from "./pages/settings/SettingsPrivacyPolicyPage.jsx";
+import SettingsTermsPage from "./pages/settings/SettingsTermsPage.jsx";
 
 function App() {
 
@@ -58,7 +66,7 @@ function App() {
 
 
                     {/*/!*settings*!/*/}
-                    {/*<Route path="/settings">*/}
+                    <Route path="/settings">
                     {/*    /!*고객센터*!/*/}
                     {/*    <Route path="support">*/}
                     {/*        <Route index element={<SettingsSupportMainPage/>}/> /!*고객센터메인*!/*/}
@@ -81,19 +89,19 @@ function App() {
                     {/*            <Route path=":qeustionNo" element={<SettingsQnaQuestionDetailPage/>}/> /!*문의내역디테일*!/*/}
                     {/*        </Route>*/}
                     {/*    </Route>*/}
-                    {/*    /!*알림*!/*/}
-                    {/*    <Route path="notifications">*/}
-                    {/*        <Route index element={<SettingsNotificationsPage/>}/> /!*알림설정*!/*/}
-                    {/*        <Route path="volatility" element={<SettingsNotificationsVolatilityPage/>}/> /!*시세변동알림목록*!/*/}
-                    {/*        <Route path="target-price" element={<SettingsNotificationsTargetPricePage/>}/> /!*지정가변동알림목록*!/*/}
-                    {/*    </Route>*/}
-                    {/*    /!*내정보*!/*/}
-                    {/*    <Route path="my-info" element={<SettingsMyInfoPage/>}/>*/}
-                    {/*    /!*개인정보취급방침*!/*/}
-                    {/*    <Route path="privacy-policy" element={<SettingsPrivacyPolicyPage/>}/>*/}
-                    {/*    /!*이용약관*!/*/}
-                    {/*    <Route path="terms" element={<SettingsTermsPage/>}/>*/}
-                    {/*</Route>*/}
+                        {/*알림*/}
+                        <Route path="notifications">
+                            <Route index element={<SettingsNotificationsPage/>}/> {/*알림설정*/}
+                            <Route path="volatility" element={<SettingsNotificationsVolatilityPage/>}/> {/*시세변동알림목록*/}
+                            <Route path="target-price" element={<SettingsNotificationsTargetPricePage/>}/> {/*지정가변동알림목록*/}
+                        </Route>
+                        {/*내정보*/}
+                        <Route path="my-info" element={<SettingsMyInfoPage/>}/>
+                        {/*개인정보취급방침*/}
+                        <Route path="privacy-policy" element={<SettingsPrivacyPolicyPage/>}/>
+                        {/*이용약관*/}
+                        <Route path="terms" element={<SettingsTermsPage/>}/>
+                    </Route>
 
 
                     {/*/!*users*!/*/}
