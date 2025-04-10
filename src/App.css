@@ -87,3 +87,27 @@
   list-style: none;
 
 }
+
+#communityNavbar {
+  position: fixed;
+  top: 4rem;
+  left: 0;
+  border: 1px solid red;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: rgba(0, 128, 0, 0.38);
+}
+#communityNavbar ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
+#communityNavbar li {
+  list-style: none;
+}
+#communityNavbar li a {
+  font-size: 1.2rem;
+  font-weight: bold;
+}

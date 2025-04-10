@@ -2,9 +2,9 @@ import {Link} from "react-router-dom";
 
 export default function CommunityNavbar() {
     return (
-        <nav id="topNavbar">
+        <nav id="communityNavbar">
             <div>
-            <ul style={{display: "flex", marginLeft:"8em", marginRight:"8em", justifyContent:"space-between" ,listStyleType: "none"}} >
+            <ul>
                 <li>
                     <Link to="/community/free" style={{color:"black"}}>자유</Link>
                 </li>
