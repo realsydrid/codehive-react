@@ -50,8 +50,6 @@ import SettingsSupportQnaHistoryPage from "./pages/settings/support/qna/Settings
 import SettingsSupportQnaQuestionDetailPage
     from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
 
-
-
 function App() {
 
 
