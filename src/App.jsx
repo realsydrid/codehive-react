@@ -8,6 +8,10 @@ import TradeChartPage from "./pages/trade/TradeChartPage.jsx";
 import TradePricePage from "./pages/trade/TradePricePage.jsx";
 import TradeInfoPage from "./pages/trade/TradeInfoPage.jsx";
 import './App.css';
+import UsersProfilePage from "./pages/users/UsersProfilePage.jsx";
+import UsersProfileFollowingsPage from "./pages/users/UsersProfileFollowingsPage.jsx";
+import UsersProfileFollowersPage from "./pages/users/UsersProfileFollowersPage.jsx";
+import UsersProfileBoardsPage from "./pages/users/UsersProfileBoardsPage.jsx";
 
 
 
