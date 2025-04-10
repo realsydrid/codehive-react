@@ -2,6 +2,9 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import HomePage from "./pages/HomePage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import './App.css';
+import NewsFearGreedIndexPage from "./pages/news/NewsFearGreedIndexPage.jsx";
+import NewsMainPage from "./pages/news/NewsMainPage.jsx";
+import NewsKimchiPremiumPage from "./pages/news/NewsKimchiPremiumPage.jsx";
 
 function AppSample() {
 

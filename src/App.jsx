@@ -2,6 +2,13 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import HomePage from "./pages/HomePage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import './App.css';
+import AssetMyAssetPage from "./pages/asset/AssetMyAssetPage.jsx";
+import NewsMainPage from "./pages/news/NewsMainPage.jsx";
+import NewsFearGreedIndexPage from "./pages/news/NewsFearGreedIndexPage.jsx";
+import NewsKimchiPremiumPage from "./pages/news/NewsKimchiPremiumPage.jsx";
+import AssetHistoryPage from "./pages/asset/AssetHistoryPage.jsx";
+import AssetPendingOrdersPage from "./pages/asset/AssetPendingOrdersPage.jsx";
+import FuturesMainPage from "./pages/news/FuturesMainPage.jsx";
 
 function App() {
 
@@ -23,11 +30,11 @@ function App() {
                     {/*</Route>*/}
 
                     {/*/!*asset*!/*/}
-                    {/*<Route path="/asset">*/}
-                    {/*    <Route path="my-asset" element={<AssetMyAssetPage/>}/>/!*나의자산*!/*/}
-                    {/*    <Route path="history" element={<AssetHistoryPage/>}/>/!*거래내역*!/*/}
-                    {/*    <Route path="pending-orders" element={<AssetPendingOrdersPage/>}/>/!*미체결*!/*/}
-                    {/*</Route>*/}
+                    <Route path="/asset">
+                        <Route path="my-asset" element={<AssetMyAssetPage/>}/>{/*나의자산*/}
+                        <Route path="history" element={<AssetHistoryPage/>}/>{/*거래내역*/}
+                        <Route path="pending-orders" element={<AssetPendingOrdersPage/>}/>{/*미체결*/}
+                    </Route>
 
                     {/*/!*community*!/*/}
                     {/*<Route path="/community">*/}
@@ -42,19 +49,19 @@ function App() {
                     {/*    <Route path="search" element={<CommunitySearchPage/>}/>*/}
                     {/*</Route>*/}
 
-                    {/*<Route path="/news">*/}
-                    {/*    <Route index element={<NewsMainPage/>}/> /!*뉴스메인(전체뉴스,암호화폐,해외증시,환율/금리)*!/*/}
+                    <Route path="/news">
+                        <Route index element={<NewsMainPage/>}/> {/*뉴스메인(전체뉴스,암호화폐,해외증시,환율/금리)*/}
 
-                    {/*    <Route path="fear-greed-index" element={<NewsFearGreedIndexPage/>}/> /!*공탐지수*!/*/}
-                    {/*    <Route path="kimchi-premium" element={<NewsKimchiPremiumPage/>}/> /!*김프*!/*/}
-                    {/*    <Route path="futures">*/}
-                    {/*        <Route index element={<FuturesMainPage/>}/> /!*선물메인페이지(진입메뉴페이지)*!/*/}
+                        <Route path="fear-greed-index" element={<NewsFearGreedIndexPage/>}/> {/*공탐지수*/}
+                        <Route path="kimchi-premium" element={<NewsKimchiPremiumPage/>}/> {/*김프*/}
+                        <Route path="futures">
+                            <Route index element={<FuturesMainPage/>}/> {/*선물메인페이지(진입메뉴페이지)*/}
 
                     {/*        <Route path="liquidations" element={<FuturesLiquidationsPage/>}/> /!*강제청산비율*!/*/}
                     {/*        <Route path="long-short" element={<FuturesLongShortPage/>}/> /!*롱숏비율*!/*/}
                     {/*        <Route path="open-interest" element={<FuturesOpenInterestPage/>}/> /!*미결제약정*!/*/}
-                    {/*    </Route>*/}
-                    {/*</Route>*/}
+                        </Route>
+                    </Route>
 
 
                     {/*/!*settings*!/*/}
