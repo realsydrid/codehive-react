@@ -7,7 +7,19 @@ import TradeAskingPricePage from "./pages/trade/TradeAskingPricePage.jsx";
 import TradeChartPage from "./pages/trade/TradeChartPage.jsx";
 import TradePricePage from "./pages/trade/TradePricePage.jsx";
 import TradeInfoPage from "./pages/trade/TradeInfoPage.jsx";
+import SettingsSupportMainPage from "./pages/settings/support/SettingsSupportMainPage.jsx";
 import './App.css';
+import SettingsSupportNoticeMainPage from "./pages/settings/support/notice/SettingsSupportNoticeMainPage.jsx";
+import SettingsSupportNoticeDetailPage from "./pages/settings/support/notice/SettingsSupportNoticeDetailPage.jsx";
+import SettingsSupportNoticeSearchPage from "./pages/settings/support/notice/SettingsSupportNoticeSearchPage.jsx";
+import SettingsMainPage from "./pages/settings/SettingsMainPage.jsx";
+import SettingsSupportFaqMainPage from "./pages/settings/support/faq/SettingsSupportFaqMainPage.jsx";
+import SettingsSupportFaqDetailPage from "./pages/settings/support/faq/SettingsSupportFaqDetailPage.jsx";
+import SettingsSupportFaqSearchPage from "./pages/settings/support/faq/SettingsSupportFaqSearchPage.jsx";
+import SettingsSupportQnaWritePage from "./pages/settings/support/qna/SettingsSupportQnaWritePage.jsx";
+import SettingsSupportQnaHistoryPage from "./pages/settings/support/qna/SettingsSupportQnaHistoryPage.jsx";
+import SettingsSupportQnaQuestionDetailPage
+    from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
 
 
 
@@ -66,29 +78,30 @@ function App() {
 
 
                     {/*/!*settings*!/*/}
-                    {/*<Route path="/settings">*/}
+                    <Route path="/settings">
+                        <Route index element={<SettingsMainPage/>}/>
                     {/*    /!*고객센터*!/*/}
-                    {/*    <Route path="support">*/}
-                    {/*        <Route index element={<SettingsSupportMainPage/>}/> /!*고객센터메인*!/*/}
+                        <Route path="support">
+                            <Route index element={<SettingsSupportMainPage/>}/> {/*고객센터메인*/}
 
-                    {/*        <Route path="notice">*/}
-                    {/*            <Route index element={<SettingsSupportNoticeMainPage/>}/> /!*공지사항메인*!/*/}
-                    {/*            <Route path=":noticeNo" element={<SettingsSupportNoticeDetailPage/>}/> /!*공지사항디테일*!/*/}
-                    {/*            <Route path="search" element={<SettingsSupportNoticeSearchPage/>}/> /!*공지사항검색결과*!/*/}
-                    {/*        </Route>*/}
+                            <Route path="notice">
+                                <Route index element={<SettingsSupportNoticeMainPage/>}/> {/*공지사항메인*/}
+                                <Route path=":noticeNo" element={<SettingsSupportNoticeDetailPage/>}/> {/*공지사항디테일*/}
+                                <Route path="search" element={<SettingsSupportNoticeSearchPage/>}/> {/*공지사항검색결과*/}
+                            </Route>
 
-                    {/*        <Route path="faq">*/}
-                    {/*            <Route index element={<SettingsSupportFaqMainPage/>}/> /!*자주묻는질문메인*!/*/}
-                    {/*            <Route path=":faqNo" element={<SettingsSupportFaqDetailPage/>}/> /!*자주묻는질문디테일*!/*/}
-                    {/*            <Route path="search" element={<SettingsSupportFaqSearchPage/>}/> /!*자주묻는질문검색결과*!/*/}
-                    {/*        </Route>*/}
+                            <Route path="faq">
+                                <Route index element={<SettingsSupportFaqMainPage/>}/> {/*자주묻는질문메인*/}
+                                <Route path=":faqNo" element={<SettingsSupportFaqDetailPage/>}/> {/*자주묻는질문디테일*/}
+                                <Route path="search" element={<SettingsSupportFaqSearchPage/>}/> {/*자주묻는질문검색결과*/}
+                            </Route>
 
-                    {/*        <Route path="qna">*/}
-                    {/*            <Route path="write" element={<SettingsQnaWritePage/>}/> /!*1:1문의작성하기*!/*/}
-                    {/*            <Route path="history" element={<SettingsQnaHistoryPage/>}/> /!*문의내역(답변대기,답변완료)*!/*/}
-                    {/*            <Route path=":qeustionNo" element={<SettingsQnaQuestionDetailPage/>}/> /!*문의내역디테일*!/*/}
-                    {/*        </Route>*/}
-                    {/*    </Route>*/}
+                            <Route path="qna">
+                                <Route path="write" element={<SettingsSupportQnaWritePage/>}/> {/*1:1문의작성하기*/}
+                                <Route path="history" element={<SettingsSupportQnaHistoryPage/>}/> {/*문의내역(답변대기,답변완료)*/}
+                                <Route path=":questionNo" element={<SettingsSupportQnaQuestionDetailPage/>}/> {/*문의내역디테일*/}
+                            </Route>
+                        </Route>
                     {/*    /!*알림*!/*/}
                     {/*    <Route path="notifications">*/}
                     {/*        <Route index element={<SettingsNotificationsPage/>}/> /!*알림설정*!/*/}
@@ -101,7 +114,7 @@ function App() {
                     {/*    <Route path="privacy-policy" element={<SettingsPrivacyPolicyPage/>}/>*/}
                     {/*    /!*이용약관*!/*/}
                     {/*    <Route path="terms" element={<SettingsTermsPage/>}/>*/}
-                    {/*</Route>*/}
+                    </Route>
 
 
                     {/*/!*users*!/*/}
