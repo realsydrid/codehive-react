@@ -32,18 +32,27 @@ import SettingsMainPage from "./pages/settings/SettingsMainPage.jsx";
 import SettingsSupportNoticeMainPage from "./pages/settings/support/notice/SettingsSupportNoticeMainPage.jsx";
 import SettingsSupportNoticeDetailPage from "./pages/settings/support/notice/SettingsSupportNoticeDetailPage.jsx";
 import SettingsSupportNoticeSearchPage from "./pages/settings/support/notice/SettingsSupportNoticeSearchPage.jsx";
-import SettingsMainPage from "./pages/settings/SettingsMainPage.jsx";
 import SettingsSupportFaqMainPage from "./pages/settings/support/faq/SettingsSupportFaqMainPage.jsx";
 import SettingsSupportFaqDetailPage from "./pages/settings/support/faq/SettingsSupportFaqDetailPage.jsx";
 import SettingsSupportFaqSearchPage from "./pages/settings/support/faq/SettingsSupportFaqSearchPage.jsx";
+import AssetMyAssetPage from "./pages/asset/AssetMyAssetPage.jsx";
+import AssetHistoryPage from "./pages/asset/AssetHistoryPage.jsx";
+import AssetPendingOrdersPage from "./pages/asset/AssetPendingOrdersPage.jsx";
+import NewsMainPage from "./pages/news/NewsMainPage.jsx";
+import NewsFearGreedIndexPage from "./pages/news/NewsFearGreedIndexPage.jsx";
+import NewsKimchiPremiumPage from "./pages/news/NewsKimchiPremiumPage.jsx";
+import FuturesMainPage from "./pages/news/futures/FuturesMainPage.jsx";
+import FuturesLiquidationsPage from "./pages/news/futures/FuturesLiquidationsPage.jsx";
+import FuturesLongShortPage from "./pages/news/futures/FuturesLongShortPage.jsx";
+import FuturesOpenInterestPage from "./pages/news/futures/FuturesOpenInterestPage.jsx";
 import SettingsSupportQnaWritePage from "./pages/settings/support/qna/SettingsSupportQnaWritePage.jsx";
 import SettingsSupportQnaHistoryPage from "./pages/settings/support/qna/SettingsSupportQnaHistoryPage.jsx";
-import SettingsSupportQnaQuestionDetailPage from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
+import SettingsSupportQnaQuestionDetailPage
+    from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
 
 
 
 function App() {
-
 
 
     return (
@@ -62,12 +71,12 @@ function App() {
                         <Route path="info/:market" element={<TradeInfoPage/>}/> {/*정보*/}
                     </Route>
 
-                    {/*/!*asset*!/*/}
-                    {/*<Route path="/asset">*/}
-                    {/*    <Route path="my-asset" element={<AssetMyAssetPage/>}/>/!*나의자산*!/*/}
-                    {/*    <Route path="history" element={<AssetHistoryPage/>}/>/!*거래내역*!/*/}
-                    {/*    <Route path="pending-orders" element={<AssetPendingOrdersPage/>}/>/!*미체결*!/*/}
-                    {/*</Route>*/}
+                    {/*asset*/}
+                    <Route path="/asset">
+                        <Route path="my-asset" element={<AssetMyAssetPage/>}/>{/*나의자산*/}
+                        <Route path="history" element={<AssetHistoryPage/>}/>{/*거래내역*/}
+                        <Route path="pending-orders" element={<AssetPendingOrdersPage/>}/>{/*미체결*/}
+                    </Route>
 
                     {/*community*/}
                     <Route path="/community">
@@ -81,29 +90,26 @@ function App() {
                         <Route path="search" element={<CommunitySearchPage/>}/>
                     </Route>
 
-                    {/*/!*news*!/*/}
-                    {/*<Route path="/news">*/}
-                    {/*    <Route index element={<NewsMainPage/>}/> /!*뉴스메인(전체뉴스,암호화폐,해외증시,환율/금리)*!/*/}
+                    {/*news*/}
+                    <Route path="/news">
+                        <Route index element={<NewsMainPage/>}/> {/*뉴스메인(전체뉴스,암호화폐,해외증시,환율/금리)*/}
 
-                    {/*    <Route path="fear-greed-index" element={<NewsFearGreedIndexPage/>}/> /!*공탐지수*!/*/}
-                    {/*    <Route path="kimchi-premium" element={<NewsKimchiPremiumPage/>}/> /!*김프*!/*/}
-                    {/*    <Route path="futures">*/}
-                    {/*        <Route index element={<FuturesMainPage/>}/> /!*선물메인페이지(진입메뉴페이지)*!/*/}
+                        <Route path="fear-greed-index" element={<NewsFearGreedIndexPage/>}/> {/*공탐지수*/}
+                        <Route path="kimchi-premium" element={<NewsKimchiPremiumPage/>}/> {/*김프*/}
+                        <Route path="futures">
+                            <Route index element={<FuturesMainPage/>}/> {/*선물메인페이지(진입메뉴페이지)*/}
 
-                    {/*        <Route path="liquidations" element={<FuturesLiquidationsPage/>}/> /!*강제청산비율*!/*/}
-                    {/*        <Route path="long-short" element={<FuturesLongShortPage/>}/> /!*롱숏비율*!/*/}
-                    {/*        <Route path="open-interest" element={<FuturesOpenInterestPage/>}/> /!*미결제약정*!/*/}
-                    {/*    </Route>*/}
-                    {/*</Route>*/}
+                            <Route path="liquidations" element={<FuturesLiquidationsPage/>}/> {/*강제청산비율*/}
+                            <Route path="long-short" element={<FuturesLongShortPage/>}/> {/*롱숏비율*/}
+                            <Route path="open-interest" element={<FuturesOpenInterestPage/>}/> {/*미결제약정*/}
+                        </Route>
+                    </Route>
 
 
-                    {/*/!*settings*!/*/}
-                    <Route path="/settings">
-                        <Route index element={<SettingsMainPage/>}/>
                     {/*settings*/}
                     <Route path="/settings">
                         <Route index element={<SettingsMainPage/>}/>
-                    {/*    /!*고객센터*!/*/}
+                        {/*고객센터*/}
                         <Route path="support">
                             <Route index element={<SettingsSupportMainPage/>}/> {/*고객센터메인*/}
 
@@ -122,23 +128,22 @@ function App() {
                             <Route path="qna">
                                 <Route path="write" element={<SettingsSupportQnaWritePage/>}/> {/*1:1문의작성하기*/}
                                 <Route path="history" element={<SettingsSupportQnaHistoryPage/>}/> {/*문의내역(답변대기,답변완료)*/}
-                                <Route path=":questionNo" element={<SettingsSupportQnaQuestionDetailPage/>}/> {/*문의내역디테일*/}
+                                <Route path=":qeustionNo" element={<SettingsSupportQnaQuestionDetailPage/>}/> {/*문의내역디테일*/}
                             </Route>
                         </Route>
-                    {/*    /!*알림*!/*/}
+                        {/*알림*/}
                         <Route path="notifications">
                             <Route index element={<SettingsNotificationsPage/>}/> {/*알림설정*/}
                             <Route path="volatility" element={<SettingsNotificationsVolatilityPage/>}/> {/*시세변동알림목록*/}
-                            <Route path="target-price" element={<SettingsNotificationsTargetPricePage/>}/> {/*지정가변동알림목록*/}
+                            <Route path="target-price"
+                                   element={<SettingsNotificationsTargetPricePage/>}/> {/*지정가변동알림목록*/}
                         </Route>
-                    {/*    /!*내정보*!/*/}
+                        {/*내정보*/}
                         <Route path="my-info" element={<SettingsMyInfoPage/>}/>
-                    {/*    /!*개인정보취급방침*!/*/}
+                        {/*개인정보취급방침*/}
                         <Route path="privacy-policy" element={<SettingsPrivacyPolicyPage/>}/>
-                    {/*    /!*이용약관*!/*/}
+                        {/*이용약관*/}
                         <Route path="terms" element={<SettingsTermsPage/>}/>
-                    </Route>
-                    {/*    <Route path="terms" element={<SettingsTermsPage/>}/>*/}
                     </Route>
 
 

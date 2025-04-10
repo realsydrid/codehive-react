@@ -6,6 +6,6 @@ export default function SettingsMainPage() {
             <h1>설정 메인페이지</h1>
             <Link to={"support"}>고객센터</Link>
         </>
-    );
     )
+
 }
