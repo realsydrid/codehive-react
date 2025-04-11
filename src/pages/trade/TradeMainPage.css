@@ -44,6 +44,7 @@
     background: white;
     border-radius: 10px;
     width: 50%;
+    color: black;
 }
 
 #tradeMainPageTable{
@@ -75,35 +76,78 @@
     width: 26%;
 }
 
-
 #tradeMainPageTable thead tr{
 
     color: #666666;
 
 
 }
-#tradeMainPageTable thead tr th:nth-child(1){
+#tradeMainPageTable thead #currentPriceTr th:nth-child(1){
     text-align: left;
     padding: 0 0.5rem;
     width: 30%;
 }
-#tradeMainPageTable thead tr th:nth-child(4){
+#tradeMainPageTable thead #currentPriceTr th:nth-child(4){
     text-align: right;
     padding: 0 0.5rem;
 }
 
-#tradeMainPageTable .FALL td:nth-child(2) {
+#tradeMainPageTable #currentPriceTr.FALL td:nth-child(2) {
     color: #1375EC;
 }
-#tradeMainPageTable .RISE td:nth-child(2) {
+#tradeMainPageTable #currentPriceTr.RISE td:nth-child(2) {
     color: #DD3C44;
 }
-#tradeMainPageTable .FALL td:nth-child(3) {
+#tradeMainPageTable #currentPriceTr.FALL td:nth-child(3) {
     color: #1375EC;
 }
-#tradeMainPageTable .RISE td:nth-child(3) {
+#tradeMainPageTable #currentPriceTr.RISE td:nth-child(3) p::before {
+    content:"+"
+}
+
+#tradeMainPageTable #currentPriceTr.FALL td:nth-child(3) p::before {
+    content:"-"
+}
+#tradeMainPageTable #currentPriceTr.FALL td:nth-child(3) span::before {
+    content:"-"
+}
+
+#tradeMainPageTable #currentPriceTr.RISE td:nth-child(3) {
     color: #DD3C44;
 }
+
+
+
+
+#tradeMainPageTable #myAssetTr.FALL td:nth-child(4) {
+    color: #1375EC;
+}
+#tradeMainPageTable #myAssetTr.RISE td:nth-child(4) p::before {
+    content:"+"
+}
+#tradeMainPageTable #myAssetTr.RISE td:nth-child(4) span::before {
+    content:"+"
+}
+
+#tradeMainPageTable #myAssetTr.FALL td:nth-child(4) p::before {
+    content:"-"
+}
+#tradeMainPageTable #myAssetTr.FALL td:nth-child(4) span::before {
+    content:"-"
+}
+
+#tradeMainPageTable #myAssetTr.RISE td:nth-child(4) {
+    color: #DD3C44;
+}
+
+#tradeMainPageTable #myAssetTr td:nth-child(2) span {
+    right: 0;
+    text-align: right;
+    color: #888888;
+
+
+}
+
 
 #tradeMainPageTable tbody tr{
     border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -120,7 +164,7 @@
     text-align: left;
     width: 10px
 }
-#tradeMainPageTable tbody td:first-child p {
+#tradeMainPageTable tbody #currentPriceTr td:first-child p {
     position: relative;
     margin: 0;
     padding-bottom: 1.2rem;
@@ -132,7 +176,7 @@
 }
 
 
-#tradeMainPageTable tbody td:first-child p span {
+#tradeMainPageTable tbody #currentPriceTr td:first-child p span {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -166,7 +210,10 @@
 #tradeMainPageTable tbody td:nth-child(3) p span{
     right: 0;
 }
-#tradeMainPageTable tbody td:last-child span{
+#tradeMainPageTable tbody #myAssetTr td:nth-child(4) p span{
+    right: 0;
+}
+#tradeMainPageTable tbody #currentPriceTr td:last-child span{
     font-size: 0.6rem;
     font-weight: bold;
     color: #888888;
