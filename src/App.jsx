@@ -70,11 +70,13 @@ function App() {
                     </Route>
 
                     {/*asset*/}
+
                     <Route path="/asset">
                         <Route path="my-asset" element={<AssetMyAssetPage/>}/>{/*나의자산*/}
                         <Route path="history" element={<AssetHistoryPage/>}/>{/*거래내역*/}
                         <Route path="pending-orders" element={<AssetPendingOrdersPage/>}/>{/*미체결*/}
                     </Route>
+
 
                     {/*community*/}
                     <Route path="/community">

@@ -21,7 +21,7 @@ export default function TradeMainPage() {
         queryFn: async () => {
             const URL = "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW";
             try {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);
                 if (!res.ok) throw new Error(res.status + "");
                 return res.json();
@@ -54,11 +54,22 @@ export default function TradeMainPage() {
         }
     });
 
+    const {data: favoriteCoins, isLoading: favoriteCoinsLoading, error: favoriteCoinsError} = useQuery({
+        queryKey: ["favoriteCoins"],
+        enabled: activeTab === "관심",
+        staleTime: 1000 * 60 * 5,
+        queryFn: async () => {
+            const res = await fetch("http://localhost:8801/api/favorites/me");
+            if (!res.ok) throw new Error(res.status + "");
+            return res.json();
+        }
+    })
+
 
     const [combinedData, setCombinedData] = useState([]);
 
     useEffect(() => {
-        // 코인 정보 맵 만들기
+
         const createCoinInfoMap = () => {
             if (!coinInfo) return {};
             const coinInfoMap = {};
@@ -68,7 +79,7 @@ export default function TradeMainPage() {
             return coinInfoMap;
         };
 
-        // 현재 시세 정보 맵 만들기
+
         const createMarketPriceMap = () => {
             if (!markets) return {};
             const marketPriceMap = {};
@@ -81,7 +92,7 @@ export default function TradeMainPage() {
         const coinInfoMap = createCoinInfoMap();
         const marketPriceMap = createMarketPriceMap();
 
-        // '원화' 탭 - 모든 코인 시세 표시
+
         if (activeTab === "원화" && coinInfo && markets) {
             const combined = markets.map(market => ({
                 ...market,
@@ -91,40 +102,49 @@ export default function TradeMainPage() {
 
             setCombinedData(combined);
         }
-        // '보유' 탭 - 사용자 보유 코인 정보 표시
+        // 보유
         else if (activeTab === "보유" && holdingCoins && coinInfo && markets) {
             const combined = holdingCoins
-                .filter(holding=>holding.market !== "KRW-KRW")
+                .filter(holding => holding.market !== "KRW-KRW")
                 .map(holding => {
-                const market = marketPriceMap[holding.market];
-                const currentPrice = market?.trade_price || 0;
-                const averagePrice = holding.averagePrice;
+                    const market = marketPriceMap[holding.market];
+                    const currentPrice = market?.trade_price || 0;
+                    const averagePrice = holding.averagePrice;
 
-                // 수익/손실 계산
-                const priceDifference = currentPrice - averagePrice;
-                const changeRate = averagePrice > 0 ? priceDifference / averagePrice : 0;
 
-                // 상승/하락 결정
-                let change = 'EVEN';
-                if (priceDifference > 0) change = 'RISE';
-                else if (priceDifference < 0) change = 'FALL';
+                    const priceDifference = currentPrice - averagePrice;
+                    const changeRate = averagePrice > 0 ? priceDifference / averagePrice : 0;
 
-                return {
-                    market: holding.market,
-                    korean_name: coinInfoMap[holding.market]?.korean_name || holding.market,
-                    holdingAmount: holding.holdingAmount,
-                    averagePrice: averagePrice,
-                    currentPrice: currentPrice,
-                    change: change,
-                    change_price: Math.abs(priceDifference),
-                    change_rate: Math.abs(changeRate),
 
-                };
-            });
+                    let change = 'EVEN';
+                    if (priceDifference > 0) change = 'RISE';
+                    else if (priceDifference < 0) change = 'FALL';
+
+                    return {
+                        market: holding.market,
+                        korean_name: coinInfoMap[holding.market]?.korean_name || holding.market,
+                        holdingAmount: holding.holdingAmount,
+                        averagePrice: averagePrice,
+                        currentPrice: currentPrice,
+                        change: change,
+                        change_price: Math.abs(priceDifference),
+                        change_rate: Math.abs(changeRate),
+
+                    };
+                });
 
             setCombinedData(combined);
+        } else if (activeTab === "관심" && favoriteCoins && coinInfo && markets) {
+            const filteredCoins= markets.filter(market=>favoriteCoins.includes(market.market));
+            const combined = filteredCoins.map(market => ({
+                ...market,
+                korean_name: coinInfoMap[market.market]?.korean_name || market.market,
+                english_name: coinInfoMap[market.market]?.korean_name || ""
+            }))
+            setCombinedData(combined);
+
         }
-        // '관심' 탭 구현은 생략...
+
 
     }, [activeTab, coinInfo, markets, holdingCoins]);
 
@@ -169,6 +189,23 @@ export default function TradeMainPage() {
             </div>
 
             <table id="tradeMainPageTable">
+                <colgroup>
+                    {activeTab === "보유" ? (
+                        <>
+                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "30%" }} />
+                            <col style={{ width: "20%" }} />
+                        </>
+                    ) : (
+                        <>
+                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "30%" }} />
+                            <col style={{ width: "20%" }} />
+                            <col style={{ width: "25%" }} />
+                        </>
+                    )}
+                </colgroup>
                 <thead>
                 <tr>
                     <th>코인명</th>
@@ -189,16 +226,21 @@ export default function TradeMainPage() {
                 {error && <ErrorComponent msg={error.message}/>}
                 {combinedData && combinedData.map((m) => (
                     activeTab === "보유" ? (
-                        <tr key={m.market} onClick={() => handleRowClick(m.market)} className={m.change} id={"myAssetTr"}>
+                        <tr key={m.market} onClick={() => handleRowClick(m.market)} className={m.change}
+                            id={"myAssetTr"}>
                             <td><p>{m.korean_name}<span>{m.market.split('-').reverse().join('/')}</span></p></td>
                             <td>
-                                <p>{formatDecimalsWithCommas(m.currentPrice * m.holdingAmount, 4)} <span>{m.holdingAmount}</span></p>
+                                <p>{formatDecimalsWithCommas(m.currentPrice * m.holdingAmount, 4)}
+                                    <span>{m.holdingAmount}</span></p>
                             </td>
-                            <td>{formatDecimalsWithCommas(m.averagePrice, 4)}</td>
-                            <td><p>{formatPercentWithDecimals(m.change_rate)}<span>{formatDecimalsWithCommas(m.change_price)}</span></p></td>
+                            <td>{formatDecimalsWithCommas(m.averagePrice, 1)}</td>
+                            <td>
+                                <p>{formatPercentWithDecimals(m.change_rate)}<span>{formatDecimalsWithCommas(m.change_price)}</span>
+                                </p></td>
                         </tr>
                     ) : (
-                        <tr key={m.market} onClick={() => handleRowClick(m.market)} className={m.change}  id={"currentPriceTr"} >
+                        <tr key={m.market} onClick={() => handleRowClick(m.market)} className={m.change}
+                            id={"currentPriceTr"}>
                             <td>
                                 <p>{m.korean_name}<span>{m.market.split('-').reverse().join('/')}</span></p>
                             </td>

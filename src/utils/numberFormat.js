@@ -43,7 +43,7 @@ export const formatPercentWithDecimals = (value, digits = 2) => {
 };
 
 /**
- * 숫자를 백만 단위로 변환하고 천 단위 구분기호를 추가합니다.
+ * 숫자를 백만 단위로 변환하고 천 단위 구분기호 추가
  * 예: 1234567 -> 1, 9876543 -> 9
  * @param {number} num - 포맷팅할 숫자
  * @param {number} digits - 소수점 이하 자릿수 (기본값: 0)
