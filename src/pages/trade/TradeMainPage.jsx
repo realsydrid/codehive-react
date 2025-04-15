@@ -9,6 +9,12 @@ import {
 import './TradeMainPage.css';
 
 export default function TradeMainPage() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [originalData, setOriginalData] = useState([]);
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+
+    };
 
     const [activeTab, setActiveTab] = useState("원화");
 
@@ -46,7 +52,8 @@ export default function TradeMainPage() {
     const {data: holdingCoins, isLoading: holdingCoinsLoading, error: holdingCoinsError} = useQuery({
         queryKey: ["holdingCoins"],
         enabled: activeTab === "보유",
-        staleTime: 1000 * 60 * 5,
+        staleTime: 0,
+        retry: 3,
         queryFn: async () => {
             const res = await fetch("http://localhost:8801/api/asset/me");
             if (!res.ok) throw new Error(res.status + "");
@@ -69,6 +76,11 @@ export default function TradeMainPage() {
     const [combinedData, setCombinedData] = useState([]);
 
     useEffect(() => {
+        if (activeTab === "보유" && (holdingCoinsError || holdingCoinsLoading)) {
+            setOriginalData([]);
+            setCombinedData([]);
+            return;
+        }
 
         const createCoinInfoMap = () => {
             if (!coinInfo) return {};
@@ -92,19 +104,20 @@ export default function TradeMainPage() {
         const coinInfoMap = createCoinInfoMap();
         const marketPriceMap = createMarketPriceMap();
 
+        let combined = [];
 
         if (activeTab === "원화" && coinInfo && markets) {
-            const combined = markets.map(market => ({
+            combined = markets.map(market => ({
                 ...market,
                 korean_name: coinInfoMap[market.market]?.korean_name || market.market,
                 english_name: coinInfoMap[market.market]?.english_name || ""
             }));
 
-            setCombinedData(combined);
+
         }
         // 보유
         else if (activeTab === "보유" && holdingCoins && coinInfo && markets) {
-            const combined = holdingCoins
+            combined = holdingCoins
                 .filter(holding => holding.market !== "KRW-KRW")
                 .map(holding => {
                     const market = marketPriceMap[holding.market];
@@ -133,20 +146,39 @@ export default function TradeMainPage() {
                     };
                 });
 
-            setCombinedData(combined);
+
         } else if (activeTab === "관심" && favoriteCoins && coinInfo && markets) {
-            const filteredCoins= markets.filter(market=>favoriteCoins.includes(market.market));
-            const combined = filteredCoins.map(market => ({
+            const filteredCoins = markets.filter(market => favoriteCoins.includes(market.market));
+            combined = filteredCoins.map(market => ({
                 ...market,
                 korean_name: coinInfoMap[market.market]?.korean_name || market.market,
                 english_name: coinInfoMap[market.market]?.korean_name || ""
             }))
-            setCombinedData(combined);
+
+
 
         }
+        setOriginalData(combined);
 
 
-    }, [activeTab, coinInfo, markets, holdingCoins]);
+
+
+
+    }, [activeTab, coinInfo, markets, holdingCoins, holdingCoinsError,favoriteCoins]);
+
+
+    useEffect(() => {
+        if (searchTerm.trim() === "") {
+            setCombinedData(originalData);
+        } else {
+            const filtered= originalData.filter(item=>item.korean_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.market.toLowerCase().includes(searchTerm.toLowerCase()));
+            setCombinedData(filtered);
+        }
+
+    },[searchTerm,originalData]);
+
+
 
     const navigate = useNavigate();
 
@@ -185,24 +217,24 @@ export default function TradeMainPage() {
                         관심
                     </li>
                 </ul>
-                <input type="text" placeholder={"검색"}/>
+                <input type="text" placeholder={"검색"} value={searchTerm} onChange={handleSearchChange} />
             </div>
 
             <table id="tradeMainPageTable">
                 <colgroup>
                     {activeTab === "보유" ? (
                         <>
-                            <col style={{ width: "25%" }} />
-                            <col style={{ width: "25%" }} />
-                            <col style={{ width: "30%" }} />
-                            <col style={{ width: "20%" }} />
+                            <col style={{width: "25%"}}/>
+                            <col style={{width: "25%"}}/>
+                            <col style={{width: "30%"}}/>
+                            <col style={{width: "20%"}}/>
                         </>
                     ) : (
                         <>
-                            <col style={{ width: "25%" }} />
-                            <col style={{ width: "30%" }} />
-                            <col style={{ width: "20%" }} />
-                            <col style={{ width: "25%" }} />
+                            <col style={{width: "25%"}}/>
+                            <col style={{width: "30%"}}/>
+                            <col style={{width: "20%"}}/>
+                            <col style={{width: "25%"}}/>
                         </>
                     )}
                 </colgroup>
@@ -215,7 +247,7 @@ export default function TradeMainPage() {
                 </tr>
                 </thead>
                 <tbody>
-                {isLoading &&
+                {(isLoading || holdingCoinsLoading) &&
                     <tr>
                         <td>
                             <Loading/>
@@ -224,6 +256,8 @@ export default function TradeMainPage() {
                     </tr>
                 }
                 {error && <ErrorComponent msg={error.message}/>}
+                {holdingCoinsError && <ErrorComponent msg={holdingCoinsError.message}/>}
+                {favoriteCoinsError && <ErrorComponent msg={favoriteCoinsError.message}/>}
                 {combinedData && combinedData.map((m) => (
                     activeTab === "보유" ? (
                         <tr key={m.market} onClick={() => handleRowClick(m.market)} className={m.change}
@@ -239,6 +273,7 @@ export default function TradeMainPage() {
                                 </p></td>
                         </tr>
                     ) : (
+
                         <tr key={m.market} onClick={() => handleRowClick(m.market)} className={m.change}
                             id={"currentPriceTr"}>
                             <td>

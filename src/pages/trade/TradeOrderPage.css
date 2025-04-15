@@ -1,0 +1,7 @@
+#activeTabNav li {
+    cursor: pointer;
+}
+
+#activeTabNav li.active {
+    font-weight: bold;
+}

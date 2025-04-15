@@ -54,6 +54,7 @@
 
 
 #tradeMainPageTable thead tr{
+
     color: #666666;
 }
 
@@ -120,6 +121,7 @@
 
 #tradeMainPageTable tbody tr{
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 #tradeMainPageTable tbody td{
@@ -133,6 +135,9 @@
 #tradeMainPageTable tbody td:first-child{
     text-align: left;
 }
+#tradeMainPageTable tbody td:first-child:hover{
+    text-decoration: underline;
+}
 
 #tradeMainPageTable tbody #currentPriceTr td:first-child p {
     position: relative;
@@ -143,9 +148,9 @@
     text-overflow: ellipsis;
     max-width: 100%;
     top:0.6rem;
+
 }
 
-/* 모바일 대응을 위한 코인명 줄임 처리 */
 #tradeMainPageTable tbody #myAssetTr td:first-child p {
     position: relative;
     margin: 0;
