@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Link} from "react-router-dom";
 
 export default function SettingsNotificationsPage() {
     const [settings, setSettings] = useState({
@@ -42,9 +43,11 @@ export default function SettingsNotificationsPage() {
                 <Switch
                     label="급격한 시세변동 알림"
                     description="10% 이상 상승/하락시"
+                    link="volatility"
                     checked={settings.volatilityYn}
                     onChange={() => toggle("volatilityYn")}
                 />
+
                 <Switch
                     label="보유 자산 알림"
                     checked={settings.portfolioYn}
@@ -53,8 +56,9 @@ export default function SettingsNotificationsPage() {
                 />
                 <Switch
                     label="지정가 알림"
+                    description="지정한 가격 도달 시 알림"
+                    link="target-price"
                     checked={settings.targetPriceYn}
-                    description="설정한 지정가 도달시 알림"
                     onChange={() => toggle("targetPriceYn")}
                 />
                 <Switch
@@ -95,7 +99,7 @@ function Section({ title, children }) {
     );
 }
 
-function Switch({ label, description, checked, onChange }) {
+function Switch({ label, description, checked, onChange, link }) {
     return (
         <div style={{
             display: 'flex',
@@ -103,53 +107,65 @@ function Switch({ label, description, checked, onChange }) {
             alignItems: 'flex-start',
             padding: '10px 0',
         }}>
+            {/* 텍스트 + 설명 */}
             <div style={{
                 borderBottom: '1px solid #eee',
                 paddingBottom: '8px',
-                marginRight: '360px',
                 flexGrow: 1
             }}>
-                <div style={{
-                    fontSize: '16px',
-                    fontWeight: 'bold' // 🔸 여기서 굵게 처리
-                }}>
-                    {label}
-                </div>
+                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{label}</div>
                 {description && (
                     <div style={{
                         fontSize: '13px',
                         color: '#888',
-                        marginTop: '2px'
+                        marginTop: '4px'
                     }}>
                         {description}
                     </div>
                 )}
             </div>
 
-            <div
-                onClick={onChange}
-                style={{
-                    width: '52px',
-                    height: '28px',
-                    backgroundColor: checked ? '#4caf50' : '#ccc',
-                    borderRadius: '28px',
-                    position: 'relative',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.3s',
-                    flexShrink: 0,
-                    marginTop: '6px'
-                }}
-            >
-                <div style={{
-                    width: '22px',
-                    height: '22px',
-                    backgroundColor: 'white',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                    top: '3px',
-                    left: checked ? '27px' : '3px',
-                    transition: 'left 0.3s'
-                }} />
+            {/* 목록보기 + 스위치 (같은 라인) */}
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '420px',
+                marginBottom: '8px',
+                gap: '12px'
+            }}>
+                {link && (
+                    <Link to={link} style={{
+                        fontSize: '13px',
+                        color: '#222',
+                        textDecoration: 'none'
+                    }}>
+                        목록보기
+                    </Link>
+                )}
+
+                <div
+                    onClick={onChange}
+                    style={{
+                        width: '52px',
+                        height: '28px',
+                        backgroundColor: checked ? '#4caf50' : '#ccc',
+                        borderRadius: '28px',
+                        position: 'relative',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s'
+                    }}
+                >
+                    <div style={{
+                        width: '22px',
+                        height: '22px',
+                        backgroundColor: 'white',
+                        borderRadius: '50%',
+                        position: 'absolute',
+                        top: '3px',
+                        left: checked ? '27px' : '3px',
+                        transition: 'left 0.3s'
+                    }} />
+                </div>
             </div>
         </div>
     );
