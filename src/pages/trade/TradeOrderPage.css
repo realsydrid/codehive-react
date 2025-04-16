@@ -1,0 +1,20 @@
+
+#activeTabNav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 50%;
+
+    border: 1px solid black;
+    margin:4.5rem 0 0;
+
+}
+#activeTabNav li {
+    list-style: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+#activeTabNav li.active {
+    font-weight: bold;
+}

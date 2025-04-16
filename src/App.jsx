@@ -2,7 +2,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import HomePage from "./pages/HomePage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import TradeMainPage from "./pages/trade/TradeMainPage.jsx";
-import TradeOrderPage from "./pages/trade/TradeMainPage.jsx";
+import TradeOrderPage from "./pages/trade/TradeOrderPage.jsx";
 import TradeAskingPricePage from "./pages/trade/TradeAskingPricePage.jsx";
 import TradeChartPage from "./pages/trade/TradeChartPage.jsx";
 import TradePricePage from "./pages/trade/TradePricePage.jsx";
@@ -70,11 +70,13 @@ function App() {
                     </Route>
 
                     {/*asset*/}
+
                     <Route path="/asset">
                         <Route path="my-asset" element={<AssetMyAssetPage/>}/>{/*나의자산*/}
                         <Route path="history" element={<AssetHistoryPage/>}/>{/*거래내역*/}
                         <Route path="pending-orders" element={<AssetPendingOrdersPage/>}/>{/*미체결*/}
                     </Route>
+
 
                     {/*community*/}
                     <Route path="/community">
