@@ -1,0 +1,41 @@
+.pending-orders-container {
+    padding: 1.5rem;
+}
+
+.pending-orders-title {
+    margin-bottom: 1rem;
+}
+
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.order-market {
+    font-size: 1.2rem;
+}
+
+.cancel-button {
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.cancel-button:hover {
+    background-color: #ff7000;
+}

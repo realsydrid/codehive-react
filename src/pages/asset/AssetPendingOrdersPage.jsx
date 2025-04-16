@@ -1,6 +1,6 @@
-import {Link} from "react-router-dom";
 import AssetNavBar from "./AssetNavBar.jsx";
 import {useEffect,useState} from "react";
+import './AssetPendingOrderPage.css'
 
 async function loadOpenOrders(){
     try{
@@ -16,6 +16,7 @@ async function loadOpenOrders(){
 
 export default function AssetPendingOrdersPage() {
     const [coinTransactions, setCoinTransactions] = useState([]);
+
     useEffect(() => {
         (async () => {
             const data = await loadOpenOrders();
@@ -26,18 +27,25 @@ export default function AssetPendingOrdersPage() {
     return (
         <>
             <AssetNavBar />
-            <h1>미체결</h1>
+            <h1 className={"pending-orders-title"}>미체결</h1>
             {
-                coinTransactions.map((tx) => (
-                    <div key={tx.id}>
-                        <p>코인명 : {tx.market}</p>
+                coinTransactions.length === 0 ? (
+                    <p>미체결 주문이 없습니다.</p>
+                ) : (
+                    coinTransactions.map((tx) => (
+                        <div key={tx.id} className="order-card">
+                            <div className="order-card-header">
+                                <strong className="order-market">{tx.market}</strong>
+                                <button className="cancel-button">주문 취소</button>
+                            </div>
                         <p>{tx.transactionType}</p>
                         <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString()}</p>
                         <p>주문 수량 : {tx.transactionCnt}</p>
                         <p>주문 금액 : {tx.price}</p>
-                        <hr/>
+                        <p>정산 금액 : {tx.price * tx.transactionCnt}</p>
                     </div>
                 ))
+                )
             }
         </>
     )
