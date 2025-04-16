@@ -1,0 +1,105 @@
+#title{
+    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: absolute;
+    top: 3rem;
+    height: 6rem;
+    width: 100%;
+
+}
+
+#title>div{
+    border: 1px solid blue;
+    padding: 0.5rem 1rem;
+}
+
+#title div.FALL{
+    color : blue
+}
+#title div.RISE{
+    color : red
+}
+
+#title>div p {
+    margin: 0;
+}
+
+#title div:nth-child(1){
+    text-align: left;
+}
+
+
+#title>div>p:nth-child(2){
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+#title>div:nth-child(2){
+    align-items: center;
+    display: flex;
+}
+
+#contentsContainer{
+    display: flex;
+    flex-direction: row;
+}
+#orderBookContainer{
+    border: 1px solid red;
+    width: 40%;
+}
+#formContainer{
+    border: 1px solid blue;
+    width: 60%;
+}
+
+.askPriceDiv{
+    border: 1px solid blue;
+    background-color: rgba(0, 0, 255, 0.2);
+}
+.bidPriceDiv{
+    border: 1px solid red;
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+#formNav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    margin:0;
+    padding: 0;
+
+}
+#formNav li{
+
+    list-style: none;
+    border: 1px solid red;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    cursor: pointer;
+}
+#formNav li.active{
+    background-color: white;
+}
+
+#priceSelectDiv{
+    display: flex;
+    flex-direction: row;
+}
+
+#priceInputDiv{
+    border: 1px solid black;
+}
+
+#priceAddDiv button{
+    background-color: #888888;
+}
+
+#resetBtn{
+    background-color: #888888;
+}
+

@@ -4,6 +4,10 @@ import {useEffect, useState} from "react";
 import {formatDecimalsWithCommas, formatPercentWithDecimals} from "../../utils/numberFormat.js";
 import './TradeOrderPage.css';
 import Order from "./component/Order.jsx";
+import Chart from "./component/Chart.jsx";
+import OrderBook from "./component/OrderBook.jsx";
+import PriceInfo from "./component/PriceInfo.jsx";
+import CoinDetailInfo from "./component/CoinDetailInfo.jsx";
 
 export default function TradeOrderPage() {
     const params = useParams();
@@ -53,7 +57,7 @@ export default function TradeOrderPage() {
 
     });
 
-    const {data:coinInfo,isLoading:coinInfoLoading,error:coinInfoError} = useQuery({
+    const {data:coinInfo,isLoading:isCoinInfoLoading,error:coinInfoError} = useQuery({
         queryKey: ["coinInfo"],
         staleTime: 1000 * 60 * 5,
         cacheTime: 1000 * 60 * 10,
@@ -95,6 +99,27 @@ export default function TradeOrderPage() {
         setActiveTab(tab);
     };
 
+    const renderTabContent = () => {
+        if (isCurrencyPriceLoading || isLoading || isCoinInfoLoading) {
+            return <div>로딩 중...</div>;
+        }
+
+        switch (activeTab) {
+            case "주문":
+                return <Order market={market} combinedData={combinedData} orderBook={orderBook} />;
+            case "호가":
+                return <OrderBook market={market} orderBook={orderBook} />;
+            case "차트":
+                return <Chart market={market} />;
+            case "시세":
+                return <PriceInfo market={market} currencyPrice={currencyPrice} />;
+            case "정보":
+                return <CoinDetailInfo market={market} />;
+            default:
+                return <Order market={market} combinedData={combinedData} />;
+        }
+    };
+
 
     return (
         <>
@@ -106,29 +131,9 @@ export default function TradeOrderPage() {
                 <li className={activeTab === "정보" ? "active" : ""} onClick={()=>handleTabClick("정보")}>정보</li>
             </ul>
 
-            <Order
-                combinedData={combinedData}
-            />
+            {renderTabContent()}
+
         </>
     );
 }
 
-// function Order({combinedData}) {
-//
-//
-//     return (
-//         <>
-//
-//         {combinedData && combinedData.market ? (
-//             <div>
-//                 <p>{combinedData.korean_name}(KRW) <span>{combinedData.market.split("-")[1]}</span></p>
-//                 <p className={combinedData.change}>{formatDecimalsWithCommas(combinedData.trade_price)} <span>{formatDecimalsWithCommas(combinedData.change_price)}</span> <span>{formatPercentWithDecimals(combinedData.change_rate)}</span></p>
-//             </div>
-//
-//         ):(
-//             <div>로딩중~~</div>
-//         )}
-//         </>
-//     )
-//
-// }

@@ -70,3 +70,29 @@ export const formatMillionsWithCommas = (num, digits = 0, locale = 'ko-KR') => {
     // 백만 미만인 경우 일반 숫자 포맷 사용
     return formatDecimalsWithCommas(num, digits, locale);
 };
+
+/**
+ * 숫자를 지정된 소수점 자리수로 포맷팅합니다.
+ *
+ * @param {number|string} value - 포맷할 숫자 값
+ * @param {number} fixedDigits - 소수점 이하 몇 자리까지 표시할지 (기본값: 2)
+ * @param {boolean} padZeros - true이면 부족한 소수점을 0으로 채움 (예: 0.1 → 0.100)
+ * @returns {string} - 포맷팅된 문자열
+ */
+export const formatDecimal = (value, fixedDigits = 2, padZeros = false) => {
+    // 숫자가 아니면 예외 처리
+    if (isNaN(value)) return '-';
+
+    // 문자열로 들어온 숫자도 변환
+    const number = Number(value);
+
+    if (padZeros) {
+        // 고정 소수점 자리수로 변환 (0 채움): toFixed는 문자열 반환
+        return number.toFixed(fixedDigits);
+    } else {
+        // 지정한 자리까지 반올림 후, 불필요한 0은 제거된 숫자 문자열 반환
+        const factor = Math.pow(10, fixedDigits);          // 10^자릿수
+        const rounded = Math.round(number * factor) / factor;
+        return rounded.toString();                          // 예: 0.1
+    }
+}
