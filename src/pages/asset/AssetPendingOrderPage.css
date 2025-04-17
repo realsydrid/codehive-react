@@ -26,6 +26,20 @@
     font-size: 1.2rem;
 }
 
+.cancel-all-button {
+    background-color: #004cff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.cancel-all-button:hover {
+    background-color: #0027ff;
+}
+
 .cancel-button {
     background-color: #ff8c00;
     color: white;
@@ -38,4 +52,14 @@
 
 .cancel-button:hover {
     background-color: #ff7000;
+}
+
+.transaction-type-buy {
+    color: red;
+    font-weight: bold;
+}
+
+.transaction-type-sell {
+    color: blue;
+    font-weight: bold;
 }
