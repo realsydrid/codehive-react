@@ -15,7 +15,7 @@ export default function CommunityExpertPostsPage() {
 
         useEffect(() => {
             fetchPosts(); // 초기 로딩 1회만 실행
-        }, []); // 의존성 배열 비워야 합니다
+        }, [page]); // 의존성 배열 비워야 합니다
 
         const fetchPosts = async () => {
             if (isLoading) return; // 중복 방지
