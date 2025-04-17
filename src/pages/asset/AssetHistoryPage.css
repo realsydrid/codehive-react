@@ -1,0 +1,63 @@
+/* AssetHistoryPage.css */
+
+.asset-history-container {
+    padding: 2rem;
+    background-color: #f8f9fa;
+}
+
+.asset-history-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.asset-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.asset-history-table th,
+.asset-history-table td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.asset-history-table th {
+    background-color: #343a40;
+    color: white;
+    font-weight: 600;
+}
+
+.asset-history-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.asset-type {
+    font-weight: bold;
+}
+
+.transaction-type-buy {
+    color: red;
+    font-weight: bold;
+}
+
+.transaction-type-sell {
+    color: blue;
+    font-weight: bold;
+}
+
+.transaction-status-completed {
+    color: green;
+    font-weight: bold;
+}
+
+.transaction-status-pending {
+    color: orange;
+    font-weight: bold;
+}
