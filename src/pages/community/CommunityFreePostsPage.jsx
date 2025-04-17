@@ -1,12 +1,11 @@
 import CommunityNavbar from "./CommunityNavbar.jsx";
-import {useSearchParams} from "react-router-dom";
-import {useQuery} from "@tanstack/react-query";
 import CommunityCreatePostForm from "./CommunityCreatePostForm.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
 import {GetPosts} from "./CommunityFetch.jsx";
 import Loading from "./Loading.jsx";
 import {useEffect, useState} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import {Link} from "react-router-dom";
 
 export default function CommunityFreePostsPage(){
     const [posts, setPosts] = useState([]);
@@ -15,29 +14,26 @@ export default function CommunityFreePostsPage(){
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const fetchPosts = async () => {
-        setIsLoading(true); // 로딩 시작
-        try {
-            const data = await GetPosts("free"); // await 사용
-            setTimeout(() => {
-                setPosts((prev) => [...prev, ...data.content]);
-                setPage((prev) => prev + 1);
-                setHasMore(!data.last); // 마지막 페이지면 false로 바뀜
-                setIsLoading(false);
-            }, 1000);
-            // 로딩 시간 살짝 지연 (최소 1000ms 보여주기)
-        } catch (err) {
-            console.error("Error fetching posts:", err);
-            setIsError(true);
-            setIsLoading(false);
-        } // data.last: 마지막 페이지 여부
-    };
-
     useEffect(() => {
-        if (posts.length === 0) {
-            fetchPosts(); // 최초 1회
+        fetchPosts(); // 초기 로딩 1회만 실행
+    }, []); // 의존성 배열 비워야 합니다
+
+    const fetchPosts = async () => {
+        if (isLoading) return; // 중복 방지
+        setIsLoading(true);
+
+        try {
+            const data = await GetPosts('free', page);
+            setPosts(prev => [...prev, ...data.content]);
+            setHasMore(!data.last);
+            setPage(prev => prev + 1); // 다음 페이지 준비!
+        } catch (e) {
+            console.error(e);
+            setIsError(true);
+        } finally {
+            setIsLoading(false);
         }
-    }, []);
+    };
 
     return (
         <>
@@ -53,24 +49,28 @@ export default function CommunityFreePostsPage(){
                 endMessage={<p style={{ textAlign: "center" }}><b>더 이상 게시글이 없습니다.</b></p>}
             >
                 {posts.map((post) => (
-                    <div key={post.id} className={"PostForm"}>
+                    <div key={post.id} className={"AllPostForm"}>
                         <div className={"UserInfo"}>
-                            {/*<span>{post.userNickname}</span>*/}
+                            <Link to={"/users/profile/" + post.userId}>
+                            <span>{post.userNickname}</span>
+                            <span>Lv.{post.userId}</span>
+                            </Link>
                         </div>
-                        <h3>{post.postCont}</h3>
-                        <p>{post.postCreatedAt}</p>
+                        <div className={"postForm"}>
+                            <Link to={`/community/posts/${post.id}`}>
+                        <h2>{post.postCont}</h2>
+                        <span>{post.postCreatedAt}</span>
+                            <div className={"postInfo"}>
+                                <button type={"button"} >좋아요{post.likeCount}개</button>
+                                <button type={"button"}>싫어요{post.dislikeCount}개</button>
+                                <span>댓글{post.commentCount}개</span>
+                            </div>
+                            </Link>
+                        </div>
                     </div>
                 ))}
             </InfiniteScroll>
             )
-            {/*{PostPage && PostPage.content.map((post)=>{*/}
-            {/*  return (*/}
-            {/*    <div>*/}
-            {/*        <span>{post.id}</span>*/}
-            {/*        <span>{post.postCont}</span>*/}
-            {/*    </div>*/}
-            {/*    )*/}
-            {/*})}*/}
         </>
     )
 }
