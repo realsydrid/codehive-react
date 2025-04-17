@@ -10,23 +10,43 @@ export const truncateDecimals = (num, digits = 2) => {
 };
 
 /**
- * 숫자에 천 단위 구분기호를 추가하고 소수점을 지정된 자릿수까지 표시
+ * 숫자에 천 단위 구분기호를 추가하고 소수점을 숫자 크기에 따라 자동으로 조정하거나 지정된 자릿수까지 표시
  * @param {number} num - 포맷팅할 숫자
- * @param {number} digits - 표시할 소수점 자릿수 (기본값: 2)
+ * @param {boolean} padZeros - true면 부족한 소수점0으로 채움(기본값: true)
+ * @param {number|null} digits - 표시할 소수점 자릿수 (null이면 자동 조정)
  * @param {string} locale - 사용할 로케일 (기본값: 'ko-KR')
  * @returns {string} 포맷팅된 문자열
  */
-export const formatDecimalsWithCommas = (num, digits = 2, locale = 'ko-KR') => {
+export const formatDecimalsWithCommas = (num,padZeros=true, digits = null,locale = 'ko-KR') => {
     if (num === undefined || num === null) return '0';
 
+    // 숫자를 Number 타입으로 변환
+    const number = Number(num);
 
-    const truncated = truncateDecimals(num, digits);
+    // digits가 null이면 숫자 범위에 따라 자동으로 소수점 자릿수 결정
+    let decimalDigits = digits;
+    if (digits === null) {
+        if (Math.abs(number) >= 1000) {
+            decimalDigits = 0; // 1000 이상은 소수점 없음
+        } else if (Math.abs(number) >= 100) {
+            decimalDigits = 1; // 100 이상 1000 미만은 소수점 1자리
+        } else if (Math.abs(number) >= 10) {
+            decimalDigits = 2; // 10 이상 100 미만은 소수점 2자리
+        } else if (Math.abs(number) >= 1) {
+            decimalDigits = 3; // 1 이상 10 미만은 소수점 3자리
+        } else if(Math.abs(number) >= 0.1) {
+            decimalDigits = 4; // 0.1 이상 1 미만은 소수점 4자리
+        } else {
+            decimalDigits = 5; // 0.1 미만은 소수점 5자리
+        }
+    }
 
+    const formattedNum = formatDecimal(number,decimalDigits,padZeros);
 
     return new Intl.NumberFormat(locale, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: digits
-    }).format(truncated);
+        minimumFractionDigits: padZeros ? decimalDigits : 0,
+        maximumFractionDigits: decimalDigits
+    }).format(parseFloat(formattedNum));
 };
 
 /**

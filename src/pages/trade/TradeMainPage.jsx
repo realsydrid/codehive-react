@@ -247,7 +247,7 @@ export default function TradeMainPage() {
                             <td>
                                 <p>{m.korean_name}<span>{m.market.split('-').reverse().join('/')}</span></p>
                             </td>
-                            <td>{formatDecimalsWithCommas(m.trade_price, 4)}</td>
+                            <td>{formatDecimalsWithCommas(m.trade_price, true)}</td>
                             <td>
                                 <p>{formatPercentWithDecimals(m.change_rate)}<span>{m.change_price}</span></p>
                             </td>
