@@ -9,7 +9,7 @@ export default function LoadAssetHistory() {
     const { data: coinTransaction, isLoading: isLoading1, isError: isError1 } = useQuery({
         queryKey: ["coinTransaction"],
         queryFn: async () => {
-            const res = await fetch("http://localhost:8801/asset/coinTransactions.do");
+            const res = await fetch("http://localhost:8801/asset/coinTransactions");
             if (!res.ok) throw new Error("거래 내역 불러오기 실패");
             return res.json();
         }

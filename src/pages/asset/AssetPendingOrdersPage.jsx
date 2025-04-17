@@ -5,13 +5,16 @@ import {useQuery} from "@tanstack/react-query";
 
 export default function AssetPendingOrdersPage() {
     const [combinedData, setCombinedData] = useState([]);
-    const {data: pendingOrders, isPendingOrdersLoading,isPendingOrdersError} = useQuery({
+    const {data: pendingOrders,
+        isPendingOrdersLoading,
+        isPendingOrdersError,
+        refetch: refetchPendingOrders} = useQuery({
         queryKey:["pendingOrders"],
         staleTime:1000*60*5,
         cacheTime:1000*60*10,
         retry:1,
         queryFn: async ()=>{
-            const URL = "http://localhost:8801/asset/openOrders.do";
+            const URL = "http://localhost:8801/asset/openOrders";
             try{
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res= await fetch(URL);
@@ -59,12 +62,21 @@ export default function AssetPendingOrdersPage() {
     }, [pendingOrders, coinInfo]);
 
 
-
     return (
         <>
             <AssetNavBar />
             <h1 className={"pending-orders-title"}>미체결</h1>
-            <button className={"cancel-all-button"}>전체 삭제</button>
+            <button onClick={async () =>{
+                try{
+                    const res = await fetch(`http://localhost:8801/asset/openOrders/user/1`,{
+                        method:"DELETE"
+                    });
+                    if(!res.ok) throw new Error("주문 취소에 실패했습니다.");
+                    setCombinedData([]);
+                }catch (e){
+                    alert("주문 취소 중 오류가 발생:" + e.message);
+                }
+            }} className={"cancel-all-button"}>전체 삭제</button>
             {
                 combinedData.length === 0 ? (
                     <p>미체결 주문이 없습니다.</p>
@@ -74,8 +86,19 @@ export default function AssetPendingOrdersPage() {
                             <div className="order-card-header">
                                 <strong className="order-market">{tx.koreanName}<br/>
                                     {tx.market.replace("-","/")}</strong>
-                                <button className="cancel-button">주문 취소</button>
+                                <button className="cancel-button" onClick={async () => {
+                                    try {
+                                        const res = await fetch(`http://localhost:8801/asset/openOrders/id/${tx.id}`,{
+                                            method: "DELETE"
+                                        });
+                                        if (!res.ok) throw new Error("주문 취소에 실패하였습니다.");
+                                        setCombinedData(prev => prev.filter(item => item.id !== tx.id));
+                                    }catch (e) {
+                                        alert("주문 취소 중 오류가 발생:" + e.message);
+                                    }
+                                }}>주문 취소</button>
                             </div>
+                            <p>거래 ID : {tx.id}</p>
                             <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>
                                 {tx.transactionType === 'BUY' ? '매수' : '매도'}
                             </p>
