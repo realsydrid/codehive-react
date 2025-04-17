@@ -8,6 +8,7 @@ import Chart from "./component/Chart.jsx";
 import OrderBook from "./component/OrderBook.jsx";
 import PriceInfo from "./component/PriceInfo.jsx";
 import CoinDetailInfo from "./component/CoinDetailInfo.jsx";
+import CoinTitle from "./component/CoinTitle.jsx";
 
 export default function TradeOrderPage() {
     const params = useParams();
@@ -110,7 +111,7 @@ export default function TradeOrderPage() {
             case "호가":
                 return <OrderBook market={market} orderBook={orderBook} />;
             case "차트":
-                return <Chart market={market} />;
+                return <Chart market={market} combinedData={combinedData} />;
             case "시세":
                 return <PriceInfo market={market} currencyPrice={currencyPrice} />;
             case "정보":
@@ -123,6 +124,7 @@ export default function TradeOrderPage() {
 
     return (
         <>
+            <CoinTitle combinedData={combinedData} />
             <ul id={"activeTabNav"}>
                 <li className={activeTab === "주문" ? "active" : ""} onClick={()=>handleTabClick("주문")}>주문</li>
                 <li className={activeTab === "호가" ? "active" : ""} onClick={()=>handleTabClick("호가")}>호가</li>

@@ -24,22 +24,6 @@ export default function Order({combinedData, orderBook}) {
     return (
         <>
 
-            {combinedData && combinedData.market &&
-                <div id={"title"}>
-                    <div>
-                        <p>{combinedData.korean_name}(KRW) <span>{combinedData.market.split("-")[1]}</span></p>
-                    </div>
-                    <div className={combinedData.change}>
-                        <p>{formatDecimalsWithCommas(combinedData.trade_price)}</p>
-                        <p>
-                            <span>{formatPercentWithDecimals(combinedData.change_rate)}</span>
-                            <span>{formatDecimalsWithCommas(combinedData.change_price)}</span>
-                        </p>
-
-                    </div>
-
-                </div>
-            }
             <div id={"contentsContainer"}>
                 <div id={"orderBookContainer"} className={combinedData.change}>
                     {orderUnits?.slice().reverse().map((unit, index) => (
