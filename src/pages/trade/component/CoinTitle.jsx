@@ -4,7 +4,7 @@ export default function coinTitle({combinedData}) {
     return (
         <>
             {combinedData && combinedData.market &&
-            <div id={"title"}>
+            <div className={"order-title"}>
                 <div>
                     <p>{combinedData.korean_name}(KRW) <span>{combinedData.market.split("-")[1]}</span></p>
                 </div>

@@ -1,24 +1,22 @@
-#contentsContainer{
+.chart-contentsContainer{
     height: 80%;
     display: flex;
     flex-direction: column;
 }
 
-
-.timeframe-tabs {
+.chart-timeframe-tabs {
     margin: 0;
     padding: 0;
 }
 
-.timeframe-tabs button {
+.chart-timeframe-tabs button {
     background-color: #535bf2;
-
 }
 
-.timeframe-tabs button.active {
+.chart-timeframe-tabs button.active {
     background-color: red;
 }
 
-#chartContainer {
+.chart-chartContainer {
     border: 1px solid black;
 }

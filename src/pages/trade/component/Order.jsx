@@ -19,85 +19,82 @@ export default function Order({combinedData, orderBook}) {
     const handleRadioTabClick = (tab) => {
         setRadioTab(tab);
     }
-
+    const [amountInputValue, setAmountInputValue] = useState(0);
+    const handleAmountChange= (e)=>{
+        setAmountInputValue(e.target.value);
+    }
 
     return (
         <>
-
-            <div id={"contentsContainer"}>
-                <div id={"orderBookContainer"} className={combinedData.change}>
+            <div className="order-contentsContainer">
+                <div className={combinedData.change + " order-orderBookContainer"}>
                     {orderUnits?.slice().reverse().map((unit, index) => (
-                        <div key={index} className={"askPriceDiv"}>
+                        <div key={index} className="order-askPriceDiv">
                             <span>{formatDecimalsWithCommas(unit.ask_price)}</span>
                             <span>||||</span>
                             <span>{formatDecimal(unit.ask_size, 3, true)}</span>
                         </div>
-                    ))
-
-                    }
+                    ))}
                     {orderUnits?.map((unit, index) => (
-                        <div key={index} className={"bidPriceDiv"}>
+                        <div key={index} className="order-bidPriceDiv">
                             <span>{formatDecimalsWithCommas(unit.bid_price)}</span>
                             <span>||||</span>
                             <span>{formatDecimal(unit.bid_size, 3, true)}</span>
                         </div>
                     ))}
                 </div>
-                <div id={"formContainer"}>
-                    <ul id={"formNav"}>
-                        <li onClick={() => handleFormTabClick("매수")}>매수</li>
-                        <li onClick={() => handleFormTabClick("매도")}>매도</li>
-                        <li onClick={() => handleFormTabClick("거래내역")}>거래내역</li>
+                <div className="order-formContainer">
+                    <ul className="order-formNav">
+                        <li onClick={() => handleFormTabClick("매수")} className={formActiveTab === "매수" ? "active" : ""}>매수</li>
+                        <li onClick={() => handleFormTabClick("매도")} className={formActiveTab === "매도" ? "active" : ""}>매도</li>
+                        <li onClick={() => handleFormTabClick("거래내역")} className={formActiveTab === "거래내역" ? "active" : ""}>거래내역</li>
                     </ul>
                     {formActiveTab === "매수" &&
-
                         <div>
                             <div>
                                 <div onClick={() => handleRadioTabClick("지정")}>
-                                    <input type="radio" id={"targetPrice"} checked={radioTab === "지정"}/>
+                                    <input type="radio" id="targetPrice" checked={radioTab === "지정"} onChange={() => {}}/>
                                     <label htmlFor="targetPrice">지정</label>
                                 </div>
                                 <div onClick={() => handleRadioTabClick("시장")}>
-                                    <input type="radio" id={"currentPrice"} checked={radioTab === "시장"}/>
+                                    <input type="radio" id="currentPrice" checked={radioTab === "시장"} onChange={() => {}}/>
                                     <label htmlFor="currentPrice">시장</label>
                                 </div>
                             </div>
 
                             <form>
                                 <p><span>주문가능</span><span>0</span><span>원</span></p>
-                                {radioTab === "지정" ?(
+                                {radioTab === "지정" ? (
                                     <>
-                                        <div id={"amountSelectDiv"}>
-                                        <div id={"amountInputDiv"}>
-                                            <p>
-                                                <span>수량</span><input type="text" value={0}/>
-                                            </p>
-                                            <div>비율</div>
-                                        </div>
-                                    </div>
-                                        <div id={"priceSelectDiv"}>
-                                        <div id={"priceInputDiv"}>
-                                            <p>
-                                                <span>가격</span><input type="text"
-                                                                      value={initialPrice !== null ? initialPrice : ''}/>
-                                            </p>
-                                            <div>
-                                                <button>-</button>
-                                                <button>+</button>
+                                        <div className="order-amountSelectDiv">
+                                            <div className="order-amountInputDiv">
+                                                <p>
+                                                    <span>수량</span><input type="text" onChange={handleAmountChange} value={amountInputValue}/>
+                                                </p>
+                                                <div>비율</div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div className="order-priceSelectDiv">
+                                            <div className="order-priceInputDiv">
+                                                <p>
+                                                    {/*<span>가격</span><input type="text" value={initialPrice !== null ? initialPrice : ''}/>*/}
+                                                </p>
+                                                <div>
+                                                    <button>-</button>
+                                                    <button>+</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div>
-
                                         </div>
                                     </>
-                                ):(
+                                ) : (
                                     <>
                                         <div>
-                                            <p><span>총액</span><input type="text" value={0}/><span>원</span></p>
+                                            <p><span>총액</span><input type="text" onChange={handleAmountChange} value={amountInputValue}/><span>원</span></p>
                                             <div>비율</div>
                                         </div>
-                                        <div id={"priceAddDiv"}>
+                                        <div className="order-priceAddDiv">
                                             <button>+1만</button>
                                             <button>+10만</button>
                                             <button>+100만</button>
@@ -106,8 +103,8 @@ export default function Order({combinedData, orderBook}) {
                                     </>
                                 )}
 
-                                <button type={"reset"} id={"resetBtn"}>초기화</button>
-                                <button type={"reset"} id={"buyConfirmBtn"}>매수</button>
+                                <button type="reset" className="order-resetBtn">초기화</button>
+                                <button type="reset" className="order-buyConfirmBtn">매수</button>
                             </form>
                         </div>
                     }
@@ -118,11 +115,8 @@ export default function Order({combinedData, orderBook}) {
                     {formActiveTab === "거래내역" &&
                         <p>거래내역</p>
                     }
-
                 </div>
-
             </div>
         </>
     )
-
 }

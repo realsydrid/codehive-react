@@ -1,5 +1,4 @@
-
-#activeTabNav{
+.tradeOrder-activeTabNav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -9,12 +8,12 @@
     margin:4.5rem 0 0;
 
 }
-#activeTabNav li {
+.tradeOrder-activeTabNav li {
     list-style: none;
     cursor: pointer;
     font-size: 20px;
 }
 
-#activeTabNav li.active {
+.tradeOrder-activeTabNav li.active {
     font-weight: bold;
 }

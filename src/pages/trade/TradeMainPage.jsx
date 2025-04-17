@@ -13,7 +13,6 @@ export default function TradeMainPage() {
     const [originalData, setOriginalData] = useState([]);
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
-
     };
 
     const [activeTab, setActiveTab] = useState("원화");
@@ -31,13 +30,11 @@ export default function TradeMainPage() {
                 const res = await fetch(URL);
                 if (!res.ok) throw new Error(res.status + "");
                 return res.json();
-
             } catch (error) {
                 throw new Error(error);
             }
         }
     });
-
 
     const {data: coinInfo, isLoading: coinInfoLoading} = useQuery({
         queryKey: ["coinInfo"],
@@ -72,7 +69,6 @@ export default function TradeMainPage() {
         }
     })
 
-
     const [combinedData, setCombinedData] = useState([]);
 
     useEffect(() => {
@@ -90,7 +86,6 @@ export default function TradeMainPage() {
             }
             return coinInfoMap;
         };
-
 
         const createMarketPriceMap = () => {
             if (!markets) return {};
@@ -112,8 +107,6 @@ export default function TradeMainPage() {
                 korean_name: coinInfoMap[market.market]?.korean_name || market.market,
                 english_name: coinInfoMap[market.market]?.english_name || ""
             }));
-
-
         }
         // 보유
         else if (activeTab === "보유" && holdingCoins && coinInfo && markets) {
@@ -124,10 +117,8 @@ export default function TradeMainPage() {
                     const currentPrice = market?.trade_price || 0;
                     const averagePrice = holding.averagePrice;
 
-
                     const priceDifference = currentPrice - averagePrice;
                     const changeRate = averagePrice > 0 ? priceDifference / averagePrice : 0;
-
 
                     let change = 'EVEN';
                     if (priceDifference > 0) change = 'RISE';
@@ -142,11 +133,8 @@ export default function TradeMainPage() {
                         change: change,
                         change_price: Math.abs(priceDifference),
                         change_rate: Math.abs(changeRate),
-
                     };
                 });
-
-
         } else if (activeTab === "관심" && favoriteCoins && coinInfo && markets) {
             const filteredCoins = markets.filter(market => favoriteCoins.includes(market.market));
             combined = filteredCoins.map(market => ({
@@ -154,31 +142,19 @@ export default function TradeMainPage() {
                 korean_name: coinInfoMap[market.market]?.korean_name || market.market,
                 english_name: coinInfoMap[market.market]?.korean_name || ""
             }))
-
-
-
         }
         setOriginalData(combined);
-
-
-
-
-
-    }, [activeTab, coinInfo, markets, holdingCoins, holdingCoinsError,favoriteCoins]);
-
+    }, [activeTab, coinInfo, markets, holdingCoins, holdingCoinsError, favoriteCoins]);
 
     useEffect(() => {
         if (searchTerm.trim() === "") {
             setCombinedData(originalData);
         } else {
-            const filtered= originalData.filter(item=>item.korean_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            const filtered = originalData.filter(item => item.korean_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.market.toLowerCase().includes(searchTerm.toLowerCase()));
             setCombinedData(filtered);
         }
-
-    },[searchTerm,originalData]);
-
-
+    }, [searchTerm, originalData]);
 
     const navigate = useNavigate();
 
@@ -190,13 +166,9 @@ export default function TradeMainPage() {
         setActiveTab(tab);
     };
 
-
     return (
-
         <>
-
-
-            <div id={"tradeMenuTab"}>
+            <div className="tradeMain-menuTab">
                 <ul>
                     <li
                         className={activeTab === "원화" ? "active" : ""}
@@ -220,7 +192,7 @@ export default function TradeMainPage() {
                 <input type="text" placeholder={"검색"} value={searchTerm} onChange={handleSearchChange} />
             </div>
 
-            <table id="tradeMainPageTable">
+            <table className="tradeMain-table">
                 <colgroup>
                     {activeTab === "보유" ? (
                         <>
@@ -251,7 +223,6 @@ export default function TradeMainPage() {
                     <tr>
                         <td>
                             <Loading/>
-
                         </td>
                     </tr>
                 }
@@ -260,8 +231,7 @@ export default function TradeMainPage() {
                 {favoriteCoinsError && <ErrorComponent msg={favoriteCoinsError.message}/>}
                 {combinedData && combinedData.map((m) => (
                     activeTab === "보유" ? (
-                        <tr key={m.market} onClick={() => handleRowClick(m.market)} className={m.change}
-                            id={"myAssetTr"}>
+                        <tr key={m.market} onClick={() => handleRowClick(m.market)} className={`${m.change} tradeMain-myAssetTr`}>
                             <td><p>{m.korean_name}<span>{m.market.split('-').reverse().join('/')}</span></p></td>
                             <td>
                                 <p>{formatDecimalsWithCommas(m.currentPrice * m.holdingAmount, 4)}
@@ -273,9 +243,7 @@ export default function TradeMainPage() {
                                 </p></td>
                         </tr>
                     ) : (
-
-                        <tr key={m.market} onClick={() => handleRowClick(m.market)} className={m.change}
-                            id={"currentPriceTr"}>
+                        <tr key={m.market} onClick={() => handleRowClick(m.market)} className={`${m.change} tradeMain-currentPriceTr`}>
                             <td>
                                 <p>{m.korean_name}<span>{m.market.split('-').reverse().join('/')}</span></p>
                             </td>
@@ -289,8 +257,6 @@ export default function TradeMainPage() {
                 ))}
                 </tbody>
             </table>
-
-
         </>
     );
 }

@@ -19,7 +19,7 @@ const TIME_FRAMES = {
     MONTH: { value: 'months', display: '1개월', count: 200 },
 };
 
-export default function Chart({ market,combinedData }) {
+export default function Chart({ market, combinedData }) {
     const [timeFrame, setTimeFrame] = useState('MIN1'); // 기본값: 1분
     const chartContainerRef = useRef(null);
     const chartInstanceRef = useRef(null);
@@ -61,18 +61,6 @@ export default function Chart({ market,combinedData }) {
         return `https://api.upbit.com/v1/candles/${tf.value}?market=${market}&count=${tf.count}`;
     };
 
-    // 적절한 refetchInterval 결정 (초/분 단위는 더 자주, 일/주/월 단위는 덜 자주)
-    const getRefetchInterval = () => {
-        if (timeFrame === 'SEC1') return 1000; // 1초
-        if (timeFrame.startsWith('MIN')) {
-            const minutes = parseInt(timeFrame.replace('MIN', ''));
-            if (minutes <= 5) return 5000; // 5초
-            if (minutes <= 30) return 15000; // 15초
-            return 30000; // 30초
-        }
-        return 60000; // 1분 (일/주/월 단위)
-    };
-
     // 캔들 데이터 가져오기
     const { data: candleData, isLoading } = useQuery({
         queryKey: ['candles', market, timeFrame],
@@ -94,14 +82,14 @@ export default function Chart({ market,combinedData }) {
             
             return data;
         },
-        refetchInterval: getRefetchInterval(),
+        refetchInterval: 500,
     });
 
     // 차트 생성
     useEffect(() => {
         if (!chartContainerRef.current) {
             console.log("돔로드아직안됨")
-                        return;
+            return;
         }
         console.log(averagePrice + "평균가");
 
@@ -109,12 +97,10 @@ export default function Chart({ market,combinedData }) {
         if (chartInstanceRef.current) {
             chartInstanceRef.current.remove();
             chartInstanceRef.current = null;
-
         }
 
         // 가격에 따른 포맷 설정
         const priceFormatter = getPriceFormatter(averagePrice)
-
 
         // 차트 생성
         const chart = createChart(chartContainerRef.current, {
@@ -212,7 +198,6 @@ export default function Chart({ market,combinedData }) {
 
             // 차트 모든 콘텐츠 표시 (초기 로드 시에만)
             if (chartInstanceRef.current && formattedData.length > 0) {
-                // fitContent() 대신 setVisibleRange() 또는 setVisibleLogicalRange() 사용
                 const timeScale = chartInstanceRef.current.timeScale();
                 
                 // 최근 N개의 캔들만 보이도록 설정
@@ -239,9 +224,9 @@ export default function Chart({ market,combinedData }) {
     }, [candleData]);
 
     return (
-        <div  id={"contentsContainer"}>
+        <div className="chart-contentsContainer">
             <div>
-                <div className="timeframe-tabs">
+                <div className="chart-timeframe-tabs">
                     {Object.entries(TIME_FRAMES).map(([key, { display }]) => (
                         <button
                             key={key}
@@ -257,7 +242,7 @@ export default function Chart({ market,combinedData }) {
             <div
                 ref={chartContainerRef}
                 style={{ width: '100%', height: '100%' }}
-                id="chartContainer"
+                className="chart-chartContainer"
             />
         </div>
     );

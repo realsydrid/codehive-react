@@ -1,4 +1,4 @@
-#tradeMenuTab{
+.tradeMain-menuTab{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -6,7 +6,7 @@
     padding: 0 0.8rem;
 }
 
-#tradeMenuTab ul {
+.tradeMain-menuTab ul {
     width: 50%;
     display: flex;
     flex-direction: row;
@@ -16,7 +16,7 @@
     gap: 1rem;
 }
 
-#tradeMenuTab ul li.active {
+.tradeMain-menuTab ul li.active {
     list-style: none;
     font-size: 1.4rem;
     font-weight: bold;
@@ -27,7 +27,7 @@
     text-underline-offset: 6px;
 }
 
-#tradeMenuTab ul li{
+.tradeMain-menuTab ul li{
     list-style: none;
     font-size: 1.4rem;
     font-weight: bold;
@@ -35,14 +35,14 @@
     color: #888888;
 }
 
-#tradeMenuTab input{
+.tradeMain-menuTab input{
     background: white;
     border-radius: 10px;
     width: 50%;
     color: black;
 }
 
-#tradeMainPageTable{
+.tradeMain-table{
     border-collapse: collapse;
     border-spacing: 0;
     border-top: 1px solid black;
@@ -51,80 +51,77 @@
     table-layout: fixed;
 }
 
-
-
-#tradeMainPageTable thead tr{
-
+.tradeMain-table thead tr{
     color: #666666;
 }
 
-#tradeMainPageTable thead th:nth-child(1){
+.tradeMain-table thead th:nth-child(1){
     text-align: left;
     padding: 0 0.5rem;
 }
 
-#tradeMainPageTable thead th:nth-child(4){
+.tradeMain-table thead th:nth-child(4){
     text-align: right;
     padding: 0 0.5rem;
 }
 
-#tradeMainPageTable #currentPriceTr.FALL td:nth-child(2) {
+.tradeMain-table .tradeMain-currentPriceTr.FALL td:nth-child(2) {
     color: #1375EC;
 }
-#tradeMainPageTable #currentPriceTr.RISE td:nth-child(2) {
+.tradeMain-table .tradeMain-currentPriceTr.RISE td:nth-child(2) {
     color: #DD3C44;
 }
-#tradeMainPageTable #currentPriceTr.FALL td:nth-child(3) {
+.tradeMain-table .tradeMain-currentPriceTr.FALL td:nth-child(3) {
     color: #1375EC;
 }
-#tradeMainPageTable #currentPriceTr.RISE td:nth-child(3) p::before {
+.tradeMain-table .tradeMain-currentPriceTr.RISE td:nth-child(3) p::before {
     content:"+"
 }
 
-#tradeMainPageTable #currentPriceTr.FALL td:nth-child(3) p::before {
+.tradeMain-table .tradeMain-currentPriceTr.FALL td:nth-child(3) p::before {
     content:"-"
 }
-#tradeMainPageTable #currentPriceTr.FALL td:nth-child(3) span::before {
+.tradeMain-table .tradeMain-currentPriceTr.FALL td:nth-child(3) span::before {
     content:"-"
 }
 
-#tradeMainPageTable #currentPriceTr.RISE td:nth-child(3) {
+.tradeMain-table .tradeMain-currentPriceTr.RISE td:nth-child(3) {
     color: #DD3C44;
 }
 
-#tradeMainPageTable #myAssetTr.FALL td:nth-child(4) {
+.tradeMain-table .tradeMain-myAssetTr.FALL td:nth-child(4) {
     color: #1375EC;
 }
-#tradeMainPageTable #myAssetTr.RISE td:nth-child(4) p::before {
+.tradeMain-table .tradeMain-myAssetTr.RISE td:nth-child(4) p::before {
     content:"+"
 }
-#tradeMainPageTable #myAssetTr.RISE td:nth-child(4) span::before {
+.tradeMain-table .tradeMain-myAssetTr.RISE td:nth-child(4) span::before {
     content:"+"
 }
 
-#tradeMainPageTable #myAssetTr.FALL td:nth-child(4) p::before {
+.tradeMain-table .tradeMain-myAssetTr.FALL td:nth-child(4) p::before {
     content:"-"
 }
-#tradeMainPageTable #myAssetTr.FALL td:nth-child(4) span::before {
+.tradeMain-table .tradeMain-myAssetTr.FALL td:nth-child(4) span::before {
     content:"-"
 }
 
-#tradeMainPageTable #myAssetTr.RISE td:nth-child(4) {
+.tradeMain-table .tradeMain-myAssetTr.RISE td:nth-child(4) {
     color: #DD3C44;
 }
 
-#tradeMainPageTable #myAssetTr td:nth-child(2) span {
+.tradeMain-table .tradeMain-myAssetTr td:nth-child(2) span {
     right: 0;
     text-align: right;
     color: #888888;
 }
 
-#tradeMainPageTable tbody tr{
+.tradeMain-table tbody tr{
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
 
-#tradeMainPageTable tbody td{
+.tradeMain-table tbody td{
     text-align: right;
     padding: 0 0.5rem;
     font-size: 0.9rem;
@@ -132,26 +129,14 @@
     height: 3rem;
 }
 
-#tradeMainPageTable tbody td:first-child{
+.tradeMain-table tbody td:first-child{
     text-align: left;
 }
-#tradeMainPageTable tbody td:first-child:hover{
+.tradeMain-table tbody td:first-child:hover{
     text-decoration: underline;
 }
 
-#tradeMainPageTable tbody #currentPriceTr td:first-child p {
-    position: relative;
-    margin: 0;
-    padding-bottom: 1.2rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    top:0.6rem;
-
-}
-
-#tradeMainPageTable tbody #myAssetTr td:first-child p {
+.tradeMain-table tbody .tradeMain-currentPriceTr td:first-child p {
     position: relative;
     margin: 0;
     padding-bottom: 1.2rem;
@@ -162,7 +147,18 @@
     top:0.6rem;
 }
 
-#tradeMainPageTable tbody #currentPriceTr td:first-child p span {
+.tradeMain-table tbody .tradeMain-myAssetTr td:first-child p {
+    position: relative;
+    margin: 0;
+    padding-bottom: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    top:0.6rem;
+}
+
+.tradeMain-table tbody .tradeMain-currentPriceTr td:first-child p span {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -175,7 +171,7 @@
     display: block;
 }
 
-#tradeMainPageTable tbody #myAssetTr td:first-child p span {
+.tradeMain-table tbody .tradeMain-myAssetTr td:first-child p span {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -188,13 +184,13 @@
     display: block;
 }
 
-#tradeMainPageTable tbody td p{
+.tradeMain-table tbody td p{
     font-size: 0.9rem;
     margin: 0;
     position: relative;
 }
 
-#tradeMainPageTable tbody td p span{
+.tradeMain-table tbody td p span{
     position: absolute;
     top: 1.1rem;
     left: 0;
@@ -203,13 +199,13 @@
     font-weight: lighter;
 }
 
-#tradeMainPageTable tbody td:nth-child(3) p span{
+.tradeMain-table tbody td:nth-child(3) p span{
     right: 0;
 }
-#tradeMainPageTable tbody #myAssetTr td:nth-child(4) p span{
+.tradeMain-table tbody .tradeMain-myAssetTr td:nth-child(4) p span{
     right: 0;
 }
-#tradeMainPageTable tbody #currentPriceTr td:last-child span{
+.tradeMain-table tbody .tradeMain-currentPriceTr td:last-child span{
     font-size: 0.6rem;
     font-weight: bold;
     color: #888888;

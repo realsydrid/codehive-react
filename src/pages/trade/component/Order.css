@@ -1,4 +1,4 @@
-#title{
+.order-title{
     border: 1px solid red;
     display: flex;
     flex-direction: column;
@@ -7,64 +7,62 @@
     top: 3rem;
     height: 6rem;
     width: 100%;
-
 }
 
-#title>div{
+.order-title>div{
     border: 1px solid blue;
     padding: 0.5rem 1rem;
 }
 
-#title div.FALL{
+.order-title div.FALL{
     color : blue
 }
-#title div.RISE{
+.order-title div.RISE{
     color : red
 }
 
-#title>div p {
+.order-title>div p {
     margin: 0;
 }
 
-#title div:nth-child(1){
+.order-title div:nth-child(1){
     text-align: left;
 }
 
-
-#title>div>p:nth-child(2){
+.order-title>div>p:nth-child(2){
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
 }
 
-#title>div:nth-child(2){
+.order-title>div:nth-child(2){
     align-items: center;
     display: flex;
 }
 
-#contentsContainer{
+.order-contentsContainer{
     display: flex;
     flex-direction: row;
 }
-#orderBookContainer{
+.order-orderBookContainer{
     border: 1px solid red;
     width: 40%;
 }
-#formContainer{
+.order-formContainer{
     border: 1px solid blue;
     width: 60%;
 }
 
-.askPriceDiv{
+.order-askPriceDiv{
     border: 1px solid blue;
     background-color: rgba(0, 0, 255, 0.2);
 }
-.bidPriceDiv{
+.order-bidPriceDiv{
     border: 1px solid red;
     background-color: rgba(255, 0, 0, 0.2);
 }
 
-#formNav{
+.order-formNav{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -72,34 +70,44 @@
     box-sizing: border-box;
     margin:0;
     padding: 0;
-
 }
-#formNav li{
 
+.order-formNav li{
     list-style: none;
     border: 1px solid red;
     background-color: rgba(0, 0, 0, 0.2);
     width: 100%;
     cursor: pointer;
 }
-#formNav li.active{
+.order-formNav li.active{
     background-color: white;
 }
 
-#priceSelectDiv{
+.order-priceSelectDiv{
     display: flex;
     flex-direction: row;
 }
 
-#priceInputDiv{
+.order-priceInputDiv{
     border: 1px solid black;
 }
 
-#priceAddDiv button{
+.order-priceAddDiv button{
     background-color: #888888;
 }
 
-#resetBtn{
+.order-resetBtn{
     background-color: #888888;
 }
 
+.order-buyConfirmBtn{
+    /* 필요한 스타일 추가 */
+}
+
+.order-amountSelectDiv{
+    /* 필요한 스타일 추가 */
+}
+
+.order-amountInputDiv{
+    /* 필요한 스타일 추가 */
+}

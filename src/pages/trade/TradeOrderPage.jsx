@@ -15,14 +15,13 @@ export default function TradeOrderPage() {
     const market = params.market;
 
     const {data: currencyPrice, isLoading: isCurrencyPriceLoading, error: currencyPriceError} = useQuery({
-        queryKey: ["currencyPrice",market],
+        queryKey: ["currencyPrice", market],
         staleTime: 1000 * 60 * 5,
         cacheTime: 1000 * 60 * 10,
         retry: 1,
         refetchInterval: 500,
-        enabled:!!market,
+        enabled: !!market,
         queryFn: async () => {
-
             const URL = "https://api.upbit.com/v1/ticker?markets=" + market;
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
@@ -33,18 +32,16 @@ export default function TradeOrderPage() {
                 throw new Error(error);
             }
         }
-
     });
 
     const {data: orderBook, isLoading, error} = useQuery({
-        queryKey: ["orderBook",market],
+        queryKey: ["orderBook", market],
         staleTime: 1000 * 60 * 5,
         cacheTime: 1000 * 60 * 10,
         retry: 1,
         refetchInterval: 500,
-        enabled:!!market,
+        enabled: !!market,
         queryFn: async () => {
-
             const URL = "https://api.upbit.com/v1/orderbook?markets=" + market;
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
@@ -55,33 +52,31 @@ export default function TradeOrderPage() {
                 throw new Error(error);
             }
         }
-
     });
 
-    const {data:coinInfo,isLoading:isCoinInfoLoading,error:coinInfoError} = useQuery({
+    const {data: coinInfo, isLoading: isCoinInfoLoading, error: coinInfoError} = useQuery({
         queryKey: ["coinInfo"],
         staleTime: 1000 * 60 * 5,
         cacheTime: 1000 * 60 * 10,
         retry: 1,
         queryFn: async () => {
-            const URL="https://api.upbit.com/v1/market/all?is_details=false"
+            const URL = "https://api.upbit.com/v1/market/all?is_details=false"
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);
                 if (!res.ok) throw new Error(res.status + "");
                 return await res.json();
-            }catch(error) {
+            } catch (error) {
                 throw new Error(error);
             }
         }
     })
 
-
     const [combinedData, setCombinedData] = useState([]);
 
     useEffect(() => {
         if (currencyPrice && orderBook && coinInfo) {
-            const currentCoinInfo=coinInfo.find(coin=>coin.market===market);
+            const currentCoinInfo = coinInfo.find(coin => coin.market === market);
             let combined = [];
             combined = {
                 ...orderBook[0],
@@ -89,11 +84,11 @@ export default function TradeOrderPage() {
                 change: currencyPrice[0].change,
                 change_price: currencyPrice[0].change_price,
                 change_rate: currencyPrice[0].change_rate,
-                korean_name:currentCoinInfo.korean_name
+                korean_name: currentCoinInfo.korean_name
             };
             setCombinedData(combined);
         }
-    }, [currencyPrice, orderBook, isCurrencyPriceLoading,coinInfo]);
+    }, [currencyPrice, orderBook, isCurrencyPriceLoading, coinInfo]);
 
     const [activeTab, setActiveTab] = useState("주문");
     const handleTabClick = (tab) => {
@@ -121,20 +116,18 @@ export default function TradeOrderPage() {
         }
     };
 
-
     return (
         <>
             <CoinTitle combinedData={combinedData} />
-            <ul id={"activeTabNav"}>
-                <li className={activeTab === "주문" ? "active" : ""} onClick={()=>handleTabClick("주문")}>주문</li>
-                <li className={activeTab === "호가" ? "active" : ""} onClick={()=>handleTabClick("호가")}>호가</li>
-                <li className={activeTab === "차트" ? "active" : ""} onClick={()=>handleTabClick("차트")}>차트</li>
-                <li className={activeTab === "시세" ? "active" : ""} onClick={()=>handleTabClick("시세")}>시세</li>
-                <li className={activeTab === "정보" ? "active" : ""} onClick={()=>handleTabClick("정보")}>정보</li>
+            <ul className="tradeOrder-activeTabNav">
+                <li className={activeTab === "주문" ? "active" : ""} onClick={() => handleTabClick("주문")}>주문</li>
+                <li className={activeTab === "호가" ? "active" : ""} onClick={() => handleTabClick("호가")}>호가</li>
+                <li className={activeTab === "차트" ? "active" : ""} onClick={() => handleTabClick("차트")}>차트</li>
+                <li className={activeTab === "시세" ? "active" : ""} onClick={() => handleTabClick("시세")}>시세</li>
+                <li className={activeTab === "정보" ? "active" : ""} onClick={() => handleTabClick("정보")}>정보</li>
             </ul>
 
             {renderTabContent()}
-
         </>
     );
 }
