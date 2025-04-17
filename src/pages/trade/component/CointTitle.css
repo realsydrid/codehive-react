@@ -1,0 +1,92 @@
+.trade-coinTitle {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 3rem;
+    height: 5rem;
+    width: 100%;
+}
+
+.trade-coinTitle > div {
+    padding: 0.5rem 1rem;
+    width: 50%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.trade-coinTitle div.FALL {
+    color: blue
+}
+
+.trade-coinTitle div.RISE {
+    color: red
+}
+
+.trade-coinTitle > div p {
+    margin: 0;
+}
+
+.trade-coinTitle div:nth-child(1) {
+    text-align: left;
+}
+
+.trade-coinTitle > div > p:nth-child(1){
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.trade-coinTitle > div > p:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.trade-coinTitle div.RISE > p:nth-child(2)>span:nth-child(1)::before {
+    content: "+";
+}
+.trade-coinTitle div.FALL > p:nth-child(2)>span:nth-child(1)::before {
+    content: "-";
+}
+.trade-coinTitle div.RISE > p:nth-child(2)>span:nth-child(2)::before {
+    background: url('/images/icon-up.svg') no-repeat center;
+    background-size: 0.7em 0.55em;
+    content: "";
+    display: inline-block;
+    height: 0.55em;
+    width: 0.7em;
+    position: relative;
+    top: -0.05em;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+.trade-coinTitle div.FALL > p:nth-child(2)>span:nth-child(2)::before{
+    background: url('/images/icon-down.svg') no-repeat center;
+    background-size: 0.7em 0.55em;
+    content: "";
+    display: inline-block;
+    height: 0.55em;
+    width: 0.7em;
+    position: relative;
+    top: -0.05em;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+
+.trade-coinTitle > div:nth-child(2) {
+    text-align: right;
+    font-size: 1.1rem;
+}
+
+.trade-coinTitle > div:nth-child(2) p {
+    font-weight: bold;
+}
+
+.trade-coinTitle > div:nth-child(2) span {
+    font-size: 0.9rem;
+    color: #666;
+    margin-left: 0.5rem;
+}

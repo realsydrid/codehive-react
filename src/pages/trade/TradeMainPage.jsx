@@ -234,10 +234,10 @@ export default function TradeMainPage() {
                         <tr key={m.market} onClick={() => handleRowClick(m.market)} className={`${m.change} tradeMain-myAssetTr`}>
                             <td><p>{m.korean_name}<span>{m.market.split('-').reverse().join('/')}</span></p></td>
                             <td>
-                                <p>{formatDecimalsWithCommas(m.currentPrice * m.holdingAmount, 4)}
+                                <p>{formatDecimalsWithCommas(m.currentPrice * m.holdingAmount)}
                                     <span>{m.holdingAmount}</span></p>
                             </td>
-                            <td>{formatDecimalsWithCommas(m.averagePrice, 1)}</td>
+                            <td>{formatDecimalsWithCommas(m.averagePrice)}</td>
                             <td>
                                 <p>{formatPercentWithDecimals(m.change_rate)}<span>{formatDecimalsWithCommas(m.change_price)}</span>
                                 </p></td>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="6" viewBox="0 0 8 6">
+    <g fill="none" fill-rule="evenodd">
+        <g fill="#4880EE">
+            <g>
+                <g>
+                    <path d="M84 36L88 42 80 42z" transform="translate(-96 -127) translate(0 26) translate(16 65) matrix(1 0 0 -1 0 78)"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

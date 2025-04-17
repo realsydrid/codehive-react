@@ -2,16 +2,16 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 50%;
-
-    border: 1px solid black;
-    margin:4.5rem 0 0;
+    width: 100vw;
+    margin:3.5rem 0 0;
+    padding: 0;
 
 }
 .tradeOrder-activeTabNav li {
     list-style: none;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 1rem;
+    padding:0 1.2rem;
 }
 
 .tradeOrder-activeTabNav li.active {
