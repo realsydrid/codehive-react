@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
+
 import {GetComments, ReadPost} from "./CommunityFetch.jsx";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import Loading from "./Loading.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
@@ -31,9 +31,13 @@ export default function CommunityPostDetailPage() {
                     {post && post.map(post=>
 
                             <div>
-                                <div className={"userInfo"}>
-                                    <span>{post.userNickname}</span>
-                                    <span>Lv.{post.userId}</span>
+                                <Link to={`/community/${post.category}`}>게시판으로 돌아가기</Link>
+                                <div className={"UserInfo"}>
+                                    <Link to={"/users/profile/" + post.userId}>
+                                        <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""/>
+                                        <span>{post.userNickname}</span>
+                                        <span>Lv.{post.userId}</span>
+                                    </Link>
                                 </div>
                                 <div>
                                     <h1>{post.postCont}</h1>

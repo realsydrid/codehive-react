@@ -34,3 +34,16 @@ export async function GetPosts(category,page){
     const data= await res.json();
     return data
 }
+export async function CreatePosts(postDto){
+    const category=postDto.get();
+    console.log(category);
+    const URL=`http://localhost:8801/rest/community/create/${category}`;
+    const res = await fetch(URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postDto)
+    });
+    if(!res.ok) throw new Error(res.status+"");
+    const data= await res.json();
+    return data
+}

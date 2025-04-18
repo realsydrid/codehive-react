@@ -38,7 +38,8 @@ export default function CommunityFreePostsPage(){
     return (
         <>
             <CommunityNavbar/>
-            <h1>자유 게시판</h1>
+            <Link to="/community/search">검색</Link>
+            <h1 style={{marginTop:"100px"}}>자유 게시판</h1>
             <CommunityCreatePostForm/>
             {isError && <ErrorMsg error={isError}/>}
             <InfiniteScroll
@@ -52,13 +53,15 @@ export default function CommunityFreePostsPage(){
                     <div key={post.id} className={"AllPostForm"}>
                         <div className={"UserInfo"}>
                             <Link to={"/users/profile/" + post.userId}>
+                                <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""/>
                             <span>{post.userNickname}</span>
                             <span>Lv.{post.userId}</span>
                             </Link>
                         </div>
                         <div className={"postForm"}>
                             <Link to={`/community/posts/${post.id}`}>
-                        <h2>{post.postCont}</h2>
+                        <h2>{post.postCont}<img src={post.imgUrl ? "/images/ImageIcon.png" : null} alt=""
+                            style={{width:"20px",height:"20px",display:post.imgUrl ? "" : "none"}}/></h2>
                         <span>{post.postCreatedAt}</span>
                             <div className={"postInfo"}>
                                 <button type={"button"} >좋아요{post.likeCount}개</button>
