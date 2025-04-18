@@ -1,0 +1,5 @@
+.terms-category-ul li{
+    list-style: none;
+    cursor: pointer;
+    border: 1px solid black;
+}
