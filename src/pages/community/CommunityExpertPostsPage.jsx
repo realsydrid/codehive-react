@@ -38,7 +38,7 @@ export default function CommunityExpertPostsPage() {
             <>
                 <CommunityNavbar/>
                 <h1 style={{marginTop:"100px"}}>전문가 게시판</h1>
-                <CommunityCreatePostForm/>
+                <CommunityCreatePostForm category={"expert"}/>
                 {isError && <ErrorMsg error={isError}/>}
                 <InfiniteScroll
                     dataLength={posts.length}
@@ -53,7 +53,7 @@ export default function CommunityExpertPostsPage() {
                                 <Link to={"/users/profile/" + post.userId}>
                                     <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""/>
                                     <span>{post.userNickname}</span>
-                                    <span>Lv.{post.userId}</span>
+                                    <span>Lv.{post.userNo}</span>
                                 </Link>
                             </div>
                             <div className={"postForm"}>
