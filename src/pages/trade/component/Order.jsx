@@ -137,24 +137,6 @@ export default function Order({combinedData, orderBook}) {
         setAmountInputValue(0);
     }
 
-    // const loginQuery = useQuery({
-    //     queryFn: async () => {
-    //         try {
-    //             const loginUser= await loadLogin(user)
-    //             setLoginUser(()=>loginUser);
-    //             navigate("/");
-    //             return loginUser;
-    //         } catch (e) {
-    //             console.log(e)
-    //             throw new Error("아이디와 비밀번호를 확인하세요!")
-    //         }
-    //     },
-    //     queryKey: ["loginUser", user.id],
-    //     retry: 1,
-    //     staleTime: 1000 * 60 * 5,
-    //     cacheTime: 1000 * 60 * 10,
-    //     enabled: false,
-    // })
     const BUY_URL="http://localhost:8801/trade/api/transaction";
     const handleBuyRequest=async ()=> {
         if (
@@ -165,22 +147,19 @@ export default function Order({combinedData, orderBook}) {
             return;
         }
 
-        // 가격에서 콤마 제거하고 정수로 변환
         const priceValue = radioTab === "지정" 
             ? Math.round(Number(String(priceInputValue).replace(/,/g, '')))
             : Math.round(combinedData.trade_price);
         
-        // 총액에서 콤마 제거
         const totalPrice = String(totalPriceInputValue).replace(/,/g, '');
 
         const transaction = {
             userNo: 1,
             market: combinedData.market,
             transactionType: formActiveTab === "매수" ? "BUY" : "SELL",
-            price: priceValue, // Long 타입으로 보낼 정수 값
+            price: priceValue, // Long 타입
             transactionCnt: radioTab === "지정" ? Number(amountInputValue) : Number(totalAmount),
             transactionState: "PENDING",
-            // 필요하다면 총액도 추가
             transactionAmount: Math.round(Number(totalPrice))
         };
 
