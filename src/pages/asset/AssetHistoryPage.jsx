@@ -9,7 +9,7 @@ export default function LoadAssetHistory() {
     const { data: coinTransaction, isLoading: isLoading1, isError: isError1 } = useQuery({
         queryKey: ["coinTransaction"],
         queryFn: async () => {
-            const res = await fetch("http://localhost:8801/api/transaction/coinTransactions");
+            const res = await fetch("http://localhost:8801/api/transaction/coinTransactions?userNo=1");
             if (!res.ok) throw new Error("거래 내역 불러오기 실패");
             return res.json();
         }
@@ -31,7 +31,7 @@ export default function LoadAssetHistory() {
                 map.set(coin.market, coin.korean_name);
             });
 
-            const merged = (coinTransaction.coinTransactions || []).map(tx => ({
+            const merged = (coinTransaction || []).map(tx => ({
                 ...tx,
                 koreanName: map.get(tx.market) || tx.market
             }));
