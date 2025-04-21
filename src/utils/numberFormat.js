@@ -40,7 +40,10 @@ export const formatDecimalsWithCommas = (num,padZeros=true, digits = null,locale
             decimalDigits = 5; // 0.1 미만은 소수점 5자리
         }
     }
+    if(number===0){
+        decimalDigits = 0
 
+    }
     const formattedNum = formatDecimal(number,decimalDigits,padZeros);
 
     return new Intl.NumberFormat(locale, {

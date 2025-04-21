@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 
 export default function CommunityNavbar() {
+
     return (
         <nav id="communityNavbar">
             <div>

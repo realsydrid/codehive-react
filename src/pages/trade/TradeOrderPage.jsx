@@ -84,7 +84,8 @@ export default function TradeOrderPage() {
                 change: currencyPrice[0].change,
                 change_price: currencyPrice[0].change_price,
                 change_rate: currencyPrice[0].change_rate,
-                korean_name: currentCoinInfo.korean_name
+                korean_name: currentCoinInfo.korean_name,
+                english_name: currentCoinInfo.english_name,
             };
             setCombinedData(combined);
         }
@@ -108,9 +109,9 @@ export default function TradeOrderPage() {
             case "차트":
                 return <Chart market={market} combinedData={combinedData} />;
             case "시세":
-                return <PriceInfo market={market} currencyPrice={currencyPrice} />;
+                return <PriceInfo market={market} />;
             case "정보":
-                return <CoinDetailInfo market={market} />;
+                return <CoinDetailInfo combinedData={combinedData} />;
             default:
                 return <Order market={market} combinedData={combinedData} />;
         }
