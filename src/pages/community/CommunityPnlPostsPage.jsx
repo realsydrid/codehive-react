@@ -1,7 +1,7 @@
 import CommunityNavbar from "./CommunityNavbar.jsx";
-import CommunityCreatePostForm from "./CommunityCreatePostForm.jsx";
+import CommunityCreatePostForm from "./CommunityForm/CommunityCreatePostForm.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
-import {GetPosts} from "./CommunityFetch.jsx";
+import {GetPosts} from "./CommunityFetch.js";
 import Loading from "./Loading.jsx";
 import {useEffect, useState} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -12,7 +12,7 @@ export default function CommunityPnlPostsPage() {
         const [hasMore, setHasMore] = useState(true);
         const [isLoading, setIsLoading] = useState(false);
         const [isError, setIsError] = useState(false);
-
+        const [size, setSize] = useState(10);
         useEffect(() => {
             fetchPosts(); // 초기 로딩 1회만 실행
         }, []); // 의존성 배열 비워야 합니다
@@ -22,7 +22,7 @@ export default function CommunityPnlPostsPage() {
             setIsLoading(true);
 
             try {
-                const data = await GetPosts('pnl', page);
+                const data = await GetPosts('pnl', page,size);
                 setPosts(prev => [...prev, ...data.content]);
                 setHasMore(!data.last);
                 setPage(prev => prev + 1); // 다음 페이지 준비!
@@ -38,7 +38,7 @@ export default function CommunityPnlPostsPage() {
             <>
                 <CommunityNavbar/>
                 <h1 style={{marginTop:"100px"}}>손익인증 게시판</h1>
-                <CommunityCreatePostForm category={"pnl"}/>
+                <CommunityCreatePostForm category='pnl' userNo={1}/>
                 {isError && <ErrorMsg error={isError}/>}
                 <InfiniteScroll
                     dataLength={posts.length}

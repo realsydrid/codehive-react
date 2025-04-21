@@ -1,7 +1,7 @@
 import CommunityNavbar from "./CommunityNavbar.jsx";
-import CommunityCreatePostForm from "./CommunityCreatePostForm.jsx";
+import CommunityCreatePostForm from "./CommunityForm/CommunityCreatePostForm.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
-import {GetPosts} from "./CommunityFetch.jsx";
+import {GetPosts} from "./CommunityFetch.js";
 import Loading from "./Loading.jsx";
 import {useEffect, useState} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -13,6 +13,7 @@ export default function CommunityFreePostsPage(){
     const [hasMore, setHasMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [size, setSize] = useState(10);
 
     useEffect(() => {
         fetchPosts(); // 초기 로딩 1회만 실행
@@ -23,10 +24,11 @@ export default function CommunityFreePostsPage(){
         setIsLoading(true);
 
         try {
-            const data = await GetPosts('free', page);
+            const data = await GetPosts('free', page,size);
             setPosts(prev => [...prev, ...data.content]);
             setHasMore(!data.last);
             setPage(prev => prev + 1); // 다음 페이지 준비!
+            setSize(size) //사이즈는 고정
         } catch (e) {
             console.error(e);
             setIsError(true);
@@ -40,10 +42,11 @@ export default function CommunityFreePostsPage(){
             <CommunityNavbar/>
             <Link to="/community/search">검색</Link>
             <h1 style={{marginTop:"100px"}}>자유 게시판</h1>
-            <CommunityCreatePostForm category="free"/>
+            <CommunityCreatePostForm category='free' userNo={1}/>
+            {/*<CommunityCreatePostForm category="free" userNo="loginUserNo"/>*/}
             {isError && <ErrorMsg error={isError}/>}
             <InfiniteScroll
-                dataLength={posts.length}
+                dataLength= {posts.length}
                 next={fetchPosts}
                 hasMore={hasMore}
                 loader={<Loading/>}
@@ -64,7 +67,7 @@ export default function CommunityFreePostsPage(){
                             style={{width:"20px",height:"20px",display:post.imgUrl ? "" : "none"}}/></h2>
                         <span>{post.postCreatedAt}</span>
                             <div className={"postInfo"}>
-                                <button type={"button"} >좋아요{post.likeCount}개</button>
+                                <button type={"button"}>좋아요{post.likeCount}개</button>
                                 <button type={"button"}>싫어요{post.dislikeCount}개</button>
                                 <span>댓글{post.commentCount}개</span>
                             </div>

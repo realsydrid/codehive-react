@@ -1,9 +1,11 @@
 
-import {GetComments, ReadPost} from "./CommunityFetch.jsx";
+import {CreateComments, GetComments, ReadPost} from "./CommunityFetch.js";
 import {Link, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import Loading from "./Loading.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
+import CommunityNavbar from "./CommunityNavbar.jsx";
+import CommunityCreateCommentForm from "./CommunityForm/CommunityCreateCommentForm.jsx";
 
 export default function CommunityPostDetailPage() {
     const {postNo}=useParams();
@@ -28,26 +30,27 @@ export default function CommunityPostDetailPage() {
                 {isLoading && <h1><Loading/></h1>}
                 {error && <h1><ErrorMsg error={error}/></h1>}
                 <div className="CommunityPostDetail">
+                    <CommunityNavbar/>
                     {post && post.map(post=>
-
                             <div>
                                 <Link to={`/community/${post.category}`}>게시판으로 돌아가기</Link>
                                 <div className={"UserInfo"}>
-                                    <Link to={"/users/profile/" + post.userId}>
+                                    <Link to={"/users/profile/" + post.userNo}>
                                         <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""/>
                                         <span>{post.userNickname}</span>
-                                        <span>Lv.{post.userId}</span>
+                                        <span>Lv.{post.userNo}</span>
                                     </Link>
                                 </div>
-                                <div>
+                                <div className={"PostInfo"}>
                                     <h1>{post.postCont}</h1>
                                     <span>{post.postCreatedAt}</span>
-                                    <div className={"postInfo"}>
+                                    <div>
                                         <button type={"button"} >좋아요{post.likeCount}개</button>
                                         <button type={"button"}>싫어요{post.dislikeCount}개</button>
                                         <span>댓글{post.commentCount}개</span>
                                     </div>
                                 </div>
+                                <CommunityCreateCommentForm postNo={post.id}/>
                             </div>
 
                     )}
