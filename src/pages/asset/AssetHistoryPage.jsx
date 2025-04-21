@@ -2,14 +2,22 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import AssetNavBar from "./AssetNavBar.jsx";
 import './AssetHistoryPage.css';
+import {Nav, NavDropdown} from "react-bootstrap";
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+
 
 export default function LoadAssetHistory() {
     const [combinedData, setCombinedData] = useState([]);
+    const [filterType, setFilterType] = useState("ALL");
+
+    const API_BASE_URL = 'http://localhost:8801/api/transaction/coinTransactions'
+    const apiUrl = `${API_BASE_URL}?userNo=1&transactionState=COMPLETED` + (filterType === "ALL" ? "" : `&transactionType=${filterType}`);
 
     const { data: coinTransaction, isLoading: isLoading1, isError: isError1 } = useQuery({
-        queryKey: ["coinTransaction"],
+        queryKey: ["coinTransaction", filterType],
         queryFn: async () => {
-            const res = await fetch("http://localhost:8801/asset/coinTransactions");
+            const res = await fetch(apiUrl);
             if (!res.ok) throw new Error("거래 내역 불러오기 실패");
             return res.json();
         }
@@ -31,7 +39,7 @@ export default function LoadAssetHistory() {
                 map.set(coin.market, coin.korean_name);
             });
 
-            const merged = (coinTransaction.coinTransactions || []).map(tx => ({
+            const merged = (coinTransaction || []).map(tx => ({
                 ...tx,
                 koreanName: map.get(tx.market) || tx.market
             }));
@@ -48,6 +56,40 @@ export default function LoadAssetHistory() {
             <AssetNavBar />
             <div className="asset-history-container">
                 <h1 className="asset-history-title">거래내역</h1>
+
+                <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+                    <Container>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="me-auto">
+                                <NavDropdown title="거래 전체" id="collapsible-nav-dropdown">
+                                    <NavDropdown.Item onClick={()=>setFilterType("BUY")}>
+                                        매수
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item onClick={()=>setFilterType("SELL")}>
+                                        매도
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item onClick={()=>setFilterType("ALL")}>
+                                        거래전체
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                                <NavDropdown title="기간 설정" id="collapsible-nav-dropdown">
+                                    <NavDropdown.Item href="#action/3.1">1일</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="#action/3.2">7일</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="#action/3.4">30일</NavDropdown.Item>
+                                </NavDropdown>
+                                <NavDropdown title="자산 전체" id="collapsible-nav-dropdown">
+                                    <input type="text" placeholder={"자산 조회"}/>
+                                    <NavDropdown.Divider />
+                                </NavDropdown>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
                 <table className="asset-history-table">
                     <thead>
                     <tr>

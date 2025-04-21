@@ -14,7 +14,7 @@ export default function AssetPendingOrdersPage() {
         cacheTime:1000*60*10,
         retry:1,
         queryFn: async ()=>{
-            const URL = "http://localhost:8801/asset/openOrders";
+            const URL = "http://localhost:8801/api/transaction/openOrders";
             try{
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res= await fetch(URL);
@@ -68,7 +68,7 @@ export default function AssetPendingOrdersPage() {
             <h1 className={"pending-orders-title"}>미체결</h1>
             <button onClick={async () =>{
                 try{
-                    const res = await fetch(`http://localhost:8801/asset/openOrders/user/1`,{
+                    const res = await fetch(`http://localhost:8801/api/transaction/openOrders/user/1`,{
                         method:"DELETE"
                     });
                     if(!res.ok) throw new Error("주문 취소에 실패했습니다.");
@@ -88,7 +88,7 @@ export default function AssetPendingOrdersPage() {
                                     {tx.market.replace("-","/")}</strong>
                                 <button className="cancel-button" onClick={async () => {
                                     try {
-                                        const res = await fetch(`http://localhost:8801/asset/openOrders/id/${tx.id}`,{
+                                        const res = await fetch(`http://localhost:8801/api/transaction/openOrders/id/${tx.id}`,{
                                             method: "DELETE"
                                         });
                                         if (!res.ok) throw new Error("주문 취소에 실패하였습니다.");
@@ -102,12 +102,12 @@ export default function AssetPendingOrdersPage() {
                             <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>
                                 {tx.transactionType === 'BUY' ? '매수' : '매도'}
                             </p>
-                        <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString()}</p>
-                        <p>주문 수량 : {(tx.transactionCnt).toLocaleString()}</p>
-                        <p>주문 금액 : {tx.price.toLocaleString()}</p>
-                        <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
-                    </div>
-                ))
+                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString()}</p>
+                            <p>주문 수량 : {(tx.transactionCnt).toLocaleString()}</p>
+                            <p>주문 금액 : {tx.price.toLocaleString()}</p>
+                            <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
+                        </div>
+                    ))
                 )
             }
         </>
