@@ -40,7 +40,7 @@ export default function CommunityFreePostsPage(){
             <CommunityNavbar/>
             <Link to="/community/search">검색</Link>
             <h1 style={{marginTop:"100px"}}>자유 게시판</h1>
-            <CommunityCreatePostForm/>
+            <CommunityCreatePostForm category="free"/>
             {isError && <ErrorMsg error={isError}/>}
             <InfiniteScroll
                 dataLength={posts.length}
@@ -55,7 +55,7 @@ export default function CommunityFreePostsPage(){
                             <Link to={"/users/profile/" + post.userId}>
                                 <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""/>
                             <span>{post.userNickname}</span>
-                            <span>Lv.{post.userId}</span>
+                            <span>Lv.{post.userNo}</span>
                             </Link>
                         </div>
                         <div className={"postForm"}>

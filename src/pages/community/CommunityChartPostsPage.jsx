@@ -38,7 +38,7 @@ export default function CommunityChartPostsPage(){
         <>
             <CommunityNavbar/>
             <h1 style={{marginTop:"100px"}}>차트분석 게시판</h1>
-            <CommunityCreatePostForm/>
+            <CommunityCreatePostForm category={"chart"}/>
             {isError && <ErrorMsg error={isError}/>}
             <InfiniteScroll
                 dataLength={posts.length}
@@ -53,7 +53,7 @@ export default function CommunityChartPostsPage(){
                             <Link to={"/users/profile/" + post.userId}>
                                 <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""/>
                                 <span>{post.userNickname}</span>
-                                <span>Lv.{post.userId}</span>
+                                <span>Lv.{post.userNo}</span>
                             </Link>
                         </div>
                         <div className={"postForm"}>

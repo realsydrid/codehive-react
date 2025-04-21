@@ -1,15 +1,42 @@
 import {CreatePosts} from "./CommunityFetch.jsx";
+import {useState} from "react";
 
 export default function CommunityCreatePostForm(){
+    const [postCont, setPostCont] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [category,setCategory]=useState("free")
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // if (!postCont.trim()) return;
+
+        setIsSubmitting(true);
+        try {
+            await CreatePosts(category,postCont);
+            alert("게시글이 성공적으로 등록되었습니다.");
+            setPostCont("");
+        } catch (error) {
+            console.error("게시글 생성 실패:", error);
+            alert("게시글 등록 중 오류가 발생했습니다.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <>
             <form style={{width:"80%", height:"400px",display:"flex", justifyContent:"center", alignItems:"center",flexDirection:"column",
-            minWidth:"800px",maxWidth:"1500px"}} onSubmit={}>
+            minWidth:"800px",maxWidth:"1500px"}} onSubmit={handleSubmit}>
                 <div>
-            <textarea name={"postCont"} style={{placeholder:"안녕하세요!",minWidth:"800px",maxWidth:"1500px", height:"400px",resize:"none",fontSize:"20px"}}></textarea>
+                    <input type="hidden" value={category} onChange={(e)=>setCategory(e.target.value)}/>
+            <textarea name={"postCont"} placeholder={'안녕하세요! 자유롭게 이용하시되 이용정첵에 ' +
+                '위배되는 글을 게시할 경우에는 제재가 될 수 있습니다.'} style={{minWidth:"800px",maxWidth:"1500px",
+                height:"400px",resize:"none",fontSize:"20px"}} value={postCont} disabled={isSubmitting}
+                 onChange={(e)=>setPostCont(e.target.value)}></textarea>
               <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center",minWidth:"800px",maxWidth:"1500px"}}>
-                  <button  type="button">이미지 첨부</button>
-                  <button  type="button">게시하기</button>
+                  <button  type="button" disabled={isSubmitting}>이미지 첨부</button>
+                  <button  type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "게시 중..." : "게시하기"}</button>
               </div>
                 </div>
             </form>
