@@ -33,6 +33,7 @@ export async function GetPosts(category,page,size){
     });
     if(!res.ok) throw new Error(res.status+"");
     const data= await res.json();
+    console.log(data)
     return data
 }
 export async function CreatePosts(category,postCont,userNo){

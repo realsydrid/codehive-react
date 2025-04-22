@@ -6,6 +6,7 @@ import Loading from "./Loading.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
 import CommunityNavbar from "./CommunityNavbar.jsx";
 import CommunityCreateCommentForm from "./CommunityForm/CommunityCreateCommentForm.jsx";
+import "./CommunityPost.css";
 
 export default function CommunityPostDetailPage() {
     const {postNo}=useParams();
@@ -29,19 +30,22 @@ export default function CommunityPostDetailPage() {
             <>
                 {isLoading && <h1><Loading/></h1>}
                 {error && <h1><ErrorMsg error={error}/></h1>}
-                <div className="CommunityPostDetail">
+                <div className="CommunityPostDetail" style={{marginTop:"2%"}}>
                     <CommunityNavbar/>
                     {post && post.map(post=>
                             <div>
                                 <Link to={`/community/${post.category}`}>게시판으로 돌아가기</Link>
                                 <div className={"UserInfo"}>
-                                    <Link to={"/users/profile/" + post.userNo}>
-                                        <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""/>
-                                        <span>{post.userNickname}</span>
-                                        <span>Lv.{post.userNo}</span>
+                                    <Link to={"/users/profile/" + post.userNo} className={"CommunityLink"}>
+                                        <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
+                                             className={"CommunityProfileImg"}/>
+                                        <div>
+                                            <span>{post.userNickname}</span>
+                                            <span>Lv.{post.userNo}</span>
+                                        </div>
                                     </Link>
                                 </div>
-                                <div className={"PostInfo"}>
+                                <div className={"list-group"}>
                                     <h1>{post.postCont}</h1>
                                     <span>{post.postCreatedAt}</span>
                                     <div>

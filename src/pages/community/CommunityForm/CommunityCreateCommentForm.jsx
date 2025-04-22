@@ -1,6 +1,7 @@
 import {CreateComments, CreatePosts} from "../CommunityFetch.js";
 import {useState} from "react";
 import {redirect} from "react-router-dom";
+import {Button, Form, FormGroup} from "react-bootstrap";
 
 export default function CommunityCreateCommentForm(postNo,userNo){
     const [commentCont, setCommentCont] = useState("");
@@ -34,21 +35,33 @@ export default function CommunityCreateCommentForm(postNo,userNo){
     };
 
     return (
-        <>
-            <form style={{width:"80%", height:"200px",display:"flex", justifyContent:"center", alignItems:"center",flexDirection:"column",
-                minWidth:"800px",maxWidth:"1500px"}} onSubmit={handleSubmit}>
-                <div>
-                    <input type="hidden" value={selectedPost}/>
-                    <textarea name="postCont" placeholder={'안녕하세요! 자유롭게 이용하시되 이용정첵에 ' +
-                        '위배되는 글이나 특정 사용자를 비방하는 댓글을 게시할 경우에는 제재가 될 수 있습니다.'}
-                              style={{minWidth:"800px",maxWidth:"1500px", height:"200px",resize:"none",fontSize:"20px"}}
-                              value={commentCont} disabled={isSubmitting} onChange={(e)=>setCommentCont(e.target.value)}></textarea>
-                    <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center",minWidth:"800px",maxWidth:"1500px"}}>
-                        <button  type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? "게시 중..." : "게시하기"}</button>
-                    </div>
-                </div>
-            </form>
-        </>
+    <Form onSubmit={handleSubmit} style={{width:"80%", height:"200px",display:"flex", justifyContent:"center", alignItems:"center",flexDirection:"column",
+        minWidth:"800px",maxWidth:"1500px",margin:"15px"}}>
+        <Form.Group controlId="postCont">
+            <Form.Label column={"lg"}>댓글 작성</Form.Label>
+            <Form.Control
+                as="textarea"
+                name="commentCont"
+                placeholder="안녕하세요! 자유롭게 이용하시되 이용정첵에 위배되거나 특정 사용자를 무분별한 비난하는 글을 게시할 경우에는 제재가 될 수 있습니다."
+                style={{
+                    minWidth: "800px",
+                    maxWidth: "1500px",
+                    height: "150px",
+                    resize: "none",
+                    fontSize: "20px",
+                }}
+                value={commentCont}
+                disabled={isSubmitting}
+                onChange={(e) => setCommentCont(e.target.value)}
+            />
+        </Form.Group>
+
+        <div className="d-flex justify-content-between mt-2">
+            <Button variant="primary" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "게시 중..." : "게시하기"}
+            </Button>
+        </div>
+    </Form>
+
     )
 }
