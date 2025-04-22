@@ -49,6 +49,7 @@ import SettingsSupportQnaWritePage from "./pages/settings/support/qna/SettingsSu
 import SettingsSupportQnaHistoryPage from "./pages/settings/support/qna/SettingsSupportQnaHistoryPage.jsx";
 import SettingsSupportQnaQuestionDetailPage
     from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
+import LoginPage from "./login/LoginPage.jsx";
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
             <Routes>
                 <Route element={<MainLayout/>}>
                     <Route path="/" element={<HomePage/>}/> {/*홈*/}
+                    <Route path="/login" element={<LoginPage />} />
 
                     {/*trade*/}
                     <Route path="/trade">
