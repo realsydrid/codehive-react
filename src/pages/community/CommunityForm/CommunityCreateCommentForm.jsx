@@ -2,12 +2,16 @@ import {CreateComments, CreatePosts} from "../CommunityFetch.js";
 import {useState} from "react";
 import {redirect} from "react-router-dom";
 
-export default function CommunityCreateCommentForm(postNo){
+export default function CommunityCreateCommentForm(postNo,userNo){
     const [commentCont, setCommentCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedPost=postNo.postNo;
-    const userNo=postNo.userNo;
+    const userNum=postNo.userNo;
     const handleSubmit = async (e) => {
+        e.preventDefault()
+        console.log(postNo)
+        console.log(userNum)
+        console.log(commentCont)
         // if (!postCont.trim()) return;
         setIsSubmitting(true);
         try {
