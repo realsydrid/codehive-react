@@ -63,3 +63,60 @@
     color: blue;
     font-weight: bold;
 }
+
+.asset-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.asset-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.asset-form h2 {
+    margin-bottom: 1rem;
+}
+
+.asset-form label {
+    display: block;
+    margin: 1rem 0 0.5rem;
+}
+
+.asset-form input,
+.asset-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.form-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-buttons button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.highlight-red {
+    color: red;
+    font-weight: bold;
+}

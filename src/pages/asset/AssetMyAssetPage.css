@@ -12,7 +12,7 @@
 .asset-summary h2 {
     font-size: 2rem;
     margin-bottom: 1rem;
-    color: #00a8ff; /* 메인 포인트 컬러 */
+    color: black; /* 메인 포인트 컬러 */
 }
 
 .asset-summary p {
