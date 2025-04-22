@@ -67,8 +67,11 @@ export default function AssetPendingOrdersPage() {
             <AssetNavBar />
             <h1 className={"pending-orders-title"}>미체결</h1>
             <button onClick={async () =>{
+                const shoudDelete = window.confirm("전체 주문을 취소하시겠습니까?");
+                if(!shoudDelete)return;
+
                 try{
-                    const res = await fetch(`http://localhost:8801/api/transaction/openOrders/user/1`,{
+                    const res = await fetch(`${URL}/user/1`,{
                         method:"DELETE"
                     });
                     if(!res.ok) throw new Error("주문 취소에 실패했습니다.");
@@ -76,7 +79,7 @@ export default function AssetPendingOrdersPage() {
                 }catch (e){
                     alert("주문 취소 중 오류가 발생:" + e.message);
                 }
-            }} className={"cancel-all-button"}>전체 삭제</button>
+            }} className={"cancel-all-button mb-5"}>전체 주문 취소</button>
             {
                 combinedData.length === 0 ? (
                     <p>미체결 주문이 없습니다.</p>
@@ -88,7 +91,7 @@ export default function AssetPendingOrdersPage() {
                                     {tx.market.replace("-","/")}</strong>
                                 <button className="cancel-button" onClick={async () => {
                                     try {
-                                        const res = await fetch(`http://localhost:8801/api/transaction/openOrders/id/${tx.id}`,{
+                                        const res = await fetch(`${URL}/id/${tx.id}`,{
                                             method: "DELETE"
                                         });
                                         if (!res.ok) throw new Error("주문 취소에 실패하였습니다.");
@@ -98,14 +101,16 @@ export default function AssetPendingOrdersPage() {
                                     }
                                 }}>주문 취소</button>
                             </div>
-                            <p>거래 ID : {tx.id}</p>
-                            <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>
-                                {tx.transactionType === 'BUY' ? '매수' : '매도'}
-                            </p>
-                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString()}</p>
-                            <p>주문 수량 : {(tx.transactionCnt).toLocaleString()}</p>
-                            <p>주문 금액 : {tx.price.toLocaleString()}</p>
-                            <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
+                            <div className="order-card-body">
+                                <p>거래 ID : {tx.id}</p>
+                                <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>
+                                    {tx.transactionType === 'BUY' ? '매수' : '매도'}
+                                </p>
+                                <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString()}</p>
+                                <p>주문 수량 : {(tx.transactionCnt).toLocaleString()}</p>
+                                <p>주문 금액 : {tx.price.toLocaleString()}</p>
+                                <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
+                            </div>
                         </div>
                     ))
                 )

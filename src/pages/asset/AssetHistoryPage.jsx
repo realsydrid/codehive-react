@@ -112,8 +112,8 @@ export default function LoadAssetHistory() {
                             <td className={tx.transactionType === "BUY" ? "transaction-type-buy" : "transaction-type-sell"}>
                                 {tx.transactionType === "BUY" ? "매수" : "매도"}
                             </td>
-                            <td>{tx.transactionCnt}</td>
-                            <td>{tx.price.toLocaleString()} 원</td>
+                            <td>{tx.transactionCnt.toLocaleString()}</td>
+                            <td>{tx.price.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 8 })} 원</td>
                             <td>{(tx.price * tx.transactionCnt).toLocaleString()} 원</td>
                             <td className={tx.transactionState === "COMPLETED" ? "transaction-status-completed" : "transaction-status-pending"}>
                                 {tx.transactionState === "COMPLETED" ? "체결완료" : "미체결"}

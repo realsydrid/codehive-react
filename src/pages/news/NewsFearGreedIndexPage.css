@@ -1,0 +1,64 @@
+h1{
+    display: none;
+}
+
+.fear-greed-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 70vh;
+}
+
+.fear-greed-card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+    text-align: left;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fear-greed-source {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+.fear-greed-info-box {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 2rem;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.fear-greed-info-box h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.fear-greed-info-box li {
+    margin-bottom: 0.75rem;
+}
+
+.fng-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.fng-list li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.label {
+    flex-basis: 180px; /* 너비 고정 */
+    text-align: center; /* <<< 가운데 정렬 핵심 */
+    font-weight: bold;
+    margin-right: 1rem;
+}
