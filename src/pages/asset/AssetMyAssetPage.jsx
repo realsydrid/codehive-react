@@ -208,12 +208,39 @@ export default function AssetMyAssetPage() {
                         </label>
 
                         <div className="form-buttons">
-                            <button onClick={() => {
-                                console.log("보유자산 등록 데이터:", formData);
-                                alert("보유자산이 등록되었습니다.");
-                                setShowForm(false);
-                                refetchKrwBalance();
-                            }}>등록하기</button>
+                            <button
+                                type="submit"
+                                onClick={async () => {
+                                    const payload = {
+                                        userNo: 1, // 예시 - 실제 로그인 유저 정보로 대체 필요
+                                        market: "KRW-KRW",
+                                        transactionType: "INIT",
+                                        price: formData.amount,
+                                        transactionCnt: 1.0,
+                                        transactionState: "COMPLETED",
+                                        transactionDate: new Date().toISOString(), // ISO 형식으로 보냄
+                                    };
+
+                                    try {
+                                        const response = await fetch(`${BASE_URL}`, {
+                                            method: "POST",
+                                            headers: { "Content-Type": "application/json" },
+                                            body: JSON.stringify(payload),
+                                        });
+
+                                        if (!response.ok) throw new Error("자산 등록 실패");
+
+                                        alert("보유자산이 등록되었습니다.");
+                                        setShowForm(false);
+                                        await refetchKrwBalance();
+                                    } catch (e) {
+                                        console.error("등록 실패:", e);
+                                        alert("등록 중 오류 발생: " + e.message);
+                                    }
+                                }}
+                            >
+                                등록하기
+                            </button>
                             <button onClick={() => {
 
                                 setShowForm(false)
