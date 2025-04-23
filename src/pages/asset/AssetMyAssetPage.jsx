@@ -2,10 +2,13 @@ import AssetNavBar from "./AssetNavBar.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import "./AssetMyAssetPage.css";
+import PortfolioDonutChart from "./PortfolioChart.jsx";
 
+const USER_NO =1;
 const API = {
-    BASE : "http://localhost:8801/api/transaction/krwBalance",
-    COIN_PRICE : "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
+    BASE : "http://localhost:8801/api/transaction",
+    BY_USER : `http://localhost:8801/api/transaction/${USER_NO}`,
+COIN_PRICE : "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
     COIN_NAME : "https://api.upbit.com/v1/market/all?is_details=false"
 };
 
@@ -20,7 +23,7 @@ export default function AssetMyAssetPage() {
 
     const { data: krwBalance, refetch: refetchKrwBalance, isPending: loadingBalance } = useQuery({
         queryKey: ["krwBalance"],
-        queryFn: () => fetch(API.BASE).then(res => res.json())
+        queryFn: () => fetch(API.BY_USER).then(res => res.json())
     });
 
     const { data: coinPrice, isPending: loadingPrice } = useQuery({
@@ -76,7 +79,7 @@ export default function AssetMyAssetPage() {
     }, [krwBalance, coinPrice, coinInfo]);
 
     const deleteAll = async () => {
-        const res = await fetch(`${API.BASE}/1`, { method: "DELETE" });
+        const res = await fetch(API.BY_USER, { method: "DELETE" });  // /{userNo}에 맞춤
         if (!res.ok) throw new Error("초기화 실패");
     };
 
@@ -141,6 +144,12 @@ export default function AssetMyAssetPage() {
                 {errorMsg && <p className="error-msg">{errorMsg}</p>}
             </div>
 
+            <div>
+                <hr/>
+                <PortfolioDonutChart data={combinedData.filter(item => item.market !== "KRW-KRW")} />
+                <hr/>
+            </div>
+
             {showForm && (
                 <div className="asset-form-overlay">
                     <div className="asset-form">
@@ -150,7 +159,7 @@ export default function AssetMyAssetPage() {
                         <p>원하는 금액을 설정하여 자산을 추가할 수 있습니다.</p>
 
                         <p className="highlight-red">자산 초기화 시 보유 코인 및 자산은 <br/>
-                        전부 0원이 되며,
+                            전부 0원이 되며,
                         </p>
                         <p>다시 자산을 추가해야합니다.</p>
                         <label>
