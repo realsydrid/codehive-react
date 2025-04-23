@@ -92,6 +92,9 @@ export default function AssetMyAssetPage() {
     };
 
     const handleRegister = async () => {
+        const date = new Date();
+        const kstISOString = new Date(date.getTime() + 9 * 60 * 60 * 1000).toISOString().replace("Z", "");
+
         const payload = {
             userNo: 1,
             market: "KRW-KRW",
@@ -99,7 +102,7 @@ export default function AssetMyAssetPage() {
             price: formData.amount,
             transactionCnt: 1.0,
             transactionState: "COMPLETED",
-            transactionDate: new Date().toISOString()
+            transactionDate: kstISOString
         };
         try {
             const res = await fetch(API.BASE, {
@@ -141,14 +144,21 @@ export default function AssetMyAssetPage() {
                 <div className="asset-form-overlay">
                     <div className="asset-form">
                         <h2>모의투자 자산 추가하기</h2>
+                        <p>모의투자 자산을 설정하세요</p>
                         <p className="highlight-red">최소 100만원부터 최대 1억원까지</p>
+                        <p>원하는 금액을 설정하여 자산을 추가할 수 있습니다.</p>
+
+                        <p className="highlight-red">자산 초기화 시 보유 코인 및 자산은 <br/>
+                        전부 0원이 되며,
+                        </p>
+                        <p>다시 자산을 추가해야합니다.</p>
                         <label>
                             보유자산 금액 (원):
                             <input type="number" min={1000000} max={100000000} step={100000} value={formData.amount} onChange={e => setFormData({ amount: Number(e.target.value) })} />
                         </label>
                         <div className="form-buttons">
-                            <button type="submit" onClick={handleRegister}>등록하기</button>
-                            <button onClick={() => setShowForm(false)}>취소</button>
+                            <button type="submit" className="register-button" onClick={handleRegister}>등록하기</button>
+                            <button className="cancel-button" onClick={() => setShowForm(false)}>취소</button>
                         </div>
                     </div>
                 </div>

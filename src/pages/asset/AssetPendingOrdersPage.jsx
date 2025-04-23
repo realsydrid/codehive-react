@@ -1,52 +1,51 @@
 import AssetNavBar from "./AssetNavBar.jsx";
 import { useEffect, useState } from "react";
-import './AssetPendingOrderPage.css';
+import "./AssetPendingOrderPage.css";
 import { useQuery } from "@tanstack/react-query";
 
-const BASE_URL = "http://localhost:8801/api/transaction/openOrders";
+const API = {
+    BASE: "http://localhost:8801/api/transaction/openOrders",
+    COIN_INFO: "https://api.upbit.com/v1/market/all?is_details=false"
+};
 
 export default function AssetPendingOrdersPage() {
     const [combinedData, setCombinedData] = useState([]);
     const [errorMsg, setErrorMsg] = useState("");
 
-    const { data: pendingOrders, isPending: isPendingOrdersLoading } = useQuery({
+    const { data: pendingOrders, isPending: loadingOrders } = useQuery({
         queryKey: ["pendingOrders"],
-        staleTime: 1000 * 60 * 5,
-        cacheTime: 1000 * 60 * 10,
-        retry: 1,
         queryFn: async () => {
-            const res = await fetch(BASE_URL);
+            const res = await fetch(API.BASE);
             if (!res.ok) throw new Error("미체결 주문 불러오기 실패");
             return res.json();
-        }
+        },
+        staleTime: 300000,
+        cacheTime: 600000,
+        retry: 1
     });
 
-    const { data: coinInfo, isPending: isCoinInfoLoading } = useQuery({
+    const { data: coinInfo, isPending: loadingInfo } = useQuery({
         queryKey: ["coinInfo"],
-        staleTime: 1000 * 60 * 5,
-        cacheTime: 1000 * 60 * 10,
-        retry: 1,
         queryFn: async () => {
-            const res = await fetch("https://api.upbit.com/v1/market/all?is_details=false");
+            const res = await fetch(API.COIN_INFO);
             if (!res.ok) throw new Error("코인 정보 불러오기 실패");
             return res.json();
-        }
+        },
+        staleTime: 300000,
+        cacheTime: 600000,
+        retry: 1
     });
 
     useEffect(() => {
-        if (pendingOrders && coinInfo) {
-            const map = new Map();
-            coinInfo.forEach((coin) => {
-                map.set(coin.market, coin.korean_name);
-            });
+        if (!pendingOrders || !coinInfo) return;
 
-            const merged = (pendingOrders.coinTransactions || []).map(tx => ({
-                ...tx,
-                koreanName: map.get(tx.market) || tx.market
-            }));
+        const nameMap = new Map(coinInfo.map(({ market, korean_name }) => [market, korean_name]));
+        const merged = (pendingOrders.coinTransactions || []).map(tx => ({
+            ...tx,
+            koreanName: nameMap.get(tx.market) || tx.market
+        }));
 
-            setCombinedData(merged);
-        }
+        setCombinedData(merged);
     }, [pendingOrders, coinInfo]);
 
     const deleteOrder = async (url) => {
@@ -55,10 +54,9 @@ export default function AssetPendingOrdersPage() {
     };
 
     const handleCancelAll = async () => {
-        const confirm = window.confirm("전체 주문을 취소하시겠습니까?");
-        if (!confirm) return;
+        if (!window.confirm("전체 주문을 취소하시겠습니까?")) return;
         try {
-            await deleteOrder(`${BASE_URL}/user/1`);
+            await deleteOrder(`${API.BASE}/user/1`);
             setCombinedData([]);
         } catch (e) {
             setErrorMsg(e.message);
@@ -67,7 +65,7 @@ export default function AssetPendingOrdersPage() {
 
     const handleCancelOne = async (id) => {
         try {
-            await deleteOrder(`${BASE_URL}/id/${id}`);
+            await deleteOrder(`${API.BASE}/id/${id}`);
             setCombinedData(prev => prev.filter(item => item.id !== id));
         } catch (e) {
             setErrorMsg(e.message);
@@ -85,12 +83,12 @@ export default function AssetPendingOrdersPage() {
 
             {errorMsg && <p className="error-msg">{errorMsg}</p>}
 
-            {isPendingOrdersLoading || isCoinInfoLoading ? (
+            {loadingOrders || loadingInfo ? (
                 <p>로딩 중...</p>
             ) : combinedData.length === 0 ? (
                 <p>미체결 주문이 없습니다.</p>
             ) : (
-                combinedData.map((tx) => (
+                combinedData.map(tx => (
                     <div key={tx.id} className="order-card">
                         <div className="order-card-header">
                             <strong className="order-market">
