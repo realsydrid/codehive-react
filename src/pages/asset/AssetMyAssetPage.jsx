@@ -119,6 +119,7 @@ export default function AssetMyAssetPage() {
             setErrorMsg(e.message);
         }
     };
+    refetchKrwBalance();
 
     if (loadingBalance || loadingPrice || loadingInfo) {
         return <><AssetNavBar /><p style={{ textAlign: "center", marginTop: "2rem" }}>로딩 중...</p></>;

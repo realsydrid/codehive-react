@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 
 const API = {
-    TRANSACTION: "http://localhost:8801/api/transaction/coinTransactions",
+    TRANSACTION: "http://localhost:8801/api/transaction",
     COIN_INFO: "https://api.upbit.com/v1/market/all?is_details=false",
 };
 
@@ -89,28 +89,39 @@ export default function LoadAssetHistory() {
                                     </div>
                                 </NavDropdown>
 
-                                <NavDropdown title="자산 검색">
-                                    <div className="px-3 py-2">
+                                <NavDropdown title="자산 검색" id="market-search-dropdown">
+                                    <div className="px-3 py-2" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="text"
                                             className="form-control"
                                             placeholder="자산 검색"
-                                            onChange={(e) => setFilter(prev => ({ ...prev, market: e.target.value }))}
+                                            onChange={(e) =>
+                                                setFilter((prev) => ({ ...prev, market: e.target.value }))
+                                            }
+                                            onClick={(e) => e.stopPropagation()} // 클릭 전파 방지
+                                            onKeyDown={(e) => e.stopPropagation()} // 한글 타이핑 시 드롭다운 닫힘 방지
                                         />
                                     </div>
                                     <NavDropdown.Divider />
-                                    <div style={{ maxHeight: "200px", overflowY: "auto" }}>
-                                        <NavDropdown.Item onClick={() => setFilter(prev => ({ ...prev, market: "" }))}>자산 전체</NavDropdown.Item>
+                                    <div style={{ maxHeight: "200px", overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
+                                        <NavDropdown.Item onClick={() => setFilter((prev) => ({ ...prev, market: "" }))}>
+                                            자산 전체
+                                        </NavDropdown.Item>
                                         {combinedData
                                             .filter((tx, idx, arr) =>
-                                                arr.findIndex(item => item.market === tx.market) === idx &&
+                                                arr.findIndex((item) => item.market === tx.market) === idx &&
                                                 (!filter.market ||
                                                     tx.koreanName.toLowerCase().includes(filter.market.toLowerCase()) ||
                                                     tx.market.toLowerCase().includes(filter.market.toLowerCase()))
                                             )
                                             .slice(0, 5)
                                             .map((tx) => (
-                                                <NavDropdown.Item key={tx.market} onClick={() => setFilter(prev => ({ ...prev, market: tx.market }))}>
+                                                <NavDropdown.Item
+                                                    key={tx.market}
+                                                    onClick={() =>
+                                                        setFilter((prev) => ({ ...prev, market: tx.market }))
+                                                    }
+                                                >
                                                     {tx.koreanName} ({tx.market.replace("KRW-", "")})
                                                 </NavDropdown.Item>
                                             ))}
