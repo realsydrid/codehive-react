@@ -1,4 +1,4 @@
-const ServerUrl='http://localhost:8801/rest/community'
+const ServerUrl='http://localhost:8801/api/community'
 
 export async function ReadPost(postNo){
     const URL=`${ServerUrl}/post?postNo=${postNo}`

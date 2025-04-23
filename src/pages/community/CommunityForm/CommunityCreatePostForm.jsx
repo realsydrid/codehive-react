@@ -1,4 +1,4 @@
-import {CreatePosts} from "../CommunityFetch.js";
+import {CreatePosts} from "../CommunityUtil/CommunityFetch.js";
 import {useState} from "react";
 import {redirect} from "react-router-dom";
 import {Button, Form, FormGroup, Stack} from "react-bootstrap";

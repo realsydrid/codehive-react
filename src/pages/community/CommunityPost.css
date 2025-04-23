@@ -1,44 +1,56 @@
-a{
-    color: black;
-    text-decoration: none;
-}
-.list-group{
-    width: 80%;
+.Community-list-group,.Community-comment,.Community-PostCont{
+    width: 100%;
     min-width: 400px;
     border: 1px solid black;
+    height: fit-content;
+    min-height: 120px;
     display: flex;
     flex-direction: column;
     color:black;
     text-decoration: none;
     padding-bottom: 5px;
     margin: 10px;
+    border-radius: 5px;
+    text-align: left;
 }
-h1{justify-content: center; align-items: center;}
-h2{justify-content: flex-start; align-items: flex-start}
-.CommunityLink{
+.Community-list-group,.Community-comment{
+    min-height: 120px;
+}
+.Community-PostCont{
+    min-height: 400px;
+}
+.Community-PostCont>h1{
+    margin-bottom: 7.8em;
+}
+.Community-Link{
     color: black;
     text-decoration: none;
     display: flex;
     flex-direction: column;
 }
-.postForm>div{
+.Community-postForm>div{
     justify-content: space-between;
     display: flex;
     flex-direction: row;
+    align-items: flex-end;
 }
-.postForm{
+.Community-postForm{
     display: flex;
     flex-direction: column;
 }
-.CommunityProfileImg{
+.Community-postForm>h2{
+    display: flex;
+    margin: 0.2em 0 1.2em 0.2em;
+}
+.Community-ProfileImg{
     width: 50px;
     height: 50px;
 }
-.UserInfo{
+.Community-UserInfo{
     width: fit-content;
     height: fit-content;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
+
