@@ -1,5 +1,11 @@
-export default function Loading() {
+import Spinner from 'react-bootstrap/Spinner';
+
+function Loading() {
     return (
-        <p style={{color:"orange", fontWeight:"bold"}}>로딩중.....</p>
-    )
+        <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+        </Spinner>
+    );
 }
+
+export default Loading;

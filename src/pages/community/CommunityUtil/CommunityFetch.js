@@ -1,4 +1,4 @@
-const ServerUrl='http://localhost:8801/rest/community'
+const ServerUrl='http://localhost:8801/api/community'
 
 export async function ReadPost(postNo){
     const URL=`${ServerUrl}/post?postNo=${postNo}`
@@ -33,6 +33,7 @@ export async function GetPosts(category,page,size){
     });
     if(!res.ok) throw new Error(res.status+"");
     const data= await res.json();
+    console.log(data)
     return data
 }
 export async function CreatePosts(category,postCont,userNo){
