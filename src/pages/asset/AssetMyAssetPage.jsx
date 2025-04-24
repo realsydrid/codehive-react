@@ -3,13 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import "./AssetMyAssetPage.css";
 import PortfolioDonutChart from "./PortfolioChart.jsx";
+import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
 
-const USER_NO =1;
+const USER_NO = 1;
 const API = {
-    BASE : "http://localhost:8801/api/transaction",
-    BY_USER : `http://localhost:8801/api/transaction/${USER_NO}`,
-COIN_PRICE : "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
-    COIN_NAME : "https://api.upbit.com/v1/market/all?is_details=false"
+    BASE: "http://localhost:8801/api/transaction",
+    BY_USER: `http://localhost:8801/api/transaction/${USER_NO}`,
+    COIN_PRICE: "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
+    COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false"
 };
 
 export default function AssetMyAssetPage() {
@@ -18,6 +19,7 @@ export default function AssetMyAssetPage() {
     const [formData, setFormData] = useState({ amount: 1000000 });
     const [showForm, setShowForm] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [chartData, setChartData] = useState([]);
 
     const isAssetCleared = summary.eval === 0 && combinedData.length === 0;
 
@@ -28,7 +30,14 @@ export default function AssetMyAssetPage() {
 
     const { data: coinPrice, isPending: loadingPrice } = useQuery({
         queryKey: ["coinPrice"],
-        queryFn: () => fetch(API.COIN_PRICE).then(res => res.json().then(data => data.map(({ market, trade_price }) => ({ market, trade_price }))))
+        queryFn: async () => {
+            const res = await fetch(API.COIN_PRICE);
+            if (!res.ok) throw new Error("코인 가격 실패");
+            const data = await res.json();
+            return data.map(({ market, trade_price }) => ({ market, trade_price }));
+        },
+        staleTime: 0,
+        refetchInterval: 500
     });
 
     const { data: coinInfo, isPending: loadingInfo } = useQuery({
@@ -78,8 +87,33 @@ export default function AssetMyAssetPage() {
         });
     }, [krwBalance, coinPrice, coinInfo]);
 
+    // 포트폴리오 차트는 보유 자산 목록이 바뀌었을 때만 갱신 (coinPrice 영향 X)
+    useEffect(() => {
+        if (!krwBalance || !coinInfo) return;
+
+        const nameMap = new Map(coinInfo.map(({ market, korean_name }) => [market, korean_name]));
+
+        const chartReady = krwBalance.map(item => {
+            const { market, holdingAmount, averagePrice } = item;
+            const isKRW = market === "KRW-KRW";
+            const evalValue = (averagePrice ?? 0) * holdingAmount;
+
+            return {
+                ...item,
+                evalValue,
+                koreanName: nameMap.get(market)
+            };
+        }).filter(item => item.market !== "KRW-KRW" && item.evalValue > 0);
+
+        setChartData(chartReady);
+    }, [krwBalance, coinInfo]);
+
+    useEffect(() => {
+        refetchKrwBalance();
+    }, []);
+
     const deleteAll = async () => {
-        const res = await fetch(API.BY_USER, { method: "DELETE" });  // /{userNo}에 맞춤
+        const res = await fetch(API.BY_USER, { method: "DELETE" });
         if (!res.ok) throw new Error("초기화 실패");
     };
 
@@ -87,8 +121,10 @@ export default function AssetMyAssetPage() {
         if (!window.confirm("보유 자산을 초기화 하시겠습니까?")) return;
         try {
             await deleteAll();
+            await refetchKrwBalance();
             setCombinedData([]);
             setSummary({ eval: 0, profit: 0, rate: 0 });
+            setChartData([]);
         } catch (e) {
             setErrorMsg(e.message);
         }
@@ -122,7 +158,6 @@ export default function AssetMyAssetPage() {
             setErrorMsg(e.message);
         }
     };
-    refetchKrwBalance();
 
     if (loadingBalance || loadingPrice || loadingInfo) {
         return <><AssetNavBar /><p style={{ textAlign: "center", marginTop: "2rem" }}>로딩 중...</p></>;
@@ -135,8 +170,8 @@ export default function AssetMyAssetPage() {
 
             <div className="asset-summary">
                 <h3>보유자산</h3>
-                <h2>{summary.eval.toLocaleString(undefined, { maximumFractionDigits: 0 })} 원</h2>
-                <p><strong>평가손익 :</strong> <span style={{ color: summary.profit >= 0 ? 'red' : 'blue' }}>{summary.profit.toLocaleString()} 원</span></p>
+                <h2>{formatDecimalsWithCommas(summary.eval)}</h2>
+                <p><strong>평가손익 :</strong> <span style={{ color: summary.profit >= 0 ? 'red' : 'blue' }}>{formatDecimalsWithCommas(summary.profit)} 원</span></p>
                 <p><strong>수익률 :</strong> <span style={{ color: summary.rate >= 0 ? 'red' : 'blue' }}>{summary.rate.toFixed(2)} %</span></p>
                 <button onClick={isAssetCleared ? () => setShowForm(true) : handleReset}>
                     {isAssetCleared ? "보유자산 추가하기" : "보유자산 초기화하기"}
@@ -145,9 +180,9 @@ export default function AssetMyAssetPage() {
             </div>
 
             <div>
-                <hr/>
-                <PortfolioDonutChart data={combinedData.filter(item => item.market !== "KRW-KRW")} />
-                <hr/>
+                <hr />
+                <PortfolioDonutChart data={chartData} />
+                <hr />
             </div>
 
             {showForm && (
@@ -158,13 +193,18 @@ export default function AssetMyAssetPage() {
                         <p className="highlight-red">최소 100만원부터 최대 1억원까지</p>
                         <p>원하는 금액을 설정하여 자산을 추가할 수 있습니다.</p>
 
-                        <p className="highlight-red">자산 초기화 시 보유 코인 및 자산은 <br/>
-                            전부 0원이 되며,
-                        </p>
+                        <p className="highlight-red">자산 초기화 시 보유 코인 및 자산은 <br />전부 0원이 되며,</p>
                         <p>다시 자산을 추가해야합니다.</p>
                         <label>
                             보유자산 금액 (원):
-                            <input type="number" min={1000000} max={100000000} step={100000} value={formData.amount} onChange={e => setFormData({ amount: Number(e.target.value) })} />
+                            <input
+                                type="number"
+                                min={1000000}
+                                max={100000000}
+                                step={100000}
+                                value={formData.amount}
+                                onChange={e => setFormData({ amount: Number(e.target.value) })}
+                            />
                         </label>
                         <div className="form-buttons">
                             <button type="submit" className="register-button" onClick={handleRegister}>등록하기</button>
@@ -178,13 +218,13 @@ export default function AssetMyAssetPage() {
                 {combinedData.filter(item => item.market !== "KRW-KRW").map((item, idx) => (
                     <div className="asset-card" key={idx}>
                         <p><strong>{item.koreanName}<br />{item.market.replace("-", "/")}</strong></p>
-                        <p>평가손익 : <span className={item.profit >= 0 ? 'red' : 'blue'}>{item.profit.toLocaleString()} 원</span></p>
-                        <p>수익률 : <span style={{ color: item.profitRate >= 0 ? 'red' : 'blue' }}>{item.profitRate.toFixed(2)} %</span></p>
+                        <p>평가손익 : <span className={item.profit >= 0 ? 'red' : 'blue'}>{formatDecimalsWithCommas(item.profit)} 원</span></p>
+                        <p>수익률 : <span style={{ color: item.profitRate >= 0 ? 'red' : 'blue' }}>{item.profitRate.toFixed(2)}%</span></p>
                         <hr />
-                        <p>보유 수량: {item.holdingAmount.toLocaleString()}</p>
-                        <p>평균 매수가: {item.averagePrice.toLocaleString(undefined, { maximumFractionDigits: 2 })} 원</p>
-                        <p>평가 금액: {item.evalValue.toLocaleString()} 원</p>
-                        <p>매수 금액: {item.buyValue.toLocaleString()} 원</p>
+                        <p>보유 수량: {formatDecimalsWithCommas(item.holdingAmount)}</p>
+                        <p>평균 매수가: {formatDecimalsWithCommas(item.averagePrice, true, 2)} 원</p>
+                        <p>평가 금액: {formatDecimalsWithCommas(item.evalValue)} 원</p>
+                        <p>매수 금액: {formatDecimalsWithCommas(item.buyValue)} 원</p>
                     </div>
                 ))}
             </div>

@@ -5,6 +5,8 @@ import './AssetHistoryPage.css';
 import { Nav, NavDropdown } from "react-bootstrap";
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {formatDecimalsWithCommas} from "../../utils/numberFormat.js";
 
 const API = {
     TRANSACTION: "http://localhost:8801/api/transaction",
@@ -147,14 +149,14 @@ export default function LoadAssetHistory() {
                     <tbody>
                     {filteredData.map((tx) => (
                         <tr key={tx.id} data-market={tx.market}>
-                            <td>{new Date(tx.transactionDate).toLocaleString()}</td>
+                            <td>{tx.transactionDate}</td>
                             <td className="asset-type">{tx.koreanName}<br />{tx.market.replace("-", "/")}</td>
                             <td className={tx.transactionType === "BUY" ? "transaction-type-buy" : "transaction-type-sell"}>
                                 {tx.transactionType === "BUY" ? "매수" : "매도"}
                             </td>
                             <td>{tx.transactionCnt.toLocaleString()}</td>
-                            <td>{tx.price.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 8 })} 원</td>
-                            <td>{(tx.price * tx.transactionCnt).toLocaleString()} 원</td>
+                            <td>{formatDecimalsWithCommas(tx.price, true)} 원</td>
+                            <td>{formatDecimalsWithCommas(tx.price * tx.transactionCnt)} 원</td>
                             <td className={tx.transactionState === "COMPLETED" ? "transaction-status-completed" : "transaction-status-pending"}>
                                 {tx.transactionState === "COMPLETED" ? "체결완료" : "미체결"}
                             </td>
