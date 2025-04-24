@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import AssetNavBar from "./AssetNavBar.jsx";
 import './AssetHistoryPage.css';
-import {Nav, NavDropdown} from "react-bootstrap";
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
+// import {Nav, NavDropdown} from "react-bootstrap";
+// import Container from 'react-bootstrap/Container';
+// import Navbar from 'react-bootstrap/Navbar';
 
 
 export default function LoadAssetHistory() {
