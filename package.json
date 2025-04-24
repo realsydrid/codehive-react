@@ -11,11 +11,16 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.72.1",
+    "bootstrap": "^5.3.5",
+    "chart.js": "^4.4.9",
     "lightweight-charts": "^5.0.5",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-router-dom": "^7.5.0"
+    "react-router-dom": "^7.5.0",
+    "recharts": "^2.15.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

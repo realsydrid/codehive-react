@@ -2,54 +2,56 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import AssetNavBar from "./AssetNavBar.jsx";
 import './AssetHistoryPage.css';
-// import {Nav, NavDropdown} from "react-bootstrap";
-// import Container from 'react-bootstrap/Container';
-// import Navbar from 'react-bootstrap/Navbar';
+import { Nav, NavDropdown } from "react-bootstrap";
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
 
+const API = {
+    TRANSACTION: "http://localhost:8801/api/transaction",
+    COIN_INFO: "https://api.upbit.com/v1/market/all?is_details=false",
+};
 
 export default function LoadAssetHistory() {
     const [combinedData, setCombinedData] = useState([]);
-    const [filterType, setFilterType] = useState("ALL");
+    const [filter, setFilter] = useState({ type: "ALL", startDate: "", endDate: "", market: "" });
 
-    const API_BASE_URL = 'http://localhost:8801/api/transaction/coinTransactions'
-    const apiUrl = `${API_BASE_URL}?userNo=1&transactionState=COMPLETED` + (filterType === "ALL" ? "" : `&transactionType=${filterType}`);
+    const buildUrl = () => {
+        const params = new URLSearchParams({
+            userNo: "1",
+            transactionState: "COMPLETED"
+        });
+        if (filter.type !== "ALL") params.append("transactionType", filter.type);
+        if (filter.startDate) params.append("startDate", `${filter.startDate}T00:00:00`);
+        if (filter.endDate) params.append("endDate", `${filter.endDate}T23:59:59`);
+        return `${API.TRANSACTION}?${params.toString()}`;
+    };
 
-    const { data: coinTransaction, isLoading: isLoading1, isError: isError1 } = useQuery({
-        queryKey: ["coinTransaction", filterType],
-        queryFn: async () => {
-            const res = await fetch(apiUrl);
-            if (!res.ok) throw new Error("거래 내역 불러오기 실패");
-            return res.json();
-        }
+    const { data: coinTransaction, isLoading: loadingTx, isError: errorTx } = useQuery({
+        queryKey: ["coinTransaction", filter],
+        queryFn: () => fetch(buildUrl()).then(res => res.json())
     });
 
-    const { data: coinInfo, isLoading: isLoading2, isError: isError2 } = useQuery({
+    const { data: coinInfo, isLoading: loadingInfo, isError: errorInfo } = useQuery({
         queryKey: ["coinInfo"],
-        queryFn: async () => {
-            const res = await fetch("https://api.upbit.com/v1/market/all?is_details=false");
-            if (!res.ok) throw new Error("코인 정보 불러오기 실패");
-            return res.json();
-        }
+        queryFn: () => fetch(API.COIN_INFO).then(res => res.json())
     });
 
     useEffect(() => {
-        if (coinTransaction && coinInfo) {
-            const map = new Map();
-            coinInfo.forEach((coin) => {
-                map.set(coin.market, coin.korean_name);
-            });
-
-            const merged = (coinTransaction || []).map(tx => ({
-                ...tx,
-                koreanName: map.get(tx.market) || tx.market
-            }));
-
-            setCombinedData(merged);
-        }
+        if (!coinTransaction || !coinInfo) return;
+        const nameMap = new Map(coinInfo.map(({ market, korean_name }) => [market, korean_name]));
+        const merged = coinTransaction.map(tx => ({
+            ...tx,
+            koreanName: nameMap.get(tx.market) || tx.market
+        }));
+        setCombinedData(merged);
     }, [coinTransaction, coinInfo]);
 
-    if (isLoading1 || isLoading2) return <p>로딩 중...</p>;
-    if (isError1 || isError2) return <p>데이터를 불러오는 중 오류가 발생했습니다.</p>;
+    const filteredData = filter.market
+        ? combinedData.filter(tx => tx.market === filter.market)
+        : combinedData;
+
+    if (loadingTx || loadingInfo) return <p>로딩 중...</p>;
+    if (errorTx || errorInfo) return <p>데이터를 불러오는 중 오류가 발생했습니다.</p>;
 
     return (
         <>
@@ -62,34 +64,74 @@ export default function LoadAssetHistory() {
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">
                             <Nav className="me-auto">
-                                <NavDropdown title="거래 전체" id="collapsible-nav-dropdown">
-                                    <NavDropdown.Item onClick={()=>setFilterType("BUY")}>
-                                        매수
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item onClick={()=>setFilterType("SELL")}>
-                                        매도
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item onClick={()=>setFilterType("ALL")}>
-                                        거래전체
-                                    </NavDropdown.Item>
+                                <NavDropdown title="거래 전체">
+                                    {['BUY', 'SELL', 'ALL'].map(type => (
+                                        <NavDropdown.Item key={type} onClick={() => setFilter(prev => ({ ...prev, type }))}>
+                                            {type === 'ALL' ? '거래전체' : type === 'BUY' ? '매수' : '매도'}
+                                        </NavDropdown.Item>
+                                    ))}
                                 </NavDropdown>
-                                <NavDropdown title="기간 설정" id="collapsible-nav-dropdown">
-                                    <NavDropdown.Item href="#action/3.1">1일</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.2">7일</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">30일</NavDropdown.Item>
+
+                                <NavDropdown title="기간 설정">
+                                    {[1, 7, 30].map(days => (
+                                        <NavDropdown.Item key={days} onClick={() => {
+                                            const today = new Date();
+                                            const past = new Date();
+                                            past.setDate(today.getDate() - days);
+                                            setFilter(prev => ({ ...prev, startDate: past.toISOString().slice(0, 10), endDate: today.toISOString().slice(0, 10) }));
+                                        }}>{days}일</NavDropdown.Item>
+                                    ))}
+                                    <div style={{ padding: "0.5rem 1rem" }}>
+                                        <label>시작일: </label>
+                                        <input type="date" value={filter.startDate} onChange={(e) => setFilter(prev => ({ ...prev, startDate: e.target.value }))} /><br />
+                                        <label>종료일: </label>
+                                        <input type="date" value={filter.endDate} onChange={(e) => setFilter(prev => ({ ...prev, endDate: e.target.value }))} />
+                                    </div>
                                 </NavDropdown>
-                                <NavDropdown title="자산 전체" id="collapsible-nav-dropdown">
-                                    <input type="text" placeholder={"자산 조회"}/>
+
+                                <NavDropdown title="자산 검색" id="market-search-dropdown">
+                                    <div className="px-3 py-2" onClick={(e) => e.stopPropagation()}>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="자산 검색"
+                                            onChange={(e) =>
+                                                setFilter((prev) => ({ ...prev, market: e.target.value }))
+                                            }
+                                            onClick={(e) => e.stopPropagation()} // 클릭 전파 방지
+                                            onKeyDown={(e) => e.stopPropagation()} // 한글 타이핑 시 드롭다운 닫힘 방지
+                                        />
+                                    </div>
                                     <NavDropdown.Divider />
+                                    <div style={{ maxHeight: "200px", overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
+                                        <NavDropdown.Item onClick={() => setFilter((prev) => ({ ...prev, market: "" }))}>
+                                            자산 전체
+                                        </NavDropdown.Item>
+                                        {combinedData
+                                            .filter((tx, idx, arr) =>
+                                                arr.findIndex((item) => item.market === tx.market) === idx &&
+                                                (!filter.market ||
+                                                    tx.koreanName.toLowerCase().includes(filter.market.toLowerCase()) ||
+                                                    tx.market.toLowerCase().includes(filter.market.toLowerCase()))
+                                            )
+                                            .slice(0, 5)
+                                            .map((tx) => (
+                                                <NavDropdown.Item
+                                                    key={tx.market}
+                                                    onClick={() =>
+                                                        setFilter((prev) => ({ ...prev, market: tx.market }))
+                                                    }
+                                                >
+                                                    {tx.koreanName} ({tx.market.replace("KRW-", "")})
+                                                </NavDropdown.Item>
+                                            ))}
+                                    </div>
                                 </NavDropdown>
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
+
                 <table className="asset-history-table">
                     <thead>
                     <tr>
@@ -103,17 +145,15 @@ export default function LoadAssetHistory() {
                     </tr>
                     </thead>
                     <tbody>
-                    {combinedData.map((tx) => (
-                        <tr key={tx.id}>
+                    {filteredData.map((tx) => (
+                        <tr key={tx.id} data-market={tx.market}>
                             <td>{new Date(tx.transactionDate).toLocaleString()}</td>
-                            <td className="asset-type">
-                                {tx.koreanName}<br />{tx.market.replace("-", "/")}
-                            </td>
+                            <td className="asset-type">{tx.koreanName}<br />{tx.market.replace("-", "/")}</td>
                             <td className={tx.transactionType === "BUY" ? "transaction-type-buy" : "transaction-type-sell"}>
                                 {tx.transactionType === "BUY" ? "매수" : "매도"}
                             </td>
-                            <td>{tx.transactionCnt}</td>
-                            <td>{tx.price.toLocaleString()} 원</td>
+                            <td>{tx.transactionCnt.toLocaleString()}</td>
+                            <td>{tx.price.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 8 })} 원</td>
                             <td>{(tx.price * tx.transactionCnt).toLocaleString()} 원</td>
                             <td className={tx.transactionState === "COMPLETED" ? "transaction-status-completed" : "transaction-status-pending"}>
                                 {tx.transactionState === "COMPLETED" ? "체결완료" : "미체결"}

@@ -1,12 +1,24 @@
-import {Link} from "react-router-dom";
-import React from "react";
 import NewsNavBar from "./NewsNavBar.jsx";
+
 
 export default function NewsKimchiPremiumPage() {
     return (
         <>
-            <NewsNavBar/>
-            <h1>김프</h1>
+            <NewsNavBar />
+            <div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>코인명</th>
+                            <th>업비트 현재가</th>
+                            <th>빗썸 현재가</th>
+                            <th>바이낸스 환산가</th>
+                            <th>OKX 환산가</th>
+                            <th>프리미엄 (%)</th>
+                        </tr>
+                        </thead>
+                    </table>
+            </div>
         </>
-    )
+    );
 }
