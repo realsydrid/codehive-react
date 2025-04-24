@@ -111,7 +111,7 @@ export default function TradeOrderPage() {
             case "시세":
                 return <PriceInfo market={market} />;
             case "정보":
-                return <CoinDetailInfo combinedData={combinedData} />;
+                return <CoinDetailInfo combinedData={combinedData} market={market} />;
             default:
                 return <Order market={market} combinedData={combinedData} />;
         }

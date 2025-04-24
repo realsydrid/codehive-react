@@ -1,18 +1,45 @@
 import {useQuery} from "@tanstack/react-query";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
-export default function CoinDetailInfo({combinedData}) {
+export default function CoinDetailInfo({combinedData, market}) {
 
+    const initialized = useRef(false);
     const [englishName, setEnglishName] = useState("");
     useEffect(() => {
-        if (combinedData?.english_name) {
-            setEnglishName(combinedData?.english_name.toLowerCase());
+
+        if(initialized.current || !combinedData?.english_name){
+            return;
         }
+        setEnglishName(combinedData.english_name.toLowerCase());
+        console.log(combinedData.english_name.toLowerCase());
+        initialized.current = true;
     }, [combinedData?.english_name]);
 
-    const {data: coinDetailData, isLoading, error} = useQuery({
-        queryKey: ['coinDetailInfo', englishName],
+    const {data: coinList, isListLoading, listError} = useQuery({
+        queryKey: ["coinList"],
         staleTime: 1000 * 60 * 60,
+        gcTime : 1000* 60 *60,
+        retry :1,
+        queryFn: async ()=>{
+            const URL= `https://api.coingecko.com/api/v3/coins/list`
+            try {
+                await new Promise(resolve => setTimeout(resolve, 0));
+                const res= await fetch(URL);
+                if(!res.ok) throw new Error("CoinListInfo could not be found!");
+                return await res.json()
+
+            }catch (e){
+                throw new Error (e)
+            }
+        }
+    })
+
+
+
+    const {data: coinDetailData, isLoading, error} = useQuery({
+        queryKey: ['coinDetailData', englishName],
+        staleTime: 1000 * 60 * 60,
+        gcTime: 1000 * 60 * 60,
         retry: 1,
         enabled: !!englishName,
         queryFn: async () => {
@@ -31,22 +58,22 @@ export default function CoinDetailInfo({combinedData}) {
         }
 
     })
-    console.log(coinDetailData)
 
     return (
         <>
-            <h1>코인정보</h1>
 
-            <p>{combinedData.english_name.toLowerCase()}</p>
 
-            {coinDetailData &&
-                <div>
-                    {coinDetailData.id}
-                </div>
+            {coinDetailData ?
+                (
+                    <div>
+                        {coinDetailData.id}
+                        {coinDetailData.description.ko}
+                    </div>) : (
+                    <div>
+                        코인정보가 없습니다.
+                    </div>
+                )
             }
-
-            //https://api.coingecko.com/api/v3/coins/ripple
-            //https://api.coingecko.com/api/v3/coins/list
 
 
         </>
