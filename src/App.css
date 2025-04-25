@@ -79,19 +79,6 @@
 
 }
 
-#bottomNavbar ul{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 80%;
-}
-#bottomNavbar li{
-  font-size: 1.2rem;
-  list-style: none;
-
-}
-
 #communityNavbar, #newsNavBar, #assetNavBar {
   position: fixed;
   top: 3rem;
@@ -99,8 +86,22 @@
   border: 1px solid red;
   width: 100%;
   box-sizing: border-box;
-  background-color: rgba(0, 128, 0, 0.38);
+  background-color: rgb(0, 0, 0);
   margin-bottom: 1rem;
+  color: white;
+}
+#bottomNavbar ul{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
+
+#bottomNavbar li{
+  font-size: 1.2rem;
+  list-style: none;
+
 }
 #communityNavbar ul, #newsNavBar ul, #assetNavBar ul {
   display: flex;
@@ -108,11 +109,14 @@
   justify-content: space-between;
   align-items: center;
   width: 80%;
+  color:white;
 }
 #communityNavbar li, #newsNavBar li, #assetNavBar li {
   list-style: none;
+  color:white;
 }
 #communityNavbar li a , #newsNavBar li a, #assetNavBar li a {
   font-size: 1.2rem;
   font-weight: bold;
+  z-index: 1;
 }

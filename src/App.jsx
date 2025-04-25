@@ -20,7 +20,7 @@ import SettingsTermsPage from "./pages/settings/SettingsTermsPage.jsx";
 import CommunityFreePostsPage from "./pages/community/CommunityFreePostsPage.jsx";
 import CommunityChartPostsPage from "./pages/community/CommunityChartPostsPage.jsx";
 import CommunityPnlPostsPage from "./pages/community/CommunityPnlPostsPage.jsx";
-import CommunityPostDetailPage from "./pages/community/CommunityPostDetailPage.jsx";
+import CommunityPostDetailPage from "./pages/community/CommunityForm/CommunityPostDetailPage.jsx";
 import CommunityPostModifyPage from "./pages/community/CommunityPostModifyPage.jsx";
 import CommunitySearchPage from "./pages/community/CommunitySearchPage.jsx";
 import CommunityExpertPostsPage from "./pages/community/CommunityExpertPostsPage.jsx";

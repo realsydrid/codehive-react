@@ -4,11 +4,12 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import {Link} from "react-router-dom";
 import "../CommunityPost.css";
 import CommunityPageNationData from "../CommunityHook/CommunityPageNationData.js";
+import {Button} from "react-bootstrap";
 
 export default function CommunityPostsPage(category){
     const { data: posts, fetchPosts, hasMore, isLoading, isError } = CommunityPageNationData(category.category);
     return (
-        <div className={"justify-content-center"}>
+        <div className={"justify-content-center mt-2"}>
                 {isError && <ErrorMsg error={isError}/>}
                 {isLoading && <Loading/>}
             <InfiniteScroll
@@ -19,7 +20,7 @@ export default function CommunityPostsPage(category){
                 endMessage={<p style={{ textAlign: "center" }}><b>더 이상 게시글이 없습니다.</b></p>}
                 className={"d-flex flex-md-column align-items-center"}
             >
-                {posts.map((post) => (
+                {posts && posts.map((post) => (
                     <div key={post.id} className={"justify-content-center align-items-center mb-2"} style={{width:'80%', minWidth:'800px'}}>
                         <div className={"Community-UserInfo"}>
                             <Link to={"/users/profile/" + post.userNo} className={"Community-Link"}>
@@ -37,12 +38,14 @@ export default function CommunityPostsPage(category){
                                     <h2>{post.postCont}<img src={post.imgUrl ? "/images/ImageIcon.png" : null} alt=""
                                                             style={{width:"20px",height:"20px",display:post.imgUrl ? "" : "none"}}/></h2>
                                     <div className={"Community-postInfo"}>
-                                        <div>
-                                            <button type={"button"} className={"btn btn-primary"}>좋아요{post.likeCount}개</button>
-                                            <button type={"button"}>싫어요{post.dislikeCount}개</button>
-                                            <span>댓글{post.commentCount}개</span>
-                                        </div>
                                         <div>{post.postCreatedAt}</div>
+                                        <div>
+                                    <span>
+                                    <Button variant="primary">좋아요</Button> {post.likeCount}&nbsp;
+                                    <Button variant="danger">싫어요</Button> {post.dislikeCount}&nbsp;
+                                        <span>댓글 {post.commentCount}개</span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </Link>

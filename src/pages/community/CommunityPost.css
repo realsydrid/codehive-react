@@ -59,4 +59,14 @@
     flex-direction: column;
     align-items: center;
 }
-
+.Community-CommentCont{
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    margin: 0.2em 0 0.2em 0.2em;
+}
+.Community-PostModify{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

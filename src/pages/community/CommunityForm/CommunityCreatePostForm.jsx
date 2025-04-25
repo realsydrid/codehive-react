@@ -33,7 +33,7 @@ export default function CommunityCreatePostForm(category){
 
     return (
         <>
-            <Form onSubmit={handleSubmit} style={{ width: "80%", minWidth: "800px", maxWidth: "1500px", margin: "0 auto" }}>
+            <Form onSubmit={handleSubmit} style={{ width: "100%", minWidth: "800px", maxWidth: "1500px", margin: "0 auto" }}>
                 <Form.Group controlId="postCont">
                     <Form.Label column={"lg"} style={{display:"none"}}>게시글 내용</Form.Label>
                     <Form.Control

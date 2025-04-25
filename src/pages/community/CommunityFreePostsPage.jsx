@@ -15,7 +15,7 @@ export default function CommunityFreePostsPage(){
     return (
         <div className={"container"}>
             <CommunityNavbar/>
-            <div>
+            <div className={"mt-20"}>
                 <Link to="/community/search">검색</Link>
                 <CommunityTitle category={"free"}/>
                 <CommunityCreatePostForm category="free" userNo={1}/>
