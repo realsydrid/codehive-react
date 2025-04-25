@@ -4,8 +4,9 @@ import "./AssetPendingOrderPage.css";
 import { useQuery } from "@tanstack/react-query";
 
 const API = {
-    BASE: "http://localhost:8801/api/transaction/openOrders",
-    COIN_INFO: "https://api.upbit.com/v1/market/all?is_details=false"
+    BASE: "http://localhost:8801/api/transaction/openOrder",
+    BY_USER: `http://localhost:8801/api/transaction?userNo=1&transactionState=PENDING`,
+    COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false"
 };
 
 export default function AssetPendingOrdersPage() {
@@ -15,7 +16,7 @@ export default function AssetPendingOrdersPage() {
     const { data: pendingOrders, isPending: loadingOrders } = useQuery({
         queryKey: ["pendingOrders"],
         queryFn: async () => {
-            const res = await fetch(API.BASE);
+            const res = await fetch(API.BY_USER);
             if (!res.ok) throw new Error("미체결 주문 불러오기 실패");
             return res.json();
         },
@@ -27,7 +28,7 @@ export default function AssetPendingOrdersPage() {
     const { data: coinInfo, isPending: loadingInfo } = useQuery({
         queryKey: ["coinInfo"],
         queryFn: async () => {
-            const res = await fetch(API.COIN_INFO);
+            const res = await fetch(API.COIN_NAME);
             if (!res.ok) throw new Error("코인 정보 불러오기 실패");
             return res.json();
         },
@@ -40,7 +41,8 @@ export default function AssetPendingOrdersPage() {
         if (!pendingOrders || !coinInfo) return;
 
         const nameMap = new Map(coinInfo.map(({ market, korean_name }) => [market, korean_name]));
-        const merged = (pendingOrders.coinTransactions || []).map(tx => ({
+
+        const merged = pendingOrders.map(tx => ({
             ...tx,
             koreanName: nameMap.get(tx.market) || tx.market
         }));
@@ -104,7 +106,7 @@ export default function AssetPendingOrdersPage() {
                             <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>
                                 {tx.transactionType === 'BUY' ? '매수' : '매도'}
                             </p>
-                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString()}</p>
+                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}</p>
                             <p>주문 수량 : {tx.transactionCnt.toLocaleString()}</p>
                             <p>주문 금액 : {tx.price.toLocaleString()}</p>
                             <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
