@@ -35,7 +35,7 @@ export default function CommunityCreatePostForm(category){
         <>
             <Form onSubmit={handleSubmit} style={{ width: "80%", minWidth: "800px", maxWidth: "1500px", margin: "0 auto" }}>
                 <Form.Group controlId="postCont">
-                    <Form.Label column={"lg"}>게시글 내용</Form.Label>
+                    <Form.Label column={"lg"} style={{display:"none"}}>게시글 내용</Form.Label>
                     <Form.Control
                         as="textarea"
                         name="postCont"
@@ -53,13 +53,17 @@ export default function CommunityCreatePostForm(category){
                     />
                 </Form.Group>
 
-                <div className="d-flex justify-content-between mt-3">
+                <div className="d-flex justify-content-sm-between mt-3">
+                    <span>
                     <Button variant="secondary" type="button" disabled={isSubmitting}>
                         이미지 첨부
                     </Button>
+                    </span>
+                    <span>
                     <Button variant="primary" type="submit" disabled={isSubmitting}>
                         {isSubmitting ? "게시 중..." : "게시하기"}
                     </Button>
+                        </span>
                 </div>
             </Form>
         </>

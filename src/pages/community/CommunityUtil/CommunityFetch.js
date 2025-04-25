@@ -1,7 +1,7 @@
 const ServerUrl='http://localhost:8801/api/community'
 
 export async function ReadPost(postNo){
-    const URL=`${ServerUrl}/post?postNo=${postNo}`
+    const URL=`${ServerUrl}/posts/detail?postNo=${postNo}`
     const res = await fetch(URL, {
         method: "GET",
         headers: { "Content-Type": "application/json" }

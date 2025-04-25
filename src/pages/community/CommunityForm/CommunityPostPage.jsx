@@ -8,7 +8,7 @@ import CommunityPageNationData from "../CommunityHook/CommunityPageNationData.js
 export default function CommunityPostsPage(category){
     const { data: posts, fetchPosts, hasMore, isLoading, isError } = CommunityPageNationData(category.category);
     return (
-        <>
+        <div className={"justify-content-center"}>
                 {isError && <ErrorMsg error={isError}/>}
                 {isLoading && <Loading/>}
             <InfiniteScroll
@@ -38,7 +38,7 @@ export default function CommunityPostsPage(category){
                                                             style={{width:"20px",height:"20px",display:post.imgUrl ? "" : "none"}}/></h2>
                                     <div className={"Community-postInfo"}>
                                         <div>
-                                            <button type={"button"}>좋아요{post.likeCount}개</button>
+                                            <button type={"button"} className={"btn btn-primary"}>좋아요{post.likeCount}개</button>
                                             <button type={"button"}>싫어요{post.dislikeCount}개</button>
                                             <span>댓글{post.commentCount}개</span>
                                         </div>
@@ -49,6 +49,6 @@ export default function CommunityPostsPage(category){
                         </div></div>
                 ))}
             </InfiniteScroll>
-        </>
+        </div>
     )
 }

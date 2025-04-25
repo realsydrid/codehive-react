@@ -28,6 +28,12 @@
     display: flex;
     flex-direction: column;
 }
+.Community-Link:hover{
+    color: black;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
 .Community-postForm>div{
     justify-content: space-between;
     display: flex;
