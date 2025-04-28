@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import AssetNavBar from "./AssetNavBar.jsx";
 import "./AssetPendingOrderPage.css";
+import Toast from "./Toast.jsx";
 
 const API = {
     BASE: "http://localhost:8801/api/transaction/openOrder",
@@ -12,6 +13,7 @@ const API = {
 export default function AssetPendingOrdersPage() {
     const [combinedData, setCombinedData] = useState([]);
     const [errorMsg, setErrorMsg] = useState("");
+    const [toastMsg, setToastMsg] = useState("");  // ✅ Toast 상태 추가
 
     const { data: pendingOrders, isPending: loadingOrders } = useQuery({
         queryKey: ["pendingOrders"],
@@ -42,7 +44,6 @@ export default function AssetPendingOrdersPage() {
 
         const nameMap = new Map(coinInfo.map(({ market, korean_name }) => [market, korean_name]));
 
-        // ⬇️ 수정: pendingOrders.content 로 접근
         const merged = (pendingOrders.content || []).map(tx => ({
             ...tx,
             koreanName: nameMap.get(tx.market) || tx.market
@@ -61,6 +62,7 @@ export default function AssetPendingOrdersPage() {
         try {
             await deleteOrder(`${API.BASE}/user/1`);
             setCombinedData([]);
+            setToastMsg("✅ 주문이 취소되었습니다.");
         } catch (e) {
             setErrorMsg(e.message);
         }
@@ -70,6 +72,7 @@ export default function AssetPendingOrdersPage() {
         try {
             await deleteOrder(`${API.BASE}/${id}`);
             setCombinedData(prev => prev.filter(item => item.id !== id));
+            setToastMsg("✅ 주문이 취소되었습니다.");
         } catch (e) {
             setErrorMsg(e.message);
         }
@@ -114,6 +117,7 @@ export default function AssetPendingOrdersPage() {
                     </div>
                 ))
             )}
+            {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
         </>
     );
 }
