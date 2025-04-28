@@ -2,7 +2,8 @@
     width: 100%;
     min-width: 38em;
     max-width: 2500px;
-    resize: none;
+    resize: none;"
+"
 }
 .CreatePost{
     height: 700px;
@@ -12,4 +13,5 @@
 }
 .display-none{
     display: none;
+
 }
