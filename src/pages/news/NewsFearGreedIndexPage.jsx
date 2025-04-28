@@ -33,7 +33,7 @@ export default function NewsFearGreedIndexPage() {
         <>
             <NewsNavBar />
             <div className="fear-greed-container">
-                <h1>공포탐욕지수</h1>
+                <h1 className="fear-greed-h1">공포탐욕지수</h1>
                 <div style={{ marginTop: "2rem" }}>
                     {/*<h2>📊비트코인 공포탐욕 지수</h2>*/}
                     <img

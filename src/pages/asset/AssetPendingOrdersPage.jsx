@@ -67,7 +67,7 @@ export default function AssetPendingOrdersPage() {
 
     const handleCancelOne = async (id) => {
         try {
-            await deleteOrder(`${API.BASE}/id/${id}`);
+            await deleteOrder(`${API.BASE}/${id}`);
             setCombinedData(prev => prev.filter(item => item.id !== id));
         } catch (e) {
             setErrorMsg(e.message);
