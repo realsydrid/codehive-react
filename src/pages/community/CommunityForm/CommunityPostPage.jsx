@@ -9,7 +9,7 @@ import {Button} from "react-bootstrap";
 export default function CommunityPostsPage(category){
     const { data: posts, fetchPosts, hasMore, isLoading, isError } = CommunityPageNationData(category.category);
     return (
-        <div className={"justify-content-center mt-2"}>
+        <div className={"-flex flex-md-column align-items-center"}>
                 {isError && <ErrorMsg error={isError}/>}
                 {isLoading && <Loading/>}
             <InfiniteScroll

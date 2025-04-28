@@ -1,0 +1,15 @@
+.CreatePost,.CreateComment{
+    width: 100%;
+    min-width: 38em;
+    max-width: 2500px;
+    resize: none;
+}
+.CreatePost{
+    height: 700px;
+}
+.CreateComment{
+    height: 120px;
+}
+.display-none{
+    display: none;
+}

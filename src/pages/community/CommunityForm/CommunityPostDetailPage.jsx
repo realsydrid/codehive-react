@@ -75,7 +75,7 @@ export default function CommunityPostDetailPage() {
             <div className={"container"}>
                 {isLoading && <h1><Loading/></h1>}
                 {error && <h1><ErrorMsg error={error}/></h1>}
-                <div className="CommunityPostDetail" style={{marginTop:"2%"}}>
+                <div className="CommunityPostDetail">
                     <CommunityNavbar/>
                     {post && post.map(post=>(
                             <div key={post.id}>
@@ -115,7 +115,7 @@ export default function CommunityPostDetailPage() {
                         <div
                             key={c.id}
                             className="Community-comment"
-                            style={{ display:c.parentNo ? "none" : "block" }} // ✅ parentNo가 있으면 숨김
+                            style={{ display:c.parentNo ? "none" : "flex" }} // ✅ parentNo가 있으면 숨김
                         >
                             <div style={{display:"flex", flexDirection:"row",justifyContent:"space-between"}}>
                             <div className={"Community-UserInfo"}>
@@ -141,13 +141,19 @@ export default function CommunityPostDetailPage() {
                             </div>
                             <h2>{c.commentCont}</h2>
                             <div>
-                                <div  className={"Community-CommentCont"}>
-                                    <Button variant="primary" style={{display:c.replyCount === 0 ? "none" : "block"}} type="button">대댓글 {c.replyCount}개 보기</Button>
-                                    <Button variant="secondary">대댓글 달기</Button>
-                                    <span>
-                                    <Button variant="primary">좋아요</Button>{c.likeCount}
-                                        <Button variant="danger">싫어요</Button>{c.dislikeCount}
-                                </span>
+                                <div className={"Community-CommentCont"}>
+                                        <Button variant="secondary">대댓글 달기</Button>
+                                        <div style={{display:c.replyCount === 0 ?  "flex" : "none",alignItems:"flex-end"}}>
+                                        <Button variant="primary">&nbsp;좋아요</Button>&nbsp;{c.likeCount}&nbsp;
+                                        <Button variant="danger">&nbsp;싫어요</Button>&nbsp;{c.dislikeCount}&nbsp;
+                                        </div>
+                                </div>
+                                <div className={"Community-CommentCont"}>
+                                <Button variant="primary" style={{display:c.replyCount === 0 ? "none" : "block"}} type="button">대댓글 {c.replyCount}개 보기</Button>
+                                <div style={{display:c.replyCount === 0 ?  "none" : "flex",alignItems:"flex-end"}}>
+                                    <Button variant="primary">&nbsp;좋아요</Button>&nbsp;{c.likeCount}&nbsp;
+                                    <Button variant="danger">&nbsp;싫어요</Button>&nbsp;{c.dislikeCount}&nbsp;
+                                </div>
                                 </div>
                             </div>
                         </div>
