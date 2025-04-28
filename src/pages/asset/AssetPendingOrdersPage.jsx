@@ -1,7 +1,7 @@
-import AssetNavBar from "./AssetNavBar.jsx";
 import { useEffect, useState } from "react";
-import "./AssetPendingOrderPage.css";
 import { useQuery } from "@tanstack/react-query";
+import AssetNavBar from "./AssetNavBar.jsx";
+import "./AssetPendingOrderPage.css";
 
 const API = {
     BASE: "http://localhost:8801/api/transaction/openOrder",
@@ -42,7 +42,8 @@ export default function AssetPendingOrdersPage() {
 
         const nameMap = new Map(coinInfo.map(({ market, korean_name }) => [market, korean_name]));
 
-        const merged = pendingOrders.map(tx => ({
+        // ⬇️ 수정: pendingOrders.content 로 접근
+        const merged = (pendingOrders.content || []).map(tx => ({
             ...tx,
             koreanName: nameMap.get(tx.market) || tx.market
         }));
@@ -74,6 +75,9 @@ export default function AssetPendingOrdersPage() {
         }
     };
 
+    if (loadingOrders || loadingInfo) return <p>로딩 중...</p>;
+    if (errorMsg) return <p className="error-msg">{errorMsg}</p>;
+
     return (
         <>
             <AssetNavBar />
@@ -83,11 +87,7 @@ export default function AssetPendingOrdersPage() {
                 전체 주문 취소
             </button>
 
-            {errorMsg && <p className="error-msg">{errorMsg}</p>}
-
-            {loadingOrders || loadingInfo ? (
-                <p>로딩 중...</p>
-            ) : combinedData.length === 0 ? (
+            {combinedData.length === 0 ? (
                 <p>미체결 주문이 없습니다.</p>
             ) : (
                 combinedData.map(tx => (
@@ -106,7 +106,7 @@ export default function AssetPendingOrdersPage() {
                             <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>
                                 {tx.transactionType === 'BUY' ? '매수' : '매도'}
                             </p>
-                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}</p>
+                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString('ko-KR')}</p>
                             <p>주문 수량 : {tx.transactionCnt.toLocaleString()}</p>
                             <p>주문 금액 : {tx.price.toLocaleString()}</p>
                             <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
