@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import {Link} from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
+import './SettingsNotificationsPage.css';
 
 export default function SettingsNotificationsPage() {
     const [settings, setSettings] = useState({
@@ -13,159 +14,79 @@ export default function SettingsNotificationsPage() {
         followerYn: false
     });
 
-    const allOn = Object.values(settings).every(v => v);
+    useEffect(() => {
+        fetch('/setting/support/notifications/notification_setting_json.do')
+            .then(res => res.json())
+            .then(data => setSettings(data))
+            .catch(err => console.error('불러오기 실패:', err));
+    }, []);
 
     const toggle = (field) => {
-        setSettings(prev => ({
-            ...prev,
-            [field]: !prev[field]
-        }));
+        const updatedValue = !settings[field];
+        setSettings(prev => ({ ...prev, [field]: updatedValue }));
+
+        fetch('/setting/support/notifications/save-auto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ field, value: updatedValue })
+        })
+            .catch(err => console.error('저장 실패:', err));
     };
 
     const toggleAll = () => {
-        const newValue = !allOn;
-        const updated = {};
-        Object.keys(settings).forEach(key => {
-            updated[key] = newValue;
-        });
-        setSettings(updated);
+        const newValue = !Object.values(settings).every(v => v);
+        const updatedSettings = {};
+        Object.keys(settings).forEach(key => updatedSettings[key] = newValue);
+        setSettings(updatedSettings);
+
+        fetch('/setting/support/notifications/save-auto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ field: "allNotifications", value: newValue })
+        })
+            .catch(err => console.error('전체 저장 실패:', err));
     };
 
+    const allOn = Object.values(settings).every(v => v);
+
     return (
-        <div style={{ maxWidth: '800px', margin: '40px auto', padding: '0 20px' }}>
-            <h2 style={{ marginBottom: '24px', fontSize: '24px' }}>알림 설정</h2>
+        <div className="notifications-container">
+            <div className="notifications-title">알림 설정</div>
 
-            <Section title="전체 알림">
-                <Switch label="전체 알림" checked={allOn} onChange={toggleAll} />
-            </Section>
+            <div className="notifications-section">
+                <h4>전체 알림</h4>
+                <Switch label="전체 알림 설정" checked={allOn} onChange={toggleAll} />
+            </div>
 
-            <Section title="거래소 알림">
-                <Switch
-                    label="급격한 시세변동 알림"
-                    description="10% 이상 상승/하락시"
-                    link="volatility"
-                    checked={settings.volatilityYn}
-                    onChange={() => toggle("volatilityYn")}
-                />
+            <div className="notifications-section">
+                <h4>거래소 알림</h4>
+                <Switch label="급격한 시세변동 알림" description="10% 이상 상승/하락시" link="volatility" checked={settings.volatilityYn} onChange={() => toggle("volatilityYn")} />
+                <Switch label="보유 자산 알림" description="매수 단가 기준 5% 구간 상승/하락시" checked={settings.portfolioYn} onChange={() => toggle("portfolioYn")} />
+                <Switch label="지정가 알림" description="설정한 지정가 도달시 알림" link="target-price" checked={settings.targetPriceYn} onChange={() => toggle("targetPriceYn")} />
+                <Switch label="매수/매도 체결시 알림" description="거래 체결시 알림" checked={settings.tradeYn} onChange={() => toggle("tradeYn")} />
+            </div>
 
-                <Switch
-                    label="보유 자산 알림"
-                    checked={settings.portfolioYn}
-                    description="매수 단가 기준 5% 구간 상승/하락시"
-                    onChange={() => toggle("portfolioYn")}
-                />
-                <Switch
-                    label="지정가 알림"
-                    description="지정한 가격 도달 시 알림"
-                    link="target-price"
-                    checked={settings.targetPriceYn}
-                    onChange={() => toggle("targetPriceYn")}
-                />
-                <Switch
-                    label="매수/매도 체결시 알림"
-                    checked={settings.tradeYn}
-                    description="거래 체결시 알림"
-                    onChange={() => toggle("tradeYn")}
-                />
-            </Section>
-
-            <Section title="커뮤니티 알림">
-                <Switch
-                    label="내 게시물 좋아요"
-                    checked={settings.likeYn}
-                    description="10,50,100개 도달시"
-                    onChange={() => toggle("likeYn")}
-                />
-                <Switch label="내 게시물에 댓글" checked={settings.commentYn} onChange={() => toggle("commentYn")} />
+            <div className="notifications-section">
+                <h4>커뮤니티 알림</h4>
+                <Switch label="내 게시글에 좋아요" description="10, 50, 100개 도달시" checked={settings.likeYn} onChange={() => toggle("likeYn")} />
+                <Switch label="내 게시글에 댓글" checked={settings.commentYn} onChange={() => toggle("commentYn")} />
                 <Switch label="나를 언급한 댓글" checked={settings.replyYn} onChange={() => toggle("replyYn")} />
                 <Switch label="새로운 팔로워" checked={settings.followerYn} onChange={() => toggle("followerYn")} />
-            </Section>
-        </div>
-    );
-}
-
-function Section({ title, children }) {
-    return (
-        <div style={{
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            padding: '16px 24px',
-            marginBottom: '20px',
-            backgroundColor: '#f9f9f9'
-        }}>
-            <h4 style={{ marginBottom: '16px', fontSize: '18px' }}>{title}</h4>
-            {children}
+            </div>
         </div>
     );
 }
 
 function Switch({ label, description, checked, onChange, link }) {
     return (
-        <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            padding: '10px 0',
-        }}>
-            {/* 텍스트 + 설명 */}
-            <div style={{
-                borderBottom: '1px solid #eee',
-                paddingBottom: '8px',
-                flexGrow: 1
-            }}>
-                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{label}</div>
-                {description && (
-                    <div style={{
-                        fontSize: '13px',
-                        color: '#888',
-                        marginTop: '4px'
-                    }}>
-                        {description}
-                    </div>
-                )}
+        <div className="switch-item">
+            <div className="switch-label">
+                <div className="main-label">{label}</div>
+                {description && <div className="sub-label">{description}</div>}
             </div>
-
-            {/* 목록보기 + 스위치 (같은 라인) */}
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginLeft: '420px',
-                marginBottom: '8px',
-                gap: '12px'
-            }}>
-                {link && (
-                    <Link to={link} style={{
-                        fontSize: '13px',
-                        color: '#222',
-                        textDecoration: 'none'
-                    }}>
-                        목록보기
-                    </Link>
-                )}
-
-                <div
-                    onClick={onChange}
-                    style={{
-                        width: '52px',
-                        height: '28px',
-                        backgroundColor: checked ? '#4caf50' : '#ccc',
-                        borderRadius: '28px',
-                        position: 'relative',
-                        cursor: 'pointer',
-                        transition: 'background-color 0.3s'
-                    }}
-                >
-                    <div style={{
-                        width: '22px',
-                        height: '22px',
-                        backgroundColor: 'white',
-                        borderRadius: '50%',
-                        position: 'absolute',
-                        top: '3px',
-                        left: checked ? '27px' : '3px',
-                        transition: 'left 0.3s'
-                    }} />
-                </div>
+            <div className="switch-actions">
+                {link && <Link to={link} className="view-link">목록보기</Link>}
+                <div className={`toggle-switch ${checked ? 'active' : ''}`} onClick={onChange}></div>
             </div>
         </div>
     );
