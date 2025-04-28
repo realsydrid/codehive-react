@@ -105,11 +105,11 @@ export default function TradeOrderPage() {
             case "주문":
                 return <Order market={market} combinedData={combinedData} orderBook={orderBook} />;
             case "호가":
-                return <OrderBook market={market} orderBook={orderBook} />;
+                return <OrderBook market={market} orderBook={orderBook} combinedData={combinedData} />;
             case "차트":
                 return <Chart market={market} combinedData={combinedData} />;
             case "시세":
-                return <PriceInfo market={market} />;
+                return <PriceInfo market={market} change={combinedData.change} />;
             case "정보":
                 return <CoinDetailInfo combinedData={combinedData} market={market} />;
             default:

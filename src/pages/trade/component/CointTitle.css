@@ -5,9 +5,10 @@
     top: 3rem;
     height: 5rem;
     width: 100%;
+    justify-content: space-between;
 }
 
-.trade-coinTitle > div {
+.trade-coinTitle > div:nth-child(1) {
     padding: 0.5rem 1rem;
     width: 50%;
     box-sizing: border-box;
@@ -38,6 +39,7 @@
 }
 
 .trade-coinTitle > div > p:nth-child(2) {
+
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
@@ -77,12 +79,38 @@
 }
 
 .trade-coinTitle > div:nth-child(2) {
+
     text-align: right;
-    font-size: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
 }
 
 .trade-coinTitle > div:nth-child(2) p {
     font-weight: bold;
+    font-size: 1.5rem;
+    position:relative;
+    width: fit-content;
+
+
+}
+.trade-coinTitle >div:nth-child(2) button {
+    position:absolute;
+    display: block;
+    background: url(/images/star_basic.svg) no-repeat center/cover;
+    text-indent: -9999px;
+    overflow: hidden;
+    width: 1.1em;
+    height: 1.1em;
+    text-align: center;
+    cursor: pointer;
+    top: 0.1em;
+    left: -1.3em;
+    padding: 0;
+    margin: 0;
+
 }
 
 .trade-coinTitle > div:nth-child(2) span {
