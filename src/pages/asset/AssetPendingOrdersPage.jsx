@@ -83,7 +83,7 @@ export default function AssetPendingOrdersPage() {
             <AssetNavBar />
             <h1 className="pending-orders-title">미체결</h1>
 
-            <button onClick={handleCancelAll} className="cancel-all-button mb-5">
+            <button onClick={handleCancelAll} className="cancel-all-button mb-5 mt-5">
                 전체 주문 취소
             </button>
 

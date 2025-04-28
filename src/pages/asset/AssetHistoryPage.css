@@ -1,3 +1,8 @@
+.asset-history-title{
+    display: none;
+}
+
+
 .asset-history-container {
     padding: 2rem;
     background-color: #f8f9fa;
