@@ -1,7 +1,4 @@
-import {redirect} from "react-router-dom";
-
 const ServerUrl='http://localhost:8801/api/community'
-const redirectUrl=''
 
 export async function ReadPost(postNo){
     const URL=`${ServerUrl}/posts/detail?postNo=${postNo}`
@@ -61,7 +58,7 @@ export async function CreateComments(postNo,userNo,commentCont){
     console.log(data)
     return data
 }
-export async function DeleteComment(postNo,commentNo,userNo){
+export async function DeleteComment(commentNo,userNo){
     const URL=`${ServerUrl}/comments?commentNo=${commentNo}&userNo=${userNo}`;
     const res = await fetch(URL, {
         method: "DELETE",
@@ -69,15 +66,15 @@ export async function DeleteComment(postNo,commentNo,userNo){
     })
     if(!res.ok) throw new Error(res.status+"");
     alert("댓글이 삭제되었습니다.")
-    return redirect(`${redirectUrl}/posts/${postNo}`);
+    return res;
 }
-export async function DeletePost(category,postNo,userNo){
-    const URL=`${ServerUrl}/comments?postNo=${postNo}&userNo=${userNo}`;
+export async function DeletePost(postNo,userNo){
+    const URL=`${ServerUrl}/posts?postNo=${postNo}&userNo=${userNo}`;
     const res = await fetch(URL, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
     })
     if(!res.ok) throw new Error(res.status+"");
-    alert("댓글이 삭제되었습니다.")
-    return redirect(`${redirectUrl}/posts/${category}`);
+    alert("게시글이 삭제되었습니다.")
+    return res;
 }

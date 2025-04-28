@@ -55,9 +55,6 @@ export default function CommunityCreatePostForm(category){
 
                 <div className="d-flex justify-content-sm-between mt-3">
                     <span>
-                    <Button variant="secondary" type="button" disabled={isSubmitting}>
-                        이미지 첨부
-                    </Button>
                     </span>
                     <span>
                     <Button variant="primary" type="submit" disabled={isSubmitting}>
