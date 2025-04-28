@@ -1,7 +1,21 @@
 import {formatDecimalsWithCommas, formatPercentWithDecimals} from "../../../utils/numberFormat.js";
 import './CointTitle.css'
+import {useState} from "react";
 
 export default function coinTitle({combinedData}) {
+    const [btnActive, setBtnActive] = useState(true);
+
+    function favoriteBtnHandler() {
+        console.log("버튼클릭")
+        if(            btnActive === true        )
+        {
+            setBtnActive(false);
+        }
+
+
+    }
+
+
     return (
         <>
             {combinedData && combinedData.market &&
@@ -16,7 +30,7 @@ export default function coinTitle({combinedData}) {
 
                 </div>
                 <div>
-                    <p>{combinedData.korean_name}(KRW)</p>
+                    <p><button onClick={()=>favoriteBtnHandler()} type={"button"}>관심추가</button>{combinedData.korean_name}</p>
                     <span>{combinedData.market.split("-")[1]}</span>
                 </div>
 
