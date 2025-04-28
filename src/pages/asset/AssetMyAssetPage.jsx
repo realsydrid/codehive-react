@@ -87,23 +87,15 @@ export default function AssetMyAssetPage() {
         });
     }, [krwBalance, coinPrice, coinInfo]);
 
-    // 포트폴리오 차트는 보유 자산 목록이 바뀌었을 때만 갱신 (coinPrice 영향 X)
     useEffect(() => {
         if (!krwBalance || !coinInfo) return;
 
-        const nameMap = new Map(coinInfo.map(({ market, korean_name }) => [market, korean_name]));
-
-        const chartReady = krwBalance.map(item => {
-            const { market, holdingAmount, averagePrice } = item;
-            const isKRW = market === "KRW-KRW";
-            const evalValue = (averagePrice ?? 0) * holdingAmount;
-
-            return {
-                ...item,
-                evalValue,
-                koreanName: nameMap.get(market)
-            };
-        }).filter(item => item.market !== "KRW-KRW" && item.evalValue > 0);
+        const chartReady = krwBalance
+            .filter(item => item.market !== "KRW-KRW" && item.holdingAmount > 0)
+            .map(item => ({
+                market: item.market,
+                evalValue: item.averagePrice * item.holdingAmount // 주의: 실시간 시세 아님!!
+            }));
 
         setChartData(chartReady);
     }, [krwBalance, coinInfo]);
@@ -166,9 +158,9 @@ export default function AssetMyAssetPage() {
     return (
         <>
             <AssetNavBar />
-            <h1>보유자산 홈</h1>
+            <h1 className="asset-myasset-title">보유자산 홈</h1>
 
-            <div className="asset-summary">
+            <div className="asset-summary mt-5" >
                 <h3>보유자산</h3>
                 <h2>{formatDecimalsWithCommas(summary.eval)}</h2>
                 <p><strong>평가손익 :</strong> <span style={{ color: summary.profit >= 0 ? 'red' : 'blue' }}>{formatDecimalsWithCommas(summary.profit)} 원</span></p>
@@ -191,10 +183,6 @@ export default function AssetMyAssetPage() {
                         <h2>모의투자 자산 추가하기</h2>
                         <p>모의투자 자산을 설정하세요</p>
                         <p className="highlight-red">최소 100만원부터 최대 1억원까지</p>
-                        <p>원하는 금액을 설정하여 자산을 추가할 수 있습니다.</p>
-
-                        <p className="highlight-red">자산 초기화 시 보유 코인 및 자산은 <br />전부 0원이 되며,</p>
-                        <p>다시 자산을 추가해야합니다.</p>
                         <label>
                             보유자산 금액 (원):
                             <input

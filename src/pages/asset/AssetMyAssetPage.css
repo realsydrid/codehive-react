@@ -1,4 +1,6 @@
-/* 요약 영역 스타일 */
+.asset-myasset-title{
+    display: none;
+}
 .asset-summary {
     text-align: center;
     background-color: #f5f8fa;
