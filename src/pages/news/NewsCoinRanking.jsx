@@ -1,12 +1,12 @@
 import {Link} from "react-router-dom";
 import React from "react";
-import NewsNavBar from "../NewsNavBar.jsx";
+import NewsNavBar from "./NewsNavBar.jsx";
 
-export default function FuturesMainPage() {
+export default function NewsCoinRanking() {
     return (
         <>
             <NewsNavBar/>
-            <h1>선물</h1>
+            <h1>시가총액 순위</h1>
             <table>
                 <tbody>
                     <tr>
