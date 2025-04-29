@@ -1,10 +1,10 @@
-
-import {CreateComments, DeleteComment, DeletePost, GetComments, ReadPost} from "../CommunityUtil/CommunityFetch.js";
+import {DeletePost, ReadPost} from "../CommunityUtil/CommunityPostFetch.js";
+import {DeleteComment, GetComments} from "../CommunityUtil/CommunityCommentFetch.js";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
-import Loading from "../Loading.jsx";
-import ErrorMsg from "../ErrorMsg.jsx";
-import CommunityNavbar from "../CommunityNavbar.jsx";
+import Loading from "./Loading.jsx";
+import ErrorMsg from "./ErrorMsg.jsx";
+import CommunityNavbar from "../CommunityComponents/CommunityNavbar.jsx";
 import CommunityCreateCommentForm from "./CommunityCreateCommentForm.jsx";
 import "../CommunityPost.css";
 import {Button} from "react-bootstrap";
@@ -50,7 +50,7 @@ export default function CommunityPostDetailPage() {
                 </Button>
             )
         }
-        function DeleteCommentBtn({userNo,commentNo}) {
+        function DeleteCommentBtn({commentNo,userNo}) {
         const navigate=useNavigate();
 
         let DeletePostHandler = async () => {

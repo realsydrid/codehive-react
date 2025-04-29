@@ -1,7 +1,7 @@
-import {CreateComments, CreatePosts} from "../CommunityUtil/CommunityFetch.js";
+import {CreateComments} from "../CommunityUtil/CommunityCommentFetch.js";
 import {useState} from "react";
 import {redirect} from "react-router-dom";
-import {Button, Form, FormGroup} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
 
 export default function CommunityCreateCommentForm(post){
