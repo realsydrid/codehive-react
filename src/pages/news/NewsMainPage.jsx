@@ -13,7 +13,7 @@ export default function NewsMainPage() {
         <>
             <NewsNavBar />
             <br/>
-            <h1 className="news-title" > 뉴스 홈</h1>
+            <h1 className="news-title">뉴스 홈</h1>
             <div className="news-tab-container">
                 <button
                     className={`news-tab-button ${activeTab === "main" ? "active" : ""}`}
