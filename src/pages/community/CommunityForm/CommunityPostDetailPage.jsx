@@ -71,31 +71,34 @@ export default function CommunityPostDetailPage() {
             )
         }
     return (
-            <div className={"container"}>
+            <div className={"AllPosts"}>
                 {isLoading && <h1><Loading/></h1>}
                 {error && <h1><ErrorMsg error={error}/></h1>}
                 <div className="CommunityPostDetail">
                     <CommunityNavbar/>
                     {post && post.map(post=>(
-                            <div key={post.id}>
+                            <div key={post.id} style={{maxWidth:"100rem",minWidth:"30rem",width:"95%"}}>
                                 <Link to={`/community/${post.category}`}>게시판으로 돌아가기</Link>
-                                <div className={"Community-UserInfo"}>
-                                    <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
-                                        <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
-                                             className={"Community-ProfileImg"}/>
-                                        <div>
-                                            <span>{post.userNickname}</span>
-                                            <span>Lv.{post.userNo}</span>
-                                        </div>
-                                    </Link>
-                                </div>
+
                                 <div className={"Community-PostModify"} style={{display:Number(loginUserNo)===Number(post.userNo) ? "flex" : "none"}}>
-                                    <span><DeletePostBtn postNo={post.id} userNo={loginUserNo} category={post.category}/></span>
-                                    <span><Button variant="primary" type={"button"}>수정하기</Button></span>
+                                    <div className={"Community-UserInfo"}>
+                                        <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
+                                            <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
+                                                 className={"Community-ProfileImg"}/>
+                                            <div>
+                                                <span>{post.userNickname}</span>
+                                                <span>Lv.{post.userNo}</span>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                    <span style={{paddingTop:"2rem"}}>
+                                        <DeletePostBtn postNo={post.id} userNo={loginUserNo} category={post.category}/>&nbsp;
+                                    <Button variant="primary" type={"button"}>수정하기</Button>
+                                    </span>
                                 </div>
                                 <div className={"Community-PostCont"}>
                                     <h1>{post.postCont}</h1>
-                                    <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
+                                    <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"flex-start"}}>
                                     <span>{post.postCreatedAt}</span>
                                     <div>
                                     <span>
@@ -118,7 +121,7 @@ export default function CommunityPostDetailPage() {
                         >
                             <div style={{display:"flex", flexDirection:"row",justifyContent:"space-between"}}>
                             <div className={"Community-UserInfo"}>
-                            <Link to={"/users/profile/" + c.userNo} className={"Community-Link"}>
+                            <Link to={"/users/profile/" + c.userNo} className={"Community-PostLink"}>
                                 {/*<img src={c.userProfileImg ? c.userProfileImg : "/images/user_icon_default.png"} alt=""*/}
                                 {/*     className={"Community-ProfileImg"}/>*/}
                                 {/*저장소 활성화 된 다음 쓸 예정*/}
@@ -134,7 +137,7 @@ export default function CommunityPostDetailPage() {
                                 <span>{c.commentCreatedAt}</span>
                                 <div style={{display:loginUserNo===c.userNo ? "flex" : "none",alignItems:"flex-end",justifyContent:"end"}}>
                                     <span><DeleteCommentBtn userNo={c.userNo} commentNo={Number(c.id)} postNo={c.postNo}/></span>
-                                    <span><Button variant="primary" type={"button"}>수정하기</Button></span>
+                                    &nbsp;<span><Button variant="primary" type={"button"}>수정하기</Button></span>
                                 </div>
                                 </div>
                             </div>

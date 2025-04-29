@@ -9,19 +9,22 @@ import {Button} from "react-bootstrap";
 export default function CommunityPostsPage(category){
     const { data: posts, fetchPosts, hasMore, isLoading, isError } = CommunityPageNationData(category.category);
     return (
-        <div style={{display: "flex", justifyContent: "center"}}>
+        <div>
                 {isError && <ErrorMsg error={isError}/>}
                 {isLoading && <Loading/>}
+            <div style={{width:"100%", minWidth:"30rem",maxWidth:"100rem",display:"flex",flexDirection:"column"}}
+            className={"infiniteScrolls"}>
             <InfiniteScroll
                 dataLength= {posts.length}
                 next={fetchPosts}
                 hasMore={hasMore}
                 loader={<Loading/>}
+                style={{width: "100%", minWidth:"30rem",maxWidth:"100rem",display:"flex"}}
+                className={"infiniteScrolls"}
                 endMessage={<p style={{ textAlign: "center" }}><b>더 이상 게시글이 없습니다.</b></p>}
-                className={"Community-PostPage"}
             >
                 {posts && posts.map((post) => (
-                    <div key={post.id}>
+                    <div key={post.id} className={"infiniteScrolls"}>
                         <div className={"Community-UserInfo"}>
                             <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
                                 <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
@@ -34,9 +37,8 @@ export default function CommunityPostsPage(category){
                         </div>
                         <div className={"Community-list-group"}>
                             <Link to={`/community/posts/${post.id}`} className={"Community-PostLink"}>
-                                <div className={"Community-postForm"}>
-                                    <h2 className={"Community-postForm"}>{post.postCont}<img src={post.imgUrl ? "/images/ImageIcon.png" : null} alt=""
-                                                            style={{width:"20px",height:"20px",display:post.imgUrl ? "" : "none"}}/></h2>
+                                <div className={"InfiniteScrolls"}>
+                                    <h2 className={"Community-postForm"}>{post.postCont}</h2>
                                     <div className={"Community-postInfo"}>
                                         <div>{post.postCreatedAt}</div>
                                         <div>
@@ -52,6 +54,7 @@ export default function CommunityPostsPage(category){
                         </div></div>
                 ))}
             </InfiniteScroll>
+            </div>
         </div>
     )
 }

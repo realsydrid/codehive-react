@@ -8,6 +8,6 @@ const httpStatusMsg={
 }
 export default function ErrorMsg({error}) {
     return (
-        <p style={{color:"red",fontWeight:"bold"}}>{error.message>99 ? httpStatusMsg[Number(error.message)] : error.message}</p>
+        <p style={{color:"red",fontWeight:"bold",width:"95%",minWidth:"30rem",maxWidth:"100rem",resize:"none"}}>{error.message>99 ? httpStatusMsg[Number(error.message)] : error.message}</p>
     )
 }
