@@ -18,11 +18,11 @@
 }
 
 .trade-coinTitle div.FALL {
-    color: blue
+    color: #1375ec;
 }
 
 .trade-coinTitle div.RISE {
-    color: red
+    color: #dd3c44;
 }
 
 .trade-coinTitle > div p {
@@ -96,10 +96,24 @@
 
 
 }
-.trade-coinTitle >div:nth-child(2) button {
+.trade-coinTitle-FavoriteBtn {
     position:absolute;
     display: block;
     background: url(/images/star_basic.svg) no-repeat center/cover;
+    text-indent: -9999px;
+    overflow: hidden;
+    width: 1.1em;
+    height: 1.1em;
+    text-align: center;
+    cursor: pointer;
+    top: 0.1em;
+    left: -1.3em;
+    padding: 0;
+    margin: 0;
+
+}
+.trade-coinTitle-FavoriteBtnActive{
+    background: url(/images/star_active.svg) no-repeat center/cover;
     text-indent: -9999px;
     overflow: hidden;
     width: 1.1em;

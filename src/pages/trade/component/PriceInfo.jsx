@@ -92,8 +92,8 @@ export default function PriceInfo({market,change}) {
                     candles.map((candle, index) => (
                         <tr key={index} className={"priceInfo-tbody-row-days"}>
                             <td>{candle.candle_date_time_kst.split('T')[0].split('-')[1]+"."+candle.candle_date_time_kst.split('T')[0].split('-')[2]}</td>
-                            <td className={candle.trade_price>candle.opening_price ? "RISE" : "FALL"} >{candle.trade_price} 원</td>
-                            <td className={candle.trade_price>candle.opening_price ? "RISE" : "FALL"}> {formatPercentWithDecimals(candle.change_rate)}<span>{candle.change_price}</span></td>
+                            <td className={candle.trade_price>candle.opening_price ? "RISE" : "FALL"} >{formatDecimalsWithCommas(candle.trade_price)}</td>
+                            <td className={candle.trade_price>candle.opening_price ? "RISE" : "FALL"}> {formatPercentWithDecimals(candle.change_rate)}<br/><span>{candle.change_price}</span></td>
                             <td>{formatDecimalsWithCommas(candle.candle_acc_trade_volume)}</td>
                         </tr>
                     ))
