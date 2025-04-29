@@ -4,6 +4,7 @@
 
 .pending-orders-title {
     margin-bottom: 1rem;
+    display: none;
 }
 
 .order-card {

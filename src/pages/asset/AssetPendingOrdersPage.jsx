@@ -1,7 +1,8 @@
-import AssetNavBar from "./AssetNavBar.jsx";
 import { useEffect, useState } from "react";
-import "./AssetPendingOrderPage.css";
 import { useQuery } from "@tanstack/react-query";
+import AssetNavBar from "./AssetNavBar.jsx";
+import "./AssetPendingOrderPage.css";
+import Toast from "./Toast.jsx";
 
 const API = {
     BASE: "http://localhost:8801/api/transaction/openOrder",
@@ -12,6 +13,7 @@ const API = {
 export default function AssetPendingOrdersPage() {
     const [combinedData, setCombinedData] = useState([]);
     const [errorMsg, setErrorMsg] = useState("");
+    const [toastMsg, setToastMsg] = useState("");  // ✅ Toast 상태 추가
 
     const { data: pendingOrders, isPending: loadingOrders } = useQuery({
         queryKey: ["pendingOrders"],
@@ -42,7 +44,7 @@ export default function AssetPendingOrdersPage() {
 
         const nameMap = new Map(coinInfo.map(({ market, korean_name }) => [market, korean_name]));
 
-        const merged = pendingOrders.map(tx => ({
+        const merged = (pendingOrders.content || []).map(tx => ({
             ...tx,
             koreanName: nameMap.get(tx.market) || tx.market
         }));
@@ -60,6 +62,7 @@ export default function AssetPendingOrdersPage() {
         try {
             await deleteOrder(`${API.BASE}/user/1`);
             setCombinedData([]);
+            setToastMsg("✅ 주문이 취소되었습니다.");
         } catch (e) {
             setErrorMsg(e.message);
         }
@@ -69,25 +72,25 @@ export default function AssetPendingOrdersPage() {
         try {
             await deleteOrder(`${API.BASE}/${id}`);
             setCombinedData(prev => prev.filter(item => item.id !== id));
+            setToastMsg("✅ 주문이 취소되었습니다.");
         } catch (e) {
             setErrorMsg(e.message);
         }
     };
+
+    if (loadingOrders || loadingInfo) return <p>로딩 중...</p>;
+    if (errorMsg) return <p className="error-msg">{errorMsg}</p>;
 
     return (
         <>
             <AssetNavBar />
             <h1 className="pending-orders-title">미체결</h1>
 
-            <button onClick={handleCancelAll} className="cancel-all-button mb-5">
+            <button onClick={handleCancelAll} className="cancel-all-button mb-5 mt-5">
                 전체 주문 취소
             </button>
 
-            {errorMsg && <p className="error-msg">{errorMsg}</p>}
-
-            {loadingOrders || loadingInfo ? (
-                <p>로딩 중...</p>
-            ) : combinedData.length === 0 ? (
+            {combinedData.length === 0 ? (
                 <p>미체결 주문이 없습니다.</p>
             ) : (
                 combinedData.map(tx => (
@@ -106,7 +109,7 @@ export default function AssetPendingOrdersPage() {
                             <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>
                                 {tx.transactionType === 'BUY' ? '매수' : '매도'}
                             </p>
-                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}</p>
+                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString('ko-KR')}</p>
                             <p>주문 수량 : {tx.transactionCnt.toLocaleString()}</p>
                             <p>주문 금액 : {tx.price.toLocaleString()}</p>
                             <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
@@ -114,6 +117,7 @@ export default function AssetPendingOrdersPage() {
                     </div>
                 ))
             )}
+            {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
         </>
     );
 }
