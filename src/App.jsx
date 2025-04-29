@@ -146,6 +146,7 @@ function App() {
                         <Route path="privacy-policy" element={<SettingsPrivacyPolicyPage/>}/>
                         {/*이용약관*/}
                         <Route path="terms" element={<SettingsTermsPage/>}/>
+
                     </Route>
 
 
