@@ -139,8 +139,8 @@ export default function NewsKimchiPremiumPage() {
                     <thead>
                     <tr>
                         <th>코인명</th>
-                        <th>업비트 (₩)</th>
-                        <th>바이낸스 환산 (₩)</th>
+                        <th>업비트</th>
+                        <th>바이낸스</th>
                         <th>가격차이</th>
                     </tr>
                     </thead>
