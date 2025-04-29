@@ -41,10 +41,7 @@ import AssetPendingOrdersPage from "./pages/asset/AssetPendingOrdersPage.jsx";
 import NewsMainPage from "./pages/news/NewsMainPage.jsx";
 import NewsFearGreedIndexPage from "./pages/news/NewsFearGreedIndexPage.jsx";
 import NewsKimchiPremiumPage from "./pages/news/NewsKimchiPremiumPage.jsx";
-import FuturesMainPage from "./pages/news/futures/FuturesMainPage.jsx";
-import FuturesLiquidationsPage from "./pages/news/futures/FuturesLiquidationsPage.jsx";
-import FuturesLongShortPage from "./pages/news/futures/FuturesLongShortPage.jsx";
-import FuturesOpenInterestPage from "./pages/news/futures/FuturesOpenInterestPage.jsx";
+import NewsCoinRanking from "./pages/news/NewsCoinRanking.jsx";
 import SettingsSupportQnaWritePage from "./pages/settings/support/qna/SettingsSupportQnaWritePage.jsx";
 import SettingsSupportQnaHistoryPage from "./pages/settings/support/qna/SettingsSupportQnaHistoryPage.jsx";
 import SettingsSupportQnaQuestionDetailPage
@@ -95,16 +92,9 @@ function App() {
                     {/*news*/}
                     <Route path="/news">
                         <Route index element={<NewsMainPage/>}/> {/*뉴스메인(전체뉴스,암호화폐,해외증시,환율/금리)*/}
-
                         <Route path="fear-greed-index" element={<NewsFearGreedIndexPage/>}/> {/*공탐지수*/}
                         <Route path="kimchi-premium" element={<NewsKimchiPremiumPage/>}/> {/*김프*/}
-                        <Route path="futures">
-                            <Route index element={<FuturesMainPage/>}/> {/*선물메인페이지(진입메뉴페이지)*/}
-
-                            <Route path="liquidations" element={<FuturesLiquidationsPage/>}/> {/*강제청산비율*/}
-                            <Route path="long-short" element={<FuturesLongShortPage/>}/> {/*롱숏비율*/}
-                            <Route path="open-interest" element={<FuturesOpenInterestPage/>}/> {/*미결제약정*/}
-                        </Route>
+                        <Route path="market-cap-ranking" element={<NewsCoinRanking/>}/> {/*선물메인페이지(진입메뉴페이지)*/}
                     </Route>
 
 
