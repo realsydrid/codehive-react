@@ -37,7 +37,6 @@ export default function SettingsPrivacyPolicyPage() {
                 본 개인정보 취급 방침은 법률 변경 또는 서비스 업데이트로 인해 변경될 수 있으며, 변경 시 공지사항을 통해 알려드리겠습니다.
             </p>
 
-
         </div>
     );
 }
