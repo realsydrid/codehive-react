@@ -1,0 +1,201 @@
+.news-title{
+    display: none;
+}
+
+.premium-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 타이틀 */
+.premium-container h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* 환율 텍스트 */
+.premium-container p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* 컨트롤 바 */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 검색 입력창 */
+.search-input {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    outline: none;
+    flex: 1 1 250px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: #4caf50;
+}
+
+/* 스위치 토글 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    margin-left: 10px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 30px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* 스위치 텍스트 */
+.sort-label {
+    font-size: 0.95rem;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+/* 테이블 */
+.premium-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.premium-table th, .premium-table td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.premium-table thead {
+    background-color: #f5f5f5;
+}
+
+.premium-table th {
+    font-weight: bold;
+}
+
+/* 가격차이 강조 스타일 */
+.premium-high {
+    color: #e53935;
+    font-weight: bold;
+}
+
+.premium-low {
+    color: #1e88e5;
+    font-weight: bold;
+}
+
+.premium-neutral {
+    color: #333;
+}
+
+.premium-percent {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.price-gap {
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* 에러 메시지 */
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 1rem;
+}
+
+/* ======= 반응형 ======= */
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .sort-label {
+        margin-top: 8px;
+    }
+
+    .premium-table th, .premium-table td {
+        padding: 12px 5px;
+        font-size: 0.85rem;
+    }
+
+    .premium-percent {
+        font-size: 1rem;
+    }
+
+    .price-gap {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .premium-container h1 {
+        font-size: 1.5rem;
+    }
+
+    .premium-container p {
+        font-size: 0.9rem;
+    }
+}
