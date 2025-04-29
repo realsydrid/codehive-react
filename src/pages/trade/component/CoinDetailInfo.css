@@ -1,0 +1,25 @@
+.coinDetailInfo-coinTitle {
+    padding: 3rem 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 1rem;
+    text-align: center;
+    align-items: center;
+    border-bottom: #888888 solid 1px;
+}
+
+.coinDetailInfo-coinTitle > div {
+    width: 4em;
+    height: 4em;
+    text-indent: -9999px;
+    overflow: hidden;
+}
+
+.coinDetailInfo-coinTitle > p {
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
+
+
+}

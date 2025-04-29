@@ -24,9 +24,23 @@
 
 
 .priceInfo-table {
-    border: 1px solid blue;
-    width: 95%;
+    border: 1px solid #1375ec;
+    width: 100%;
     margin: auto;
+}
+
+.priceInfo-table tbody td {
+    border-bottom: #eeeeee 1px solid;
+    border-right: #ddd 1px solid;
+    border-left: #ddd 1px solid;
+}
+.priceInfo-table thead th {
+    border-right: #ddd 1px solid;
+    border-left: #ddd 1px solid;
+    border-top: #bbb 1px solid;
+    border-bottom: #bbb 1px solid;
+    font-size: 0.85rem;
+    color: #666666;
 }
 .priceInfo-thead-row-seconds{
     color: #888888;
@@ -35,38 +49,58 @@
 }
 
 
-.priceInfo-thead-row-seconds th:nth-child(1) {
-    text-align: left;
-}
-.priceInfo-thead-row-seconds th:nth-child(3) {
-    text-align: right;
+.priceInfo-thead-row-seconds th{
+    text-align: center;
 }
 
+
 .priceInfo-tbody-row-seconds{
-    height: 3rem;
+    height: 2.5rem;
 }
 
 
 .priceInfo-tbody-row-seconds .RISE{
-    color: red;
+    color: #dd3c44;
     font-weight: bold;
 
 }
 .priceInfo-tbody-row-seconds .FALL{
-    color: blue;
+    color: #1375ec;
     font-weight: bold;
 }
 
 .priceInfo-tbody-row-seconds td:nth-child(1) {
-    text-align: left;
+    text-align: center;
 }
-.priceInfo-tbody-row-seconds td:nth-child(3) {
+
+
+.priceInfo-tbody-row-days {
+    height: 3rem;
+
+}
+.priceInfo-tbody-row-seconds td {
+    font-size: 0.85em;
+    font-weight: bold;
+    text-align: right;
+
+}
+.priceInfo-tbody-row-days td{
+    font-size: 0.85em;
+    font-weight: bold;
     text-align: right;
 }
 
+
+.priceInfo-tbody-row-days td span{
+    font-size: 0.8em;
+}
+.priceInfo-tbody-row-days td:nth-child(1) {
+    text-align: center;
+}
+
 .priceInfo-tbody-row-days .RISE{
-    color: red;
+    color: #dd3c44;
 }
 .priceInfo-tbody-row-days .FALL{
-    color: blue;
+    color: #1375ec;
 }

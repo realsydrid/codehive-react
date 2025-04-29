@@ -227,15 +227,22 @@ export default function Chart({ market, combinedData }) {
         <div className="chart-contentsContainer">
             <div>
                 <div className="chart-timeframe-tabs">
-                    {Object.entries(TIME_FRAMES).map(([key, { display }]) => (
-                        <button
-                            key={key}
-                            onClick={() => setTimeFrame(key)}
-                            className={timeFrame === key ? 'active' : ''}
-                        >
-                            {display}
-                        </button>
-                    ))}
+                    {/*<span>차트시간설정 </span>*/}
+                    <button>1분</button>
+                    <button>15분</button>
+                    <button>30분</button>
+                    <button>1시간</button>
+                    <select
+                        value={timeFrame}
+                        onChange={e => setTimeFrame(e.target.value)}
+                        className="chart-timeframe-select"
+                    >
+                        {Object.entries(TIME_FRAMES).map(([key, { display }]) => (
+                            <option key={key} value={key}>
+                                {display}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             </div>
             {isLoading && <div>로딩 중...</div>}

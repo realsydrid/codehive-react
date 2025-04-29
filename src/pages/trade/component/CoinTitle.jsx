@@ -7,10 +7,7 @@ export default function coinTitle({combinedData}) {
 
     function favoriteBtnHandler() {
         console.log("버튼클릭")
-        if(            btnActive === true        )
-        {
-            setBtnActive(false);
-        }
+        setBtnActive((prev) => !prev);
 
 
     }
@@ -19,22 +16,30 @@ export default function coinTitle({combinedData}) {
     return (
         <>
             {combinedData && combinedData.market &&
-            <div className={"trade-coinTitle"}>
+                <div className={"trade-coinTitle"}>
 
-                <div className={combinedData.change}>
-                    <p>{formatDecimalsWithCommas(combinedData.trade_price)}</p>
-                    <p>
-                        <span>{formatPercentWithDecimals(combinedData.change_rate)}</span>
-                        <span>{formatDecimalsWithCommas(combinedData.change_price)}</span>
-                    </p>
+                    <div className={combinedData.change}>
+                        <p>{formatDecimalsWithCommas(combinedData.trade_price)}</p>
+                        <p>
+                            <span>{formatPercentWithDecimals(combinedData.change_rate)}</span>
+                            <span>{formatDecimalsWithCommas(combinedData.change_price)}</span>
+                        </p>
+
+                    </div>
+                    <div>
+                        <p>
+                            <button
+                                onClick={favoriteBtnHandler}
+                                type={"button"}
+                                className={btnActive ? "trade-coinTitle-FavoriteBtn" : "trade-coinTitle-FavoriteBtnActive"}>
+                                관심추가
+                            </button>
+                            {combinedData.korean_name}
+                        </p>
+                        <span>{combinedData.market.split("-")[1]}</span>
+                    </div>
 
                 </div>
-                <div>
-                    <p><button onClick={()=>favoriteBtnHandler()} type={"button"}>관심추가</button>{combinedData.korean_name}</p>
-                    <span>{combinedData.market.split("-")[1]}</span>
-                </div>
-
-            </div>
             }
         </>
     )
