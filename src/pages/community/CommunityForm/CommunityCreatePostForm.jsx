@@ -1,7 +1,7 @@
-import {CreatePosts} from "../CommunityUtil/CommunityFetch.js";
+import {CreatePosts} from "../CommunityUtil/CommunityPostFetch.js";
 import {useState} from "react";
 import {redirect} from "react-router-dom";
-import {Button, Form, FormGroup, Stack} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
 
 export default function CommunityCreatePostForm(category){
@@ -34,7 +34,7 @@ export default function CommunityCreatePostForm(category){
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} className={"CreatePostForm"}>
                 <Form.Group controlId="postCont">
                     <Form.Label column={"lg"} style={{display:"none"}}>게시글 내용</Form.Label>
                     <Form.Control

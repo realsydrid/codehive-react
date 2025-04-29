@@ -1,10 +1,10 @@
-
-import {CreateComments, DeleteComment, DeletePost, GetComments, ReadPost} from "../CommunityUtil/CommunityFetch.js";
+import {DeletePost, ReadPost} from "../CommunityUtil/CommunityPostFetch.js";
+import {DeleteComment, GetComments} from "../CommunityUtil/CommunityCommentFetch.js";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
-import Loading from "../Loading.jsx";
-import ErrorMsg from "../ErrorMsg.jsx";
-import CommunityNavbar from "../CommunityNavbar.jsx";
+import Loading from "./Loading.jsx";
+import ErrorMsg from "./ErrorMsg.jsx";
+import CommunityNavbar from "../CommunityComponents/CommunityNavbar.jsx";
 import CommunityCreateCommentForm from "./CommunityCreateCommentForm.jsx";
 import "../CommunityPost.css";
 import {Button} from "react-bootstrap";
@@ -50,7 +50,7 @@ export default function CommunityPostDetailPage() {
                 </Button>
             )
         }
-        function DeleteCommentBtn({userNo,commentNo}) {
+        function DeleteCommentBtn({commentNo,userNo,postNo}) {
         const navigate=useNavigate();
 
         let DeletePostHandler = async () => {
@@ -60,8 +60,7 @@ export default function CommunityPostDetailPage() {
             }
             try {
                 await DeleteComment(commentNo, userNo);
-                alert('댓글이 삭제되었습니다.');
-                navigate(`/community/posts/${commentNo}`);
+                navigate(`/community/posts/${postNo}`);
             } catch (error) {
                 alert(error + ' 오류로 인해 게시글 삭제에 실패했습니다.');
             }}
@@ -81,7 +80,7 @@ export default function CommunityPostDetailPage() {
                             <div key={post.id}>
                                 <Link to={`/community/${post.category}`}>게시판으로 돌아가기</Link>
                                 <div className={"Community-UserInfo"}>
-                                    <Link to={"/users/profile/" + post.userNo} className={"Community-Link"}>
+                                    <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
                                         <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
                                              className={"Community-ProfileImg"}/>
                                         <div>
@@ -134,7 +133,7 @@ export default function CommunityPostDetailPage() {
                                 <div style={{marginBottom:"3%"}}>
                                 <span>{c.commentCreatedAt}</span>
                                 <div style={{display:loginUserNo===c.userNo ? "flex" : "none",alignItems:"flex-end",justifyContent:"end"}}>
-                                    <span><DeleteCommentBtn userNo={commentDto.userNo} commentNo={Number(commentDto.id)}/></span>
+                                    <span><DeleteCommentBtn userNo={c.userNo} commentNo={Number(c.id)} postNo={c.postNo}/></span>
                                     <span><Button variant="primary" type={"button"}>수정하기</Button></span>
                                 </div>
                                 </div>

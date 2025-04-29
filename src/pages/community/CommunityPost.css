@@ -1,6 +1,11 @@
+.AllPosts{
+    width:auto;
+    min-width: 70rem;
+    justify-content: center;
+    align-items: center;
+}
 .Community-list-group,.Community-comment,.Community-PostCont{
     width: auto;
-    min-width: 38em;
     border: 1px solid black;
     height: fit-content;
     min-height: 120px;
@@ -16,6 +21,11 @@
 .Community-list-group,.Community-comment{
     min-height: 120px;
 }
+.Community-PostPage,.Community-postForm,.Community-list-group,.Community-comment,.Community-PostCont{
+    width: auto;
+    min-width: 63rem;
+    max-width: 70rem;
+}
 .Community-PostCont{
     min-height: 400px;
     width: auto;
@@ -25,7 +35,7 @@
     margin-bottom: 7.8em;
 }
 .Community-Link{
-    color: black;
+    color: white;
     text-decoration: none;
     display: flex;
     flex-direction: column;
@@ -35,6 +45,15 @@
     text-decoration: none;
     display: flex;
     flex-direction: column;
+}
+.Community-PostLink{
+    color: black;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+.Community-PostLink:hover{
+    color: black;
 }
 .Community-postForm>div{
     justify-content: space-between;

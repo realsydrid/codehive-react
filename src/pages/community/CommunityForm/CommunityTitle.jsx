@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 export default function CommunityTitle({category}) {
     const categoryMsg={
         "free": "자유게시판",
@@ -5,5 +7,10 @@ export default function CommunityTitle({category}) {
         "pnl": "손익인증 게시판",
         "expert": "전문가 게시판"
     }
-    return (<h1 style={{marginTop:"50px"}}>{categoryMsg[category]}</h1>)
+    return (
+        <div style={{marginTop:"50px"}}>
+        <Link to="/community/search" >검색</Link>
+        <h1>{categoryMsg[category]}</h1>
+        </div>
+    )
 }

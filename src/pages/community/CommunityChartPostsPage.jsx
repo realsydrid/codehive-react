@@ -1,4 +1,4 @@
-import CommunityNavbar from "./CommunityNavbar.jsx";
+import CommunityNavbar from "./CommunityComponents/CommunityNavbar.jsx";
 import CommunityCreatePostForm from "./CommunityForm/CommunityCreatePostForm.jsx";
 import {Link} from "react-router-dom";
 import "./CommunityPost.css";

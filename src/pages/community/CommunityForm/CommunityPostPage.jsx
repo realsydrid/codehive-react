@@ -1,5 +1,5 @@
-import ErrorMsg from "../ErrorMsg.jsx";
-import Loading from "../Loading.jsx";
+import ErrorMsg from "./ErrorMsg.jsx";
+import Loading from "./Loading.jsx";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {Link} from "react-router-dom";
 import "../CommunityPost.css";
@@ -9,7 +9,7 @@ import {Button} from "react-bootstrap";
 export default function CommunityPostsPage(category){
     const { data: posts, fetchPosts, hasMore, isLoading, isError } = CommunityPageNationData(category.category);
     return (
-        <div className={"-flex flex-md-column align-items-center"}>
+        <div style={{display: "flex", justifyContent: "center"}}>
                 {isError && <ErrorMsg error={isError}/>}
                 {isLoading && <Loading/>}
             <InfiniteScroll
@@ -18,12 +18,12 @@ export default function CommunityPostsPage(category){
                 hasMore={hasMore}
                 loader={<Loading/>}
                 endMessage={<p style={{ textAlign: "center" }}><b>더 이상 게시글이 없습니다.</b></p>}
-                className={"d-flex flex-md-column align-items-center"}
+                className={"Community-PostPage"}
             >
                 {posts && posts.map((post) => (
-                    <div key={post.id} className={"justify-content-center align-items-center mb-2"} style={{width:'80%', minWidth:'800px'}}>
+                    <div key={post.id}>
                         <div className={"Community-UserInfo"}>
-                            <Link to={"/users/profile/" + post.userNo} className={"Community-Link"}>
+                            <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
                                 <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
                                      className={"Community-ProfileImg"}/>
                                 <div>
@@ -33,9 +33,9 @@ export default function CommunityPostsPage(category){
                             </Link>
                         </div>
                         <div className={"Community-list-group"}>
-                            <Link to={`/community/posts/${post.id}`} className={"Community-Link"}>
+                            <Link to={`/community/posts/${post.id}`} className={"Community-PostLink"}>
                                 <div className={"Community-postForm"}>
-                                    <h2>{post.postCont}<img src={post.imgUrl ? "/images/ImageIcon.png" : null} alt=""
+                                    <h2 className={"Community-postForm"}>{post.postCont}<img src={post.imgUrl ? "/images/ImageIcon.png" : null} alt=""
                                                             style={{width:"20px",height:"20px",display:post.imgUrl ? "" : "none"}}/></h2>
                                     <div className={"Community-postInfo"}>
                                         <div>{post.postCreatedAt}</div>
