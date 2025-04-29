@@ -2,6 +2,7 @@ import {CreatePosts} from "../CommunityUtil/CommunityFetch.js";
 import {useState} from "react";
 import {redirect} from "react-router-dom";
 import {Button, Form, FormGroup, Stack} from "react-bootstrap";
+import "../CommunityTextArea.css";
 
 export default function CommunityCreatePostForm(category){
     const [postCont, setPostCont] = useState("");
@@ -33,20 +34,14 @@ export default function CommunityCreatePostForm(category){
 
     return (
         <>
-            <Form onSubmit={handleSubmit} style={{ width: "100%", minWidth: "800px", maxWidth: "1500px", margin: "0 auto" }}>
+            <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="postCont">
                     <Form.Label column={"lg"} style={{display:"none"}}>게시글 내용</Form.Label>
                     <Form.Control
                         as="textarea"
                         name="postCont"
                         placeholder="안녕하세요! 자유롭게 이용하시되 이용정첵에 위배되는 글을 게시할 경우에는 제재가 될 수 있습니다."
-                        style={{
-                            minWidth: "800px",
-                            maxWidth: "1500px",
-                            height: "400px",
-                            resize: "none",
-                            fontSize: "20px",
-                        }}
+                        className={"CreatePost"}
                         value={postCont}
                         disabled={isSubmitting}
                         onChange={(e) => setPostCont(e.target.value)}
@@ -55,9 +50,6 @@ export default function CommunityCreatePostForm(category){
 
                 <div className="d-flex justify-content-sm-between mt-3">
                     <span>
-                    <Button variant="secondary" type="button" disabled={isSubmitting}>
-                        이미지 첨부
-                    </Button>
                     </span>
                     <span>
                     <Button variant="primary" type="submit" disabled={isSubmitting}>

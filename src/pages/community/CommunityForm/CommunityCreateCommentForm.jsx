@@ -2,6 +2,7 @@ import {CreateComments, CreatePosts} from "../CommunityUtil/CommunityFetch.js";
 import {useState} from "react";
 import {redirect} from "react-router-dom";
 import {Button, Form, FormGroup} from "react-bootstrap";
+import "../CommunityTextArea.css";
 
 export default function CommunityCreateCommentForm(post){
     const [commentCont, setCommentCont] = useState("");
@@ -35,22 +36,14 @@ export default function CommunityCreateCommentForm(post){
     };
 
     return (
-    <Form onSubmit={handleSubmit} style={{width:"100%", height:"250px",display:"flex", justifyContent:"center", alignItems:"center",flexDirection:"column",
-        minWidth:"1000px",maxWidth:"2500px",margin:"15px"}}>
+    <Form onSubmit={handleSubmit}>
         <Form.Group controlId="commentCont">
             <Form.Label column={"lg"}>댓글 작성</Form.Label>
             <Form.Control
                 as="textarea"
                 name="commentCont"
                 placeholder="안녕하세요! 자유롭게 이용하시되 이용정첵에 위배되거나 특정 사용자를 무분별한 비난하는 글을 게시할 경우에는 제재가 될 수 있습니다."
-                style={{
-                    width:"100%",
-                    minWidth: "1000px",
-                    maxWidth: "2500px",
-                    height: "150px",
-                    resize: "none",
-                    fontSize: "20px",
-                }}
+                className={"CreateComment"}
                 value={commentCont}
                 disabled={isSubmitting}
                 onChange={(e) => setCommentCont(e.target.value)}
