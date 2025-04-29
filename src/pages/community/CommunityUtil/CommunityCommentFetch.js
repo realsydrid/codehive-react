@@ -44,5 +44,5 @@ export async function ModifyComment(commentNo,userNo,commentCont){
     })
     if(!res.ok) throw new Error(res.status+"");
     alert("댓글이 수정되었습니다.")
-    return res;
+    return res.json();
 }

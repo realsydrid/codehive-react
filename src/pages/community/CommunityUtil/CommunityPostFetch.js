@@ -53,5 +53,5 @@ export async function ModifyPost(postNo,userNo,postCont){
     })
     if(!res.ok) throw new Error(res.status+"");
     alert("게시글이 수정되었습니다.")
-    return res;
+    return res.json();
 }

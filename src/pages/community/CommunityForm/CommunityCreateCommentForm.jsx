@@ -1,6 +1,6 @@
 import {CreateComments} from "../CommunityUtil/CommunityCommentFetch.js";
 import {useState} from "react";
-import {redirect} from "react-router-dom";
+import {redirect, useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
 
@@ -9,25 +9,21 @@ export default function CommunityCreateCommentForm(post){
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedPost=post.postNo;
     const userNo=post.userNo;
-    console.log(post);
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(post.postNo)
-        console.log(commentCont)
         // if (!postCont.trim()) return;
         setIsSubmitting(true);
         if(commentCont === ""){
             setIsSubmitting(false);
             alert("내용을 입력해주세요!")
-            e.preventDefault()
+            navigate(`http://localhost:5173/posts/detail?postNo=${selectedPost}`)
         }
-        else{
-            await CreateComments(selectedPost,userNo,commentCont);
-            setCommentCont("");}
-            alert("댓글이 성공적으로 등록되었습니다.");
-        try {
-            redirect(`http://localhost:5173/posts/detail?postNo=${selectedPost}`);
-        } catch (error) {
+        else{setCommentCont("");}
+        alert("댓글이 성공적으로 등록되었습니다.");
+
+        await CreateComments(selectedPost,userNo,commentCont);
+        try {navigate(`http://localhost:5173/posts/detail?postNo=${selectedPost}`)}
+        catch (error) {
             console.error("댓글 생성 실패:", error);
             alert("댓글 등록 중 오류가 발생했습니다.");
         } finally {
