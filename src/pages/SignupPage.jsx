@@ -30,6 +30,16 @@ export default function SignupPage() {
         email: null
     });
 
+    // 필드명을 사용자 친화적으로 바꿔주는 함수
+    const getFieldLabel = (field) => {
+        switch (field) {
+            case "userId": return "아이디";
+            case "nickname": return "닉네임";
+            case "email": return "이메일";
+            default: return field;
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setForm((prevForm) => ({
@@ -50,7 +60,7 @@ export default function SignupPage() {
     const checkDuplicate = async (field) => {
         const value = form[field];
         if (!value) {
-            alert(`${field}를 입력해주세요.`);
+            alert(`${getFieldLabel(field)}를 입력해주세요.`);
             return;
         }
 
@@ -64,14 +74,14 @@ export default function SignupPage() {
             const data = await response.json();
 
             if (data.exists) {
-                alert(`이미 사용 중인 ${field === "userId" ? "아이디" : field === "nickname" ? "닉네임" : "이메일"}입니다.`);
+                alert(`이미 사용 중인 ${getFieldLabel(field)}입니다.`);
                 setCheckResult(prev => ({ ...prev, [field]: false }));
             } else {
-                alert(`사용 가능한 ${field === "userId" ? "아이디" : field === "nickname" ? "닉네임" : "이메일"}입니다.`);
+                alert(`사용 가능한 ${getFieldLabel(field)}입니다.`);
                 setCheckResult(prev => ({ ...prev, [field]: true }));
             }
         } catch (err) {
-            console.error(`${field} 중복체크 실패`, err);
+            console.error(`${getFieldLabel(field)} 중복체크 실패`, err);
         }
     };
 
