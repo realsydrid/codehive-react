@@ -7,7 +7,7 @@ export default function ExchangeRate() {
         <>
             <NewsNavBar />
             <NewsList title="금리/환율"
-                      fetchUrl="http://localhost:8801/api/news/finance"
+                      fetchUrl="http://localhost:8801/api/news?category=finance"
                       />
         </>
     );

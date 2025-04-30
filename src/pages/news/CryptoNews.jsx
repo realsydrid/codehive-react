@@ -7,7 +7,7 @@ export default function CryptoNews() {
         <>
             <NewsNavBar />
             <NewsList title="암호화폐 뉴스"
-                      fetchUrl="http://localhost:8801/api/news/crypto"
+                      fetchUrl="http://localhost:8801/api/news?category=crypto"
                       />
         </>
     );

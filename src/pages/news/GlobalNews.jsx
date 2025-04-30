@@ -7,7 +7,7 @@ export default function GlobalNews() {
         <>
             <NewsNavBar />
             <NewsList title="글로벌 증시"
-                      fetchUrl="http://localhost:8801/api/news/global"
+                      fetchUrl="http://localhost:8801/api/news?category=global"
                       />
         </>
     );
