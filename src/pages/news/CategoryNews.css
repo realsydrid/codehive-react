@@ -1,0 +1,120 @@
+.news-container {
+    padding: 2rem 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.news-title {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #222;
+}
+
+.error-text {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.loading-text {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 2rem;
+    color: #666;
+}
+
+.news-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.news-item {
+    display: flex;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out;
+}
+
+.news-item:hover {
+    transform: translateY(-2px);
+}
+
+.news-link {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+
+.news-thumbnail {
+    width: 140px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.news-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.news-link h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.news-link p {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0.2rem 0;
+    line-height: 1.5;
+}
+
+.news-date {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+/* ✅ 모바일 최적화 */
+@media (max-width: 768px) {
+    .news-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .news-thumbnail {
+        width: 100%;
+        height: auto;
+    }
+
+    .news-text {
+        margin-top: 0.8rem;
+    }
+
+    .news-link h2 {
+        font-size: 1rem;
+    }
+
+    .news-link p {
+        font-size: 0.9rem;
+    }
+
+    .news-date {
+        font-size: 0.75rem;
+    }
+}
