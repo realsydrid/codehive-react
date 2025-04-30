@@ -48,11 +48,23 @@ import SettingsSupportQnaQuestionDetailPage
     from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
+import {useContext, useEffect} from "react";
+import {UseLoginUserContext} from "./provider/LoginUserProvider.jsx";
+import {loadCheckLogin} from "./utils/loginCheck.js";
 
 
 function App() {
-
-
+    const [,setLoginUser] = useContext(UseLoginUserContext)
+    useEffect(() => {
+        loadCheckLogin().then(data => {
+            if (data) {
+                setLoginUser(data.user);
+                console.log(data.user);
+            } else {
+                setLoginUser(null);
+            }
+        });
+    }, [setLoginUser]);
     return (
         <BrowserRouter>
             <Routes>
@@ -156,6 +168,20 @@ function App() {
         </BrowserRouter>
 
     )
+    // 필터는 아직 넣을곳 안정해서 제외
+    // function LoginCheckFilter({children}){
+    //     const [loginUser,]=useContext(UseLoginUserContext);
+    //     if(loginUser){
+    //         if(children){
+    //             return children;
+    //         }else{
+    //             return <Outlet/>;
+    //         }
+    //     }else{
+    //         alert("이 기능을 이용하시려면 로그인 하세요!")
+    //         return <Navigate to="/login"/>
+    //     }
+    // }
 }
 
 export default App

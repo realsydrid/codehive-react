@@ -16,16 +16,16 @@ export default function CommunityCreateCommentForm(post){
         if(!loginUser){
             alert("로그인 해주세요!")
             navigate("/login");
-        }
-        setIsSubmitting(true);
-        if(commentCont === ""){
+        }else if(loginUser.id!==userNo){
+            alert("접근이 제한되었습니다.")
+        }else if(commentCont === ""){
             setIsSubmitting(false);
             alert("내용을 입력해주세요!")
             e.preventDefault();
         }
-        else{setCommentCont("");}
-        alert("댓글이 성공적으로 등록되었습니다.");
-
+        else setCommentCont("");
+        setIsSubmitting(true)
+        alert("댓글이 성공적으로 등록되었습니다.")
         await CreateComments(selectedPost,userNo,commentCont);
         try {navigate(`http://localhost:5173/posts/detail?postNo=${selectedPost}`)}
         catch (error) {
