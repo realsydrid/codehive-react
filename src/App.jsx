@@ -154,20 +154,6 @@ function App() {
         </BrowserRouter>
 
     )
-    // 필터는 아직 넣을곳 안정해서 제외
-    // function LoginCheckFilter({children}){
-    //     const [loginUser,]=useContext(UseLoginUserContext);
-    //     if(loginUser){
-    //         if(children){
-    //             return children;
-    //         }else{
-    //             return <Outlet/>;
-    //         }
-    //     }else{
-    //         alert("이 기능을 이용하시려면 로그인 하세요!")
-    //         return <Navigate to="/login"/>
-    //     }
-    // }
 }
 
 export default App
