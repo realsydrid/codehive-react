@@ -4,7 +4,7 @@ import CryptoNews from "./CryptoNews.jsx";
 import GlobalNews from "./GlobalNews.jsx";
 import ExchangeRate from "./ExchangeRate.jsx";
 import NewsNavBar from "./NewsNavBar.jsx";
-import "./NewsMainPage.css"; // ✅ CSS 연결
+import "./NewsMainPage.css";
 
 export default function NewsMainPage() {
     const [activeTab, setActiveTab] = React.useState("NewsMainPage");
@@ -14,6 +14,8 @@ export default function NewsMainPage() {
             <NewsNavBar />
             <br/>
             <h1 className="news-title">뉴스 홈</h1>
+            <h2>전날 주요 뉴스</h2>
+            <hr/>
             <div className="news-tab-container">
                 <button
                     className={`news-tab-button ${activeTab === "main" ? "active" : ""}`}
