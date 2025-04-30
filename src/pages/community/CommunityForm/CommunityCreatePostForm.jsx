@@ -1,19 +1,21 @@
 import {CreatePosts} from "../CommunityUtil/CommunityPostFetch.js";
-import {useState} from "react";
-import {redirect} from "react-router-dom";
+import {useContext, useState} from "react";
+import {redirect, useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
+import "../CommunityPost.css";
+import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
 export default function CommunityCreatePostForm(category){
+    const navigate = useNavigate();
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedCategory=category.category;
     const userNo=category.userNo;
     const handleSubmit = async (e) => {
-        // if (!postCont.trim()) return;
         setIsSubmitting(true);
         try {
-            if(postCont === ""){
+             if(postCont === ""){
                 setIsSubmitting(false);
                 alert("게시글을 입력해주세요!")
                 e.preventDefault()
@@ -33,22 +35,21 @@ export default function CommunityCreatePostForm(category){
 
 
     return (
-        <>
-            <Form onSubmit={handleSubmit} className={"CreatePostForm"}>
-                <Form.Group controlId="postCont">
-                    <Form.Label column={"lg"} style={{display:"none"}}>게시글 내용</Form.Label>
+        <div className={"AllPosts"}>
+            <Form onSubmit={handleSubmit} className={"AllPosts"}>
+                <Form.Group controlId="postCont"  className={"AllPosts"}>
+                    <Form.Label column={"lg"} style={{display:"none",width:"95%",maxWidth:"100rem",minWidth:"30rem"}}>게시글 내용</Form.Label>
                     <Form.Control
+                        style={{width:"95%",minWidth:"30rem",maxWidth:"100rem",resize:"none", minHeight: "20rem",marginBottom:"2px"}}
                         as="textarea"
                         name="postCont"
                         placeholder="안녕하세요! 자유롭게 이용하시되 이용정첵에 위배되는 글을 게시할 경우에는 제재가 될 수 있습니다."
-                        className={"CreatePost"}
                         value={postCont}
                         disabled={isSubmitting}
                         onChange={(e) => setPostCont(e.target.value)}
                     />
                 </Form.Group>
-
-                <div className="d-flex justify-content-sm-between mt-3">
+                <div>
                     <span>
                     </span>
                     <span>
@@ -58,6 +59,6 @@ export default function CommunityCreatePostForm(category){
                         </span>
                 </div>
             </Form>
-        </>
+        </div>
     )
 }

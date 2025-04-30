@@ -1,8 +1,9 @@
 import {CreateComments} from "../CommunityUtil/CommunityCommentFetch.js";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {redirect, useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
+import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
 export default function CommunityCreateCommentForm(post){
     const [commentCont, setCommentCont] = useState("");
@@ -10,17 +11,18 @@ export default function CommunityCreateCommentForm(post){
     const selectedPost=post.postNo;
     const userNo=post.userNo;
     const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
-        // if (!postCont.trim()) return;
-        setIsSubmitting(true);
-        if(commentCont === ""){
+        if(userNo!==1){
+            alert("접근이 제한되었습니다.")
+        }else if(commentCont === ""){
             setIsSubmitting(false);
             alert("내용을 입력해주세요!")
-            navigate(`http://localhost:5173/posts/detail?postNo=${selectedPost}`)
+            e.preventDefault();
         }
-        else{setCommentCont("");}
-        alert("댓글이 성공적으로 등록되었습니다.");
-
+        else setCommentCont("");
+        setIsSubmitting(true)
+        alert("댓글이 성공적으로 등록되었습니다.")
         await CreateComments(selectedPost,userNo,commentCont);
         try {navigate(`http://localhost:5173/posts/detail?postNo=${selectedPost}`)}
         catch (error) {

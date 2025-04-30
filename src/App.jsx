@@ -51,8 +51,6 @@ import SignupPage from "./pages/SignupPage.jsx";
 
 
 function App() {
-
-
     return (
         <BrowserRouter>
             <Routes>

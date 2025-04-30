@@ -1,11 +1,20 @@
+.AllPosts,.InfiniteScrolls{
+    flex-direction: column;
+    min-width: 32rem;
+    max-width: 100rem;
+}
 .AllPosts{
-    width:auto;
-    min-width: 70rem;
     justify-content: center;
     align-items: center;
 }
+.infiniteScrolls{
+    width:95%!important;
+    display: flex!important;
+    flex-direction: column!important;
+    min-width: 32rem!important;
+    max-width: 100rem!important;
+}
 .Community-list-group,.Community-comment,.Community-PostCont{
-    width: auto;
     border: 1px solid black;
     height: fit-content;
     min-height: 120px;
@@ -17,19 +26,23 @@
     margin: 10px;
     border-radius: 5px;
     text-align: left;
+
 }
 .Community-list-group,.Community-comment{
     min-height: 120px;
 }
-.Community-PostPage,.Community-postForm,.Community-list-group,.Community-comment,.Community-PostCont{
-    width: auto;
-    min-width: 63rem;
-    max-width: 70rem;
+.Community-PostPage,.Community-postForm,.Community-list-group,.Community-comment,
+.Community-PostCont,.CommunityPostDetail,.Community-PostModify,.Community-Link,.Community-commentCont{
+    width: 99%;
+    min-width: 30rem;
+    max-width: 100rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .Community-PostCont{
-    min-height: 400px;
-    width: auto;
-    min-width: 35em;
+    min-height: 5rem;
+    height: auto;
 }
 .Community-PostCont>h1{
     margin-bottom: 7.8em;
@@ -64,6 +77,7 @@
 .Community-postForm{
     display: flex;
     flex-direction: column;
+    margin-bottom:2.5rem;
 }
 .Community-postForm>h2{
     display: flex;
@@ -79,23 +93,33 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: black;
 }
-.Community-CommentCont{
+.Community-commentCont{
     justify-content: space-between;
     display: flex;
     flex-direction: row;
     margin: 0.2em 0 0.2em 0.2em;
 }
-.Community-PostModify{
+.Community-PostModify,.Community-postInfo{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
+@media(max-width: 700px){.Community-postInfo {
+    justify-content: flex-start;
+    flex-direction: column;
+}}
+@media(max-width: 700px){.Community-commentCont {
+    width: 99%;
+}}
+@media(max-width: 500px){.Community-commentCont {
+    justify-content: flex-start;
+    flex-direction: column;
+}}
 .CommunityPostDetail{
     margin-top:5%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 38em;
-    width: auto;
 }

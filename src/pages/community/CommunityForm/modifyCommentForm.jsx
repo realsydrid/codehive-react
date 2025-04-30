@@ -19,9 +19,11 @@ export default function CommunityModifyCommentForm(comment){
         onSuccess: () => {
             console.log('수정 성공');
             queryClient.invalidateQueries(['comments', comment.postNo]);
+            setIsSubmitting(true);
         },
         onError: (error) => {
             console.error('수정 실패:', error);
+            setIsSubmitting(false);
         },
     });
     const handleSubmit = () => {

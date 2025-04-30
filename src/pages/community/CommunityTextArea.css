@@ -1,18 +1,22 @@
 .CreatePostForm{
-    width:auto;
-    min-width: 70rem;
+    width:95%;
+    min-width: 30rem;
+    max-width: 100rem;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 .CreatePost,.CreateComment{
-    width: 100%;
-    min-width: 70rem;
-    max-width: 2500px;
+    width: 95%;
+    min-width: 30rem;
+    max-width: 100rem;
     resize: none;
 }
 .CreatePost{
-    height: 400px;
+    min-height: 40rem;
+    width:95%;
+    min-width: 30rem;
+    max-width: 100rem;
 }
 .CreateComment{
     height: 120px;

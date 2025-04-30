@@ -13,6 +13,5 @@ export function useLogin() {
         setLoginUser(userData);
         navigate("/");
     };
-
     return { login };
 }
