@@ -1,5 +1,5 @@
 const ServerUrl='http://localhost:8801'
-//모든 요청에 로그인 정보인 jwt를 해더에 포함하는 커스텀 fetch
+// 로그인 fetch 주소임 그리고 저 함수도 강사님 강의랑 gpt 참조해서 만든것
 export async function loadCheckLogin() {
     const jwt = localStorage.getItem("jwt");
     if (!jwt) {
