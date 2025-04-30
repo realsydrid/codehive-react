@@ -11,7 +11,7 @@
     width:95%!important;
     display: flex!important;
     flex-direction: column!important;
-    min-width: 30rem!important;
+    min-width: 32rem!important;
     max-width: 100rem!important;
 }
 .Community-list-group,.Community-comment,.Community-PostCont{
@@ -26,15 +26,19 @@
     margin: 10px;
     border-radius: 5px;
     text-align: left;
+
 }
 .Community-list-group,.Community-comment{
     min-height: 120px;
 }
 .Community-PostPage,.Community-postForm,.Community-list-group,.Community-comment,
-.Community-PostCont,.CommunityPostDetail,.Community-PostModify,.Community-Link{
-    width: 95%;
+.Community-PostCont,.CommunityPostDetail,.Community-PostModify,.Community-Link,.Community-commentCont{
+    width: 99%;
     min-width: 30rem;
     max-width: 100rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .Community-PostCont{
     min-height: 5rem;
@@ -91,7 +95,7 @@
     align-items: center;
     color: black;
 }
-.Community-CommentCont{
+.Community-commentCont{
     justify-content: space-between;
     display: flex;
     flex-direction: row;
@@ -102,6 +106,17 @@
     flex-direction: row;
     justify-content: space-between;
 }
+@media(max-width: 700px){.Community-postInfo {
+    justify-content: flex-start;
+    flex-direction: column;
+}}
+@media(max-width: 700px){.Community-commentCont {
+    width: 99%;
+}}
+@media(max-width: 500px){.Community-commentCont {
+    justify-content: flex-start;
+    flex-direction: column;
+}}
 .CommunityPostDetail{
     margin-top:5%;
     display: flex;
