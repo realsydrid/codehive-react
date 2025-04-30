@@ -48,26 +48,9 @@ import SettingsSupportQnaQuestionDetailPage
     from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
-import {useContext, useEffect} from "react";
-import {UseLoginUserContext} from "./provider/LoginUserProvider.jsx";
-import {loadCheckLogin} from "./utils/loginCheck.js";
 
 
 function App() {
-    const [,setLoginUser] = useContext(UseLoginUserContext)
-    useEffect(() => {
-        loadCheckLogin().then(data => {
-            if (data) {
-                setLoginUser(data.user);
-                console.log(data.user);
-            } else {
-                setLoginUser(null);
-            }
-        });
-    }, [setLoginUser]);
-    // 이부분에서 로그아웃 지연 문제가 생기는거 같은데 내 능력으론 여기까지가 한계임
-    // 아까 저기랑 중복코드인거 같은데 핵심문제는 모르겠음 어딜 잘못지우고 잘못 쓰면 틀어질까봐 못하겠음
-    // 이걸 메인에 추가해야 하나 싶기도 한데 잘 처리해 주세요 내 능력의 한계임... 이제 커뮤니티에 전념 하겠습니다.
     return (
         <BrowserRouter>
             <Routes>

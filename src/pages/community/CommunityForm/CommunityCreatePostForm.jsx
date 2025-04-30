@@ -7,7 +7,6 @@ import "../CommunityPost.css";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
 export default function CommunityCreatePostForm(category){
-    const  [loginUser, ]= useContext(UseLoginUserContext);
     const navigate = useNavigate();
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,11 +15,7 @@ export default function CommunityCreatePostForm(category){
     const handleSubmit = async (e) => {
         setIsSubmitting(true);
         try {
-            if(!loginUser){
-                if(confirm("게시글 작성을 위해서는 로그인 해주세요!")){
-                    navigate("/login");
-                }
-            }else if(postCont === ""){
+             if(postCont === ""){
                 setIsSubmitting(false);
                 alert("게시글을 입력해주세요!")
                 e.preventDefault()

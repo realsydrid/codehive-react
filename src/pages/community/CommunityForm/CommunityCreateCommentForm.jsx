@@ -11,12 +11,9 @@ export default function CommunityCreateCommentForm(post){
     const selectedPost=post.postNo;
     const userNo=post.userNo;
     const navigate = useNavigate();
-    const  [loginUser, ]= useContext(UseLoginUserContext);
+
     const handleSubmit = async (e) => {
-        if(!loginUser){
-            alert("로그인 해주세요!")
-            navigate("/login");
-        }else if(loginUser.id!==userNo){
+        if(userNo!==1){
             alert("접근이 제한되었습니다.")
         }else if(commentCont === ""){
             setIsSubmitting(false);

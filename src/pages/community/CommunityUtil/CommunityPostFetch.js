@@ -28,8 +28,7 @@ export async function CreatePosts(category,postCont,userNo){
     const URL=`${ServerUrl}/posts?category=${category}`;
     const res = await fetch(URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`},
+        headers: { "Content-Type": "application/json"},
         body: JSON.stringify({postCont,userNo})
     });
     if(!res.ok) throw new Error(res.status+"");
@@ -41,8 +40,7 @@ export async function DeletePost(postNo,userNo){
     const res = await fetch(URL, {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            "Content-Type": "application/json"
             },
     })
     if(!res.ok) throw new Error(res.status+"");
@@ -53,8 +51,7 @@ export async function ModifyPost(postNo,userNo,postCont){
     const URL=`${ServerUrl}/posts?postNo=${postNo}&userNo=${userNo}`;
     const res = await fetch(URL, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" ,
-            Authorization: `Bearer ${token}`},
+        headers: { "Content-Type": "application/json"},
         body: JSON.stringify({postNo:postNo,userNo:userNo,postCont:postCont})
     })
     if(!res.ok) throw new Error(res.status+"");

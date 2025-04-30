@@ -14,8 +14,7 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 export default function CommunityPostDetailPage() {
     const {postNo}=useParams();
     const navigate=useNavigate();
-    const  [loginUser, ]= useContext(UseLoginUserContext);
-    let loginUserNo=loginUser.id
+    let loginUserNo=1
     console.log(loginUserNo);
     const {data:post,isLoading,error}=useQuery({
         queryKey:["post",postNo],
