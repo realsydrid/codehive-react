@@ -20,6 +20,13 @@
     margin-top: 2rem;
 }
 
+.loading-text {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 2rem;
+    color: #666;
+}
+
 .news-list {
     list-style: none;
     padding: 0;

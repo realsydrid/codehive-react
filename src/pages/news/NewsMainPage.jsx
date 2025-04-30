@@ -1,5 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import {useState} from "react";
 import CryptoNews from "./CryptoNews.jsx";
 import GlobalNews from "./GlobalNews.jsx";
 import ExchangeRate from "./ExchangeRate.jsx";
@@ -7,7 +6,7 @@ import NewsNavBar from "./NewsNavBar.jsx";
 import "./NewsMainPage.css";
 
 export default function NewsMainPage() {
-    const [activeTab, setActiveTab] = React.useState("NewsMainPage");
+    const [activeTab, setActiveTab] = useState("main");
 
     return (
         <>
