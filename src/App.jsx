@@ -48,6 +48,7 @@ import SettingsSupportQnaQuestionDetailPage
     from "./pages/settings/support/qna/SettingsSupportQnaQuestionDetailPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
+import OAuthSignupPage from "./pages/OAuthSignupPage.jsx";
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
                     <Route path="/" element={<HomePage/>}/> {/*홈*/}
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/OAuthSignup" element={<OAuthSignupPage />} />
 
                     {/*trade*/}
                     <Route path="/trade">
