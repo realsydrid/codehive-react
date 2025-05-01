@@ -1,0 +1,161 @@
+.orderBook-contentsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  height: 100vh;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.orderBook-askContainer {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  overflow-y: auto;
+  background-color: #eef6ff;
+  padding-right: 0.5rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.orderBook-askContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.orderBook-bidContainer {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: auto;
+  background-color: #fff0ef;
+  padding-left: 0.5rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.orderBook-bidContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.orderBook-centerContainer {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #f9f9f9;
+  padding: 1rem;
+}
+
+.orderBook-infoContainer {
+  grid-column: 1;
+  grid-row: 2;
+  background-color: #f4f4f4;
+  padding: 1rem;
+  font-size: 0.85rem;
+}
+
+.orderBook-orderBookContainer {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    width: 50%;
+    gap: 0.1em;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f0f0f0;
+    grid-auto-rows: 3em;
+    box-sizing: border-box;
+}
+
+
+
+.orderBook-askPriceDiv,
+.orderBook-bidPriceDiv {
+    display: contents;
+    margin-bottom: 1px;
+    cursor: pointer;
+}
+
+
+.orderBook-askPriceDiv > div:first-child,
+.orderBook-bidPriceDiv > div:first-child {
+    text-align: right;
+    padding: 0 0.5rem;
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 0.8rem;
+    display: flex;          /* Flexbox 적용 */
+    justify-content: flex-end; /* 오른쪽 정렬 유지 */
+    align-items: center;
+}
+
+.RISE .orderBook-askPriceDiv>div:nth-child(1),
+.RISE .orderBook-bidPriceDiv>div:nth-child(1) {
+    color: red;
+}
+
+.FALL .orderBook-askPriceDiv>div:nth-child(1),
+.FALL .orderBook-bidPriceDiv>div:nth-child(1) {
+    color: blue;
+}
+
+.orderBook-sizeDiv {
+    position: relative;
+    height: 100%;
+    display: flex;         /* Flexbox 적용 */
+    align-items: center;
+}
+
+.orderBook-sizeDiv div {
+    text-indent: -9999px;
+    overflow: hidden;
+    height: 0.8rem;        /* 막대 높이 */
+    position: absolute;
+    top: 50%;              /* 부모의 50% 위치에 배치 */
+    transform: translateY(-50%); /* 자신 높이의 절반만큼 위로 올림 */
+    box-sizing: border-box;
+}
+
+.orderBook-sizeDiv span {
+    position: relative;    /* absolute 대신 relative 사용 */
+    top: auto;             /* top 값 제거 */
+    left: 0.5rem;
+    font-size: 0.8rem;
+    z-index: 1;
+}
+
+.orderBook-askPriceDiv > div:first-child,
+.orderBook-askPriceDiv .orderBook-sizeDiv {
+    background-color: #eef6ff;
+}
+
+.orderBook-askPriceDiv .orderBook-sizeDiv div {
+    background-color: #cde0f6;
+}
+
+.orderBook-bidPriceDiv .orderBook-sizeDiv div {
+    background-color: #f8d8d6;
+}
+
+.orderBook-bidPriceDiv > div:first-child,
+.orderBook-bidPriceDiv .orderBook-sizeDiv {
+    background-color: #fff0ef;
+}
+
+
+
+.orderBook-orderBookContainer {
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.orderBook-orderBookContainer::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+}

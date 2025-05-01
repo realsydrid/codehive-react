@@ -20,9 +20,9 @@
 
 
 .order-formContainer {
-    border: 1px solid blue;
     width: 60%;
     height: 70%;
+
 }
 
 .order-askPriceDiv,
@@ -40,44 +40,44 @@
     white-space: nowrap;
     font-weight: bold;
     font-size: 0.8rem;
-    display: flex;          /* Flexbox 적용 */
+    display: flex; /* Flexbox 적용 */
     justify-content: flex-end; /* 오른쪽 정렬 유지 */
-    align-items: center; 
+    align-items: center;
 }
 
-.RISE .order-askPriceDiv>div:nth-child(1),
-.RISE .order-bidPriceDiv>div:nth-child(1) {
+.RISE .order-askPriceDiv > div:nth-child(1),
+.RISE .order-bidPriceDiv > div:nth-child(1) {
     color: red;
 }
 
-.FALL .order-askPriceDiv>div:nth-child(1),
-.FALL .order-bidPriceDiv>div:nth-child(1) {
+.FALL .order-askPriceDiv > div:nth-child(1),
+.FALL .order-bidPriceDiv > div:nth-child(1) {
     color: blue;
 }
 
 .order-sizeDiv {
     position: relative;
     height: 100%;
-    display: flex;         /* Flexbox 적용 */
+    display: flex; /* Flexbox 적용 */
     align-items: center;
 }
 
 .order-sizeDiv div {
     text-indent: -9999px;
     overflow: hidden;
-    height: 0.8rem;        /* 막대 높이 */
+    height: 0.8rem; /* 막대 높이 */
     position: absolute;
-    top: 50%;              /* 부모의 50% 위치에 배치 */
+    top: 50%; /* 부모의 50% 위치에 배치 */
     transform: translateY(-50%); /* 자신 높이의 절반만큼 위로 올림 */
     box-sizing: border-box;
 }
 
 .order-sizeDiv span {
-    position: relative;    /* absolute 대신 relative 사용 */
-    top: auto;             /* top 값 제거 */
+    position: relative; /* absolute 대신 relative 사용 */
+    top: auto; /* top 값 제거 */
     left: 0.5rem;
     font-size: 0.8rem;
-    z-index: 1;  
+    z-index: 1;
 }
 
 .order-askPriceDiv > div:first-child,
@@ -110,8 +110,7 @@
 
 .order-formNav li {
     list-style: none;
-    border: 1px solid red;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: #f2f3f4;
     width: 100%;
     cursor: pointer;
 }
@@ -121,46 +120,105 @@
 }
 
 .order-priceSelectDiv {
+    border: 1px solid #e5e5e5;
     display: flex;
+    justify-content: space-between;
     flex-direction: row;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
 }
-
-.order-priceInputDiv {
-    display: flex;
-
-    border: 1px solid black;
+.order-priceSelectDiv>p{
+    margin: 0;
+    position: relative;
+    width: 100%;
 }
+.order-priceSelectDiv>p>input {
+    text-align: right;
+    border: none;
+    width: 100%;
 
-.order-priceInputDiv button {
-    background-color: #888888;
+}
+.order-priceSelectDiv>p>span{
+    position: absolute;
+    top: 0;
+    left: 0.5rem;
+}
+.order-priceSelectDiv>div{
+    width: 4.5rem;
+}
+.order-priceSelectDiv button {
+    background-color: #e5e5e5;
+    width: 50%;
+    height: 100%;
+    padding: 0;
+}
+.order-priceSelectDiv button:nth-child(1) {
+    border-right: 1px solid white;
 }
 
 .order-totalPriceAddDiv button {
     background-color: #888888;
 }
 
+.order-submitBtnDiv{
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 1rem;
+}
 .order-resetBtn {
-    background-color: #888888;
+    background-color: #a4a4a4;
+    width: 30%;
+    color: white;
+    border-radius: 0.2rem;
+    padding: 0;
+    height: 2rem;
+    font-size: 1rem;
+    font-weight: normal;
 }
 
 .order-buyConfirmBtn {
-    background-color: red;
+    background-color: #e15241;
+    color: white;
+    border-radius: 0.2rem;
+    padding: 0;
+    height: 2rem;
+    width: 68%;
+    font-size: 1rem;
+    font-weight: normal;
 }
 
 .order-amountSelectDiv {
-    /* 필요한 스타일 추가 */
-}
-
-.order-amountInputDiv {
+    border: 1px solid #e5e5e5;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
 
 }
-.order-amountInputDiv>div{
-    align-items: center;
+
+.order-amountSelectDiv>p{
+    position: relative;
+    margin: 0;
+    width: 100%;
 }
+.order-amountSelectDiv>p>input {
+    text-align: right;
+    border: none;
+    width: 100%;
+}
+.order-amountSelectDiv>p>span {
+    position: absolute;
+    top: 0;
+    left: 0.5rem;
+}
+.order-amountSelectDiv select {
+    border: none;
+    background-color: #e5e5e5;
+    padding: 0.2rem 0;
+;
+}
+
 
 /* Webkit 브라우저(Chrome, Safari 등)용 스크롤바 스타일 */
 .order-orderBookContainer::-webkit-scrollbar {
@@ -176,7 +234,7 @@
     border-radius: 0.1875rem;
 }
 
-.trade-coinTitle div.RISE > p:nth-child(2)>span:nth-child(2)::before {
+.trade-coinTitle div.RISE > p:nth-child(2) > span:nth-child(2)::before {
     background: url('/images/icon-up.svg') no-repeat center;
     background-size: 0.7em 0.55em; /* 부모 글꼴 크기 대비 비율 */
     content: "";
@@ -189,8 +247,79 @@
     vertical-align: middle; /* 텍스트 중앙 정렬 */
 }
 
-.order-formRadioNav{
+.order-formRadioNav {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    padding-left: 1.5rem;
+    padding-top: 0.5rem;
+
+
 }
+
+.order-formRadioNav input {
+    display: none;
+}
+
+.order-formRadioNav label {
+    position: relative;
+    color: #888888
+}
+
+
+.order-formRadioNav label::before {
+    display: inline-block;
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    background: url('/images/checkbox_basic.png') no-repeat center/contain;
+    cursor: pointer;
+    position: absolute;
+    top: 0.25rem;
+    left: -1.2rem;
+}
+
+.order-formRadioNav label.active {
+    color: #333;
+    font-weight: bold;
+}
+
+.order-formRadioNav label.active::before {
+    background: url('/images/checkbox_active.png') no-repeat center/contain;
+    background-size: 1.2rem 1.2rem;
+}
+
+.order-buyForm {
+    padding: 0.25rem;
+}
+
+.order-depositDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.order-depositDiv > div > span:nth-child(2) {
+    color: #888888;
+
+}
+
+.order-totalPriceDiv {
+   border: 1px solid #e5e5e5;
+}
+.order-totalPriceDiv>p {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    width: 100%;
+}
+.order-totalPriceDiv>p>span {
+    padding : 0 0.2rem
+}
+.order-totalPriceDiv input{
+    border: none;
+    text-align: right;
+}
+
