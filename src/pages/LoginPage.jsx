@@ -29,8 +29,6 @@ export default function LoginPage() {
             // JWT 저장
             localStorage.setItem("jwt", jwt);
 
-            // 로컬에 저장되는 유저데이터 삭제
-            localStorage.removeItem("loginUser");
 
             // Context 업데이트
             setLoginUser(userData);
