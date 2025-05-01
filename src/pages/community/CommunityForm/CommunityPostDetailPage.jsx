@@ -14,8 +14,8 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 export default function CommunityPostDetailPage() {
     const {postNo}=useParams();
     const navigate=useNavigate();
-    let loginUserNo=1
-    console.log(loginUserNo);
+    const  [loginUser, ]= useContext(UseLoginUserContext);
+    console.log(loginUser.id)
     const {data:post,isLoading,error}=useQuery({
         queryKey:["post",postNo],
         queryFn:async ()=>ReadPost(postNo),
@@ -33,7 +33,6 @@ export default function CommunityPostDetailPage() {
         }
     )
     function DeletePostBtn({postNo,userNo,category}) {
-        const  [loginUser, ]= useContext(UseLoginUserContext);
         let DeletePostHandler = async () => {
             if(!loginUser){
                 alert("로그인 해주세요!")
@@ -100,8 +99,8 @@ export default function CommunityPostDetailPage() {
                                             </div>
                                         </Link>
                                     </div>
-                                    <span style={{paddingTop:"2rem",display:Number(loginUserNo)===Number(post.userNo) ? "flex" : "none"}}>
-                                        <DeletePostBtn postNo={post.id} userNo={loginUserNo} category={post.category}/>&nbsp;
+                                    <span style={{paddingTop:"2rem",display:Number(loginUser.id)===Number(post.userNo) ? "flex" : "none"}}>
+                                        <DeletePostBtn postNo={post.id} userNo={loginUser.id} category={post.category}/>&nbsp;
                                     <Button variant="primary" type={"button"}>수정하기</Button>
                                     </span>
                                 </div>

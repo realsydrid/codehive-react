@@ -22,9 +22,10 @@ export default function CommunityCreateCommentForm(post){
         }
         else setCommentCont("");
         setIsSubmitting(true)
-        alert("댓글이 성공적으로 등록되었습니다.")
-        await CreateComments(selectedPost,userNo,commentCont);
-        try {navigate(`http://localhost:5173/posts/detail?postNo=${selectedPost}`)}
+        try {
+            await CreateComments(selectedPost,userNo,commentCont);
+            alert("댓글이 성공적으로 등록되었습니다.")
+            navigate(`http://localhost:5173/posts/${selectedPost}`)}
         catch (error) {
             console.error("댓글 생성 실패:", error);
             alert("댓글 등록 중 오류가 발생했습니다.");
