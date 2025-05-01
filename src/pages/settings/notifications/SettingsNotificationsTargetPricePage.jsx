@@ -4,23 +4,39 @@ export default function SettingsNotificationsTargetPricePage() {
     const [alerts, setAlerts] = useState([]);
 
     useEffect(() => {
-        fetch('/setting/support/notifications/volatility_alerts.do')
+        fetch('http://localhost:8801/api/target_price_alerts/me')
             .then(res => res.json())
-            .then(data => setAlerts(data.volatilityAlerts))
+            .then(data => {
+                console.log("불러온 알림 데이터:", data.targetPriceAlerts); // 이거 추가
+                setAlerts(data.targetPriceAlerts);
+            })
             .catch(err => console.error('알림 로드 실패:', err));
     }, []);
 
+    const isEnabled = (market) => !market.endsWith(' (OFF)');
+
+    const toggleMarketName = (market, enable) => {
+        return enable ? market.replace(' (OFF)', '') : `${market.replace(' (OFF)', '')} (OFF)`;
+    };
+
     const handleToggle = (id, market) => {
-        const enabled = !market.includes('OFF');
-        fetch('/setting/support/notifications/volatility_alerts/save', {
+        const currentlyEnabled = isEnabled(market);
+        const updatedMarket = toggleMarketName(market, !currentlyEnabled);
+
+        fetch('http://localhost:8801/api/target_price_alerts/me', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id, enabled: !enabled }),
+            body: JSON.stringify({ id, enabled: !currentlyEnabled }),
         })
-            .then(() => {
-                setAlerts(alerts.map(alert =>
-                    alert.id === id ? { ...alert, market: enabled ? market + ' (OFF)' : market.replace(' (OFF)', '') } : alert
-                ));
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    setAlerts(alerts.map(alert =>
+                        alert.id === id ? { ...alert, market: updatedMarket } : alert
+                    ));
+                } else {
+                    console.error('저장 실패');
+                }
             })
             .catch(err => console.error('상태 변경 실패:', err));
     };
@@ -38,7 +54,7 @@ export default function SettingsNotificationsTargetPricePage() {
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    checked={!alert.market.includes('OFF')}
+                                    checked={isEnabled(alert.market)}
                                     onChange={() => handleToggle(alert.id, alert.market)}
                                 />
                             </div>
