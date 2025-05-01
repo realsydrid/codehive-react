@@ -1,5 +1,5 @@
 const ServerUrl='http://localhost:8801/api/community'
-const token=localStorage.getItem('jwt');
+const jwt=localStorage.getItem('jwt');
 
 export async function ReadPost(postNo){
     const URL=`${ServerUrl}/posts/detail?postNo=${postNo}`
@@ -24,23 +24,30 @@ export async function GetPosts(category,page,size){
     const data= await res.json();
     return data
 }
-export async function CreatePosts(category,postCont,userNo){
+export async function CreatePosts(category,postCont){
     const URL=`${ServerUrl}/posts?category=${category}`;
     const res = await fetch(URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json"},
-        body: JSON.stringify({postCont,userNo})
+        headers: {
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json"
+            },
+        body: JSON.stringify({postCont})
     });
-    if(!res.ok) throw new Error(res.status+"");
+    if(!res.ok) {
+        throw new Error(res.status+"");
+    }
     const data= await res.json();
-    return data
+    console.log(data);
+    return data;
 }
 export async function DeletePost(postNo,userNo){
     const URL=`${ServerUrl}/posts?postNo=${postNo}&userNo=${userNo}`;
     const res = await fetch(URL, {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`
             },
     })
     if(!res.ok) throw new Error(res.status+"");
@@ -51,7 +58,7 @@ export async function ModifyPost(postNo,userNo,postCont){
     const URL=`${ServerUrl}/posts?postNo=${postNo}&userNo=${userNo}`;
     const res = await fetch(URL, {
         method: "PUT",
-        headers: { "Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json",Authorization: `Bearer ${jwt}`},
         body: JSON.stringify({postNo:postNo,userNo:userNo,postCont:postCont})
     })
     if(!res.ok) throw new Error(res.status+"");
