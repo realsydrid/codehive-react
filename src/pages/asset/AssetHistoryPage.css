@@ -4,7 +4,8 @@
 
 
 .asset-history-container {
-    padding: 2rem;
+    padding: 1.5rem;
+    padding-top: 6rem;
     background-color: #f8f9fa;
     position: relative;
     overflow-anchor: none;
