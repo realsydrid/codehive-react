@@ -9,7 +9,7 @@ export default function CommunityCreateCommentForm(post){
     const [commentCont, setCommentCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedPost=post.postNo;
-    const userNo=post.userNo;
+    const userNo=1;
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -23,7 +23,7 @@ export default function CommunityCreateCommentForm(post){
         else setCommentCont("");
         setIsSubmitting(true)
         try {
-            await CreateComments(selectedPost,userNo,commentCont);
+            await CreateComments(selectedPost,commentCont);
             alert("댓글이 성공적으로 등록되었습니다.")
             navigate(`http://localhost:5173/posts/${selectedPost}`)}
         catch (error) {

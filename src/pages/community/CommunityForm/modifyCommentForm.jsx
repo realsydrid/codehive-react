@@ -13,9 +13,8 @@ export default function CommunityModifyCommentForm(comment){
     };
     const queryClient = useQueryClient();
     const selectedComment=comment.commentNo;
-    const userNo=comment.userNo;
     const { mutate } = useMutation({
-        mutationFn: ({commentNo,userNo,commentCont})=> ModifyComment(commentNo,userNo,commentCont),
+        mutationFn: ({commentNo,commentCont})=> ModifyComment(commentNo,commentCont),
         onSuccess: () => {
             console.log('수정 성공');
             queryClient.invalidateQueries(['comments', comment.postNo]);
@@ -27,7 +26,7 @@ export default function CommunityModifyCommentForm(comment){
         },
     });
     const handleSubmit = () => {
-        mutate({commentNo:selectedComment,userNo:userNo, commentCont:commentCont});
+        mutate({commentNo:selectedComment, commentCont:commentCont});
     };
     return (
         <Form onSubmit={handleSubmit}>
