@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import "./AssetMyAssetPage.css";
 import PortfolioDonutChart from "./PortfolioChart.jsx";
 import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
+import {useNavigate} from "react-router-dom";
 
 const USER_NO = 1;
 const API = {
@@ -20,6 +21,7 @@ export default function AssetMyAssetPage() {
     const [showForm, setShowForm] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [chartData, setChartData] = useState([]);
+    const navigate = useNavigate();
 
     const isAssetCleared = summary.eval === 0 && combinedData.length === 0;
 
@@ -204,7 +206,12 @@ export default function AssetMyAssetPage() {
 
             <div className="asset-card-container">
                 {combinedData.filter(item => item.market !== "KRW-KRW").map((item, idx) => (
-                    <div className="asset-card" key={idx}>
+                    <div
+                        className="asset-card"
+                        key={idx}
+                        onClick={() => navigate(`/trade/order/${item.market}`)}
+                        style={{ cursor: "pointer" }}
+                    >
                         <p><strong>{item.koreanName}<br />{item.market.replace("-", "/")}</strong></p>
                         <p>평가손익 : <span className={item.profit >= 0 ? 'red' : 'blue'}>{formatDecimalsWithCommas(item.profit)} 원</span></p>
                         <p>수익률 : <span style={{ color: item.profitRate >= 0 ? 'red' : 'blue' }}>{item.profitRate.toFixed(2)}%</span></p>

@@ -50,7 +50,7 @@ export default function NewsCoinRanking() {
                 <h1 className="news-title">시가총액 순위</h1>
                 {error && <p className="error">{error}</p>}
                 <div className="table-wrapper">
-                    <table className="ranking-table">
+                    <table className="ranking-table mt-3">
                         <thead>
                         <tr>
                             <th>순위</th>
