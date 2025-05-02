@@ -8,16 +8,11 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 import Loading from "./Loading.jsx";
 
 export default function CommunityCreatePostForm(category){
-    const [loginUser,]=useContext(UseLoginUserContext);
-    if(!loginUser){
-        return (<Loading/>)
-    }
-    if(loginUser!==null){
     const navigate = useNavigate();
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedCategory=category.category;
-    console.log(loginUser);
+    const loginUserNo=1;
     const handleSubmit = async (e) => {
         setIsSubmitting(true);
         try {
@@ -25,7 +20,7 @@ export default function CommunityCreatePostForm(category){
                 setIsSubmitting(false);
                 alert("게시글을 입력해주세요!")
                 e.preventDefault()
-            }else if(loginUser===null){
+            }else if(loginUserNo===null){
                  alert("로그인 후 이용해주세요!")
                  e.preventDefault()
                  return navigate("/login")
@@ -73,4 +68,4 @@ export default function CommunityCreatePostForm(category){
             </Form>
         </div>
     )
-}}
+}
