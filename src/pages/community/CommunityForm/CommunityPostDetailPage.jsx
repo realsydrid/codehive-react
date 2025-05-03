@@ -127,7 +127,7 @@ export default function CommunityPostDetailPage() {
                 }),
             });
             // 좋아요 상태 새로고침
-            queryClient.invalidateQueries(['likeStatuses']);
+            await queryClient.invalidateQueries(['likeStatuses']);
         };
         return (
             <div className={"AllPosts"}>
