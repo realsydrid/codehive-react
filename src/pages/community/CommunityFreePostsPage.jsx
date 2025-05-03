@@ -4,8 +4,7 @@ import "./CommunityPost.css";
 import "./CommunityTextArea.css";
 import CommunityTitle from "./CommunityForm/CommunityTitle.jsx";
 import CommunityPostsPage from "./CommunityForm/CommunityPostPage.jsx";
-import {UseLoginUserContext} from "../../provider/LoginUserProvider.jsx";
-import {useContext} from "react";
+
 
 export default function CommunityFreePostsPage(){
     return (
