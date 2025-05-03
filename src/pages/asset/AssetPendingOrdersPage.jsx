@@ -13,7 +13,7 @@ const API = {
 export default function AssetPendingOrdersPage() {
     const [combinedData, setCombinedData] = useState([]);
     const [errorMsg, setErrorMsg] = useState("");
-    const [toastMsg, setToastMsg] = useState("");  // ✅ Toast 상태 추가
+    const [toastMsg, setToastMsg] = useState("");
 
     const { data: pendingOrders, isPending: loadingOrders } = useQuery({
         queryKey: ["pendingOrders"],
