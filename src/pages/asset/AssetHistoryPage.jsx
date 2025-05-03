@@ -83,13 +83,12 @@ export default function LoadAssetHistory() {
         <>
             <AssetNavBar />
             <div className="asset-history-container">
-                <h1 className="asset-history-title">거래내역</h1>
-
-                <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-                    <Container>
+                {/* 테이블 상단 필터 정렬 영역 */}
+                <div className="asset-history-filter-bar">
+                    <Navbar collapseOnSelect expand="lg" className="p-0 bg-transparent" variant="light">
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">
-                            <Nav className="me-auto">
+                            <Nav className="filter-nav">
                                 {/* 거래 전체 */}
                                 <NavDropdown title="거래 전체">
                                     {['BUY', 'SELL', 'ALL'].map(type => (
@@ -119,7 +118,7 @@ export default function LoadAssetHistory() {
                                             setPage(0);
                                         }}>{days}일</NavDropdown.Item>
                                     ))}
-                                    <div style={{ padding: "0.5rem 1rem" }}>
+                                    <div className="px-3 py-2">
                                         <label>시작일: </label>
                                         <input type="date" value={filter.startDate} onChange={(e) => {
                                             setFilter(prev => ({ ...prev, startDate: e.target.value }));
@@ -177,9 +176,8 @@ export default function LoadAssetHistory() {
                                 </NavDropdown>
                             </Nav>
                         </Navbar.Collapse>
-                    </Container>
-                </Navbar>
-
+                    </Navbar>
+                </div>
                 {/* 테이블 출력 */}
                 <table className="asset-history-table">
                     <thead>

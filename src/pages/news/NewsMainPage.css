@@ -1,21 +1,58 @@
-/* NewsMainPage.css */
-
 .news-title {
     text-align: center;
     font-size: 2rem;
     margin: 1.5rem 0;
 }
 
+.news-carousel-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem;
+    scroll-snap-type: x mandatory;
+}
+
+.news-card {
+    flex: 0 0 auto;
+    width: 80%;
+    max-width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    scroll-snap-align: start;
+    transition: transform 0.2s ease;
+}
+
+.news-card:hover {
+    transform: scale(1.02);
+}
+
+.news-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.news-card-title {
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
 .news-tab-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-bottom: 2rem;
+    padding: 0 1rem;
 }
 
 .news-tab-button {
-    padding: 0.7rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
     border: 2px solid #007bff;
     background-color: white;
     color: #007bff;
@@ -36,5 +73,31 @@
 }
 
 .news-content {
-    padding: 0 1.5rem;
+    padding: 0 1rem;
+}
+
+/* 📱 모바일 대응 */
+@media (max-width: 600px) {
+    .news-title {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+    }
+
+    .news-card-title {
+        font-size: 0.95rem;
+    }
+
+    .news-tab-button {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.8rem;
+    }
+
+    .news-carousel-container {
+        gap: 0.7rem;
+        padding: 0.5rem;
+    }
+
+    .news-card {
+        width: 90%;
+    }
 }
