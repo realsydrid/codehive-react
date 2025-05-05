@@ -33,6 +33,7 @@ export default function SignupPage() {
             case "userId": return "아이디";
             case "nickname": return "닉네임";
             case "email": return "이메일";
+            case "password": return "비밀번호";
             default: return field;
         }
     };
@@ -51,7 +52,13 @@ export default function SignupPage() {
 
     const checkDuplicate = async (field) => {
         const value = form[field];
+
         if (!value) return;
+
+        // 유효성 조건 검사
+        if (field === "userId" && (value.length < 4 || value.length > 12)) return;
+        if (field === "nickname" && (value.length < 2 || value.length > 8)) return;
+        if (field === "password" && (value.length < 4 || value.length > 12)) return;
 
         let url;
         if (field === "userId") url = `http://localhost:8801/user/check-userid?userId=${value}`;
@@ -71,8 +78,23 @@ export default function SignupPage() {
         e.preventDefault();
         setError("");
 
+        const today = new Date().toISOString().split("T")[0];
+        if (form.birthDate > today) {
+            setError("생년월일이 잘못되었습니다.");
+            return;
+        }
+
         if (!form.privacyAgreements) {
             setError("개인정보 처리방침에 동의해야 가입할 수 있습니다.");
+            return;
+        }
+
+        if (
+            form.userId.length < 4 || form.userId.length > 12 ||
+            form.password.length < 4 || form.password.length > 12 ||
+            form.nickname.length < 2 || form.nickname.length > 8
+        ) {
+            setError("입력 조건을 만족하지 않습니다.");
             return;
         }
 
@@ -85,7 +107,7 @@ export default function SignupPage() {
             const response = await fetch("http://localhost:8801/user/jwt/signup.do", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
+                body: JSON.stringify(form)
             });
 
             if (!response.ok) {
@@ -105,6 +127,13 @@ export default function SignupPage() {
     };
 
     const renderValidationText = (field) => {
+        const value = form[field];
+        if (value === "") return null;
+
+        if (field === "userId" && (value.length < 4 || value.length > 12)) return <div className="text-danger small">아이디는 4~12자여야 합니다.</div>;
+        if (field === "password" && (value.length < 4 || value.length > 12)) return <div className="text-danger small">비밀번호는 4~12자여야 합니다.</div>;
+        if (field === "nickname" && (value.length < 2 || value.length > 8)) return <div className="text-danger small">닉네임은 2~8자여야 합니다.</div>;
+
         if (checkResult[field] === true) return <div className="text-success small">사용 가능한 {getFieldLabel(field)}입니다.</div>;
         if (checkResult[field] === false) return <div className="text-danger small">이미 사용 중인 {getFieldLabel(field)}입니다.</div>;
         return null;
@@ -118,13 +147,16 @@ export default function SignupPage() {
             <form onSubmit={handleSubmit}>
                 <div className="mb-1">
                     <div className="d-flex">
-                        <input type="text" name="userId" placeholder="아이디 (이메일)" className="form-control mb-1" value={form.userId} onChange={handleChange} required />
+                        <input type="text" name="userId" placeholder="아이디" className="form-control mb-1" value={form.userId} onChange={handleChange} required />
                         <button type="button" className="btn btn-outline-secondary ms-2" style={{ whiteSpace: "nowrap", height: "38px", minWidth: "80px" }} onClick={() => checkDuplicate("userId")}>중복확인</button>
                     </div>
                     {renderValidationText("userId")}
                 </div>
 
-                <input type="password" name="password" placeholder="비밀번호" className="form-control mb-3" value={form.password} onChange={handleChange} required />
+                <div className="mb-1">
+                    <input type="password" name="password" placeholder="비밀번호" className="form-control mb-1" value={form.password} onChange={handleChange} required />
+                    {renderValidationText("password")}
+                </div>
 
                 <div className="mb-1">
                     <div className="d-flex">
@@ -143,7 +175,6 @@ export default function SignupPage() {
                 </div>
 
                 <input type="text" name="name" placeholder="이름" className="form-control mb-3" value={form.name} onChange={handleChange} required />
-
                 <label className="form-label">생년월일</label>
                 <input type="date" name="birthDate" className="form-control mb-3" value={form.birthDate} onChange={handleChange} required />
 
@@ -170,7 +201,7 @@ export default function SignupPage() {
                     <button type="button" onClick={() => setShowMarketingTerms(prev => !prev)} className="btn btn-link btn-sm ms-2">[보기]</button>
                     {showMarketingTerms && (
                         <div className="mt-2 p-2 border" style={{ maxHeight: "200px", overflowY: "auto" }}>
-                            <li>아직 못정함</li>
+                            <ul><li>추후 작성 예정</li></ul>
                         </div>
                     )}
                 </div>
