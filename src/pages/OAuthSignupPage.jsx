@@ -56,6 +56,13 @@ export default function OAuthSignupPage() {
 
     const checkDuplicate = async (field) => {
         const value = form[field];
+
+        // 유효성 검사 먼저 수행
+        if (field === "nickname" && (value.length < 2 || value.length > 8)) {
+            setCheckResult(prev => ({ ...prev, [field]: false }));
+            return;
+        }
+
         if (!value) return;
 
         let url;
@@ -77,6 +84,17 @@ export default function OAuthSignupPage() {
 
         if (!form.privacy_agreements) {
             setErrMsg("개인정보 처리방침에 동의해야 가입할 수 있습니다.");
+            return;
+        }
+
+        const today = new Date().toISOString().split("T")[0];
+        if (form.birthDate > today) {
+            setErrMsg("생년월일은 미래 날짜일 수 없습니다.");
+            return;
+        }
+
+        if (form.nickname.length < 2 || form.nickname.length > 8) {
+            setErrMsg("닉네임은 2~8자여야 합니다.");
             return;
         }
 
@@ -106,10 +124,19 @@ export default function OAuthSignupPage() {
     };
 
     const renderValidationText = (field) => {
+        if (form[field] === "") return null;
+
+        if (field === "nickname" && (form.nickname.length < 2 || form.nickname.length > 8)) {
+            return <div className="form-text mt-0 text-danger">닉네임은 2~8자여야 합니다.</div>;
+        }
+
         if (checkResult[field] === null) return null;
+
         return (
             <div className="form-text mt-0" style={{ color: checkResult[field] ? "green" : "red" }}>
-                {checkResult[field] ? `사용 가능한 ${field === "nickname" ? "닉네임" : "이메일"}입니다.` : `이미 사용 중인 ${field === "nickname" ? "닉네임" : "이메일"}입니다.`}
+                {checkResult[field]
+                    ? `사용 가능한 ${field === "nickname" ? "닉네임" : "이메일"}입니다.`
+                    : `이미 사용 중인 ${field === "nickname" ? "닉네임" : "이메일"}입니다.`}
             </div>
         );
     };
@@ -173,7 +200,7 @@ export default function OAuthSignupPage() {
                     </button>
                     {showMarketingTerms && (
                         <div className="mt-2 p-2 border" style={{ maxHeight: "200px", overflowY: "auto" }}>
-                            <li>아직 못붙여놨음</li>
+                            <ul><li>마케팅 약관은 추후 작성 예정</li></ul>
                         </div>
                     )}
                 </div>
