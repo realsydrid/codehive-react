@@ -5,9 +5,8 @@ export function useGetCommentLikeStatus(userNo, commentNo) {
     return useQuery({
         queryKey: ["commentLikeStatus", userNo, commentNo],
         queryFn: () => GetCommentLikeType(userNo, commentNo),
-        enabled: !!commentNo && !!userNo,
-        staleTime: 60000, // 60초 캐시 유지
-        refetchOnWindowFocus: false, // 포커스 이동 시 재요청 방지
+        staleTime: 1,
+        enabled: !!userNo && !!commentNo, // 둘 다 있을 때만 요청
     });
 }
 // 좋아요/싫어요 구현시 Optimistic Update 구조를 사용,
@@ -24,18 +23,22 @@ export function useToggleCommentLike() {
 
     return useMutation({
         mutationFn: ToggleCommentLike,
+
         onMutate: async (variables) => {
             const { userNo, commentNo, likeType, postNo } = variables;
 
+            // 기존 쿼리 취소
             await queryClient.cancelQueries(["commentLikeStatus", userNo, commentNo]);
+            await queryClient.cancelQueries(["commentDto", postNo]);
 
+            // 기존 데이터 백업
             const previousStatus = queryClient.getQueryData(["commentLikeStatus", userNo, commentNo]);
             const previousComments = queryClient.getQueryData(["commentDto", postNo]);
 
-            // 선반영 상태 저장
+            // 즉시 반영: commentLikeStatus (개별 상태)
             queryClient.setQueryData(["commentLikeStatus", userNo, commentNo], { likeType });
 
-            // commentDto도 선반영
+            // 즉시 반영: commentDto (댓글 목록)
             queryClient.setQueryData(["commentDto", postNo], (oldComments) => {
                 if (!oldComments) return oldComments;
 
@@ -46,7 +49,7 @@ export function useToggleCommentLike() {
                     let newLikeCount = cmt.likeCount;
                     let newDislikeCount = cmt.dislikeCount;
 
-                    // rollback을 위해 미리 계산
+                    // 상태 변경에 따른 수치 반영
                     if (prevType === 1 && likeType !== 1) newLikeCount--;
                     if (prevType === 0 && likeType !== 0) newDislikeCount--;
 
@@ -62,10 +65,13 @@ export function useToggleCommentLike() {
                 });
             });
 
+            // rollback용 백업 데이터 리턴
             return { previousStatus, previousComments };
         },
+
         onError: (_err, variables, context) => {
             const { userNo, commentNo, postNo } = variables;
+
             if (context?.previousStatus) {
                 queryClient.setQueryData(["commentLikeStatus", userNo, commentNo], context.previousStatus);
             }
@@ -73,9 +79,15 @@ export function useToggleCommentLike() {
                 queryClient.setQueryData(["commentDto", postNo], context.previousComments);
             }
         },
-        onSuccess: (_data, variables) => {
-            const { userNo, commentNo, likeType } = variables;
-            queryClient.setQueryData(["commentLikeStatus", userNo, commentNo], { likeType });
+
+        onSuccess: (data, variables) => {
+            const { userNo, commentNo } = variables;
+
+            // 서버 응답값으로 최종 상태 업데이트
+            queryClient.setQueryData(["commentLikeStatus", userNo, commentNo], {
+                likeType: data?.likeType ?? null,
+            });
+
             console.log(
                 "최종 commentLikeStatus:",
                 queryClient.getQueryData(["commentLikeStatus", userNo, commentNo])

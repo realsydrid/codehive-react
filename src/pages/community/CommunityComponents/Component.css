@@ -55,3 +55,12 @@
     margin-bottom: 0.5rem;
     font-size:  1.1rem;
  }
+.Community-commentCont{
+    justify-content: space-between;
+    display: block;
+    overflow: scroll;
+    text-overflow:ellipsis;
+    flex-direction: row;
+    white-space: pre-wrap;
+    margin: 0.2em 0 0.2em 0.2em;
+}

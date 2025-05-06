@@ -1,19 +1,21 @@
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {GetPostLikeType, TogglePostLike} from "../CommunityUtil/CommunityToggleLike.js";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { GetPostLikeType, TogglePostLike } from "../CommunityUtil/CommunityToggleLike.js";
 
+// 좋아요 상태 조회 훅
 export function useGetPostLikeStatus(userNo, postNo) {
     return useQuery({
         queryKey: ["postLikeStatus", userNo, postNo],
         queryFn: async () => {
             const res = await GetPostLikeType(userNo, postNo);
-            return res ?? { likeType: null }; // 기본값 지정
+            return res ?? { likeType: null };
         },
-        enabled: !!postNo && !!userNo,
+        enabled: !!userNo && !!postNo,
         staleTime: 0,
     });
 }
 
-export function useTogglePostLike() {
+// 토글 훅
+export function useTogglePostLike(category) {
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -27,46 +29,79 @@ export function useTogglePostLike() {
             const previousLikeStatus = queryClient.getQueryData(["postLikeStatus", userNo, postNo]);
             const currentType = previousLikeStatus?.likeType;
 
-            // 토글 처리
-            let likeType = clickedType === currentType ? null : clickedType;
+            let newType = clickedType === currentType ? null : clickedType;
 
-            // 선반영 상태 업데이트
-            queryClient.setQueryData(["postLikeStatus", userNo, postNo], { likeType });
+            // 상태 선반영 (postLikeStatus)
+            queryClient.setQueryData(["postLikeStatus", userNo, postNo], {
+                userNo,
+                postNo,
+                likeType: newType,
+            });
 
-            // 게시글 목록 내 상태도 선반영
-            queryClient.setQueryData(["post", postNo], (oldPosts) => {
-                if (!oldPosts) return oldPosts;
+            // 상세 페이지용 캐시 업데이트
+            queryClient.setQueryData(["post", postNo], (oldPost) => {
+                if (!oldPost) return oldPost;
 
-                return oldPosts.map((pt) => {
-                    if (pt.id !== postNo) return pt;
+                let { likeCount, dislikeCount, userLikeType } = oldPost;
 
-                    let newLikeCount = pt.likeCount;
-                    let newDislikeCount = pt.dislikeCount;
-                    const prev = pt.userLikeType;
-
-                    // 선반영 계산
-                    if (prev === likeType) {
-                        // 같으면 토글 → 취소
-                        if (likeType === 1) newLikeCount--;
-                        if (likeType === 0) newDislikeCount--;
-                        likeType = null;
-                    } else {
-                        if (likeType === 1) {
-                            newLikeCount++;
-                            if (prev === 0) newDislikeCount--;
-                        } else if (likeType === 0) {
-                            newDislikeCount++;
-                            if (prev === 1) newLikeCount--;
-                        }
+                if (userLikeType === newType) {
+                    if (newType === 1) likeCount--;
+                    if (newType === 0) dislikeCount--;
+                    newType = null;
+                } else {
+                    if (newType === 1) {
+                        likeCount++;
+                        if (userLikeType === 0) dislikeCount--;
+                    } else if (newType === 0) {
+                        dislikeCount++;
+                        if (userLikeType === 1) likeCount--;
                     }
+                }
 
-                    return {
-                        ...pt,
-                        likeCount: newLikeCount,
-                        dislikeCount: newDislikeCount,
-                        userLikeType: likeType,
-                    };
-                });
+                return {
+                    ...oldPost,
+                    likeCount,
+                    dislikeCount,
+                    userLikeType: newType,
+                };
+            });
+
+            // 목록 페이지용 캐시 업데이트 (InfiniteQuery 구조)
+            queryClient.setQueryData(["posts", category], (oldData) => {
+                if (!oldData) return oldData;
+
+                return {
+                    ...oldData,
+                    pages: oldData.pages.map((page) => ({
+                        ...page,
+                        content: page.content.map((pt) => {
+                            if (pt.id !== postNo) return pt;
+
+                            let { likeCount, dislikeCount, userLikeType } = pt;
+
+                            if (userLikeType === newType) {
+                                if (newType === 1) likeCount--;
+                                if (newType === 0) dislikeCount--;
+                                newType = null;
+                            } else {
+                                if (newType === 1) {
+                                    likeCount++;
+                                    if (userLikeType === 0) dislikeCount--;
+                                } else if (newType === 0) {
+                                    dislikeCount++;
+                                    if (userLikeType === 1) likeCount--;
+                                }
+                            }
+
+                            return {
+                                ...pt,
+                                likeCount,
+                                dislikeCount,
+                                userLikeType: newType,
+                            };
+                        }),
+                    })),
+                };
             });
 
             return { previousLikeStatus };
@@ -81,11 +116,16 @@ export function useTogglePostLike() {
 
         onSuccess: (data, variables) => {
             const { userNo, postNo } = variables;
-            queryClient.setQueryData(["postLikeStatus", userNo, postNo], { likeType: data.likeType });
+            // 서버에서 likeType 외에도 전체 객체 반환 시 이렇게 설정
+            queryClient.setQueryData(["postLikeStatus", userNo, postNo], {
+                userNo,
+                postNo,
+                likeType: data.likeType,
+            });
         },
 
         onSettled: (_data, _error, variables) => {
-            queryClient.invalidateQueries(["post", variables.postNo]);
+            queryClient.invalidateQueries(["postLikeStatus", variables.userNo, variables.postNo]);
         },
     });
 }

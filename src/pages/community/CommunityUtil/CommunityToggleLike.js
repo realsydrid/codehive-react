@@ -1,8 +1,8 @@
 const ServerUrl='http://localhost:8801/api/community/LikeStatus'
 // const jwt=localStorage.getItem('jwt');
 
-export async function GetCommentLikeType(userNo,commentNo){
-    const URL = `${ServerUrl}/comments/${commentNo}?userNo=${userNo}`;
+export async function GetCommentLikeType(userNo,postNo){
+    const URL = `${ServerUrl}/posts/${postNo}/comments?userNo=${userNo}`;
     const res = await fetch(URL, {
         method: "GET",
         headers: {
@@ -10,10 +10,10 @@ export async function GetCommentLikeType(userNo,commentNo){
         },
     });
     if (!res.ok) {
-        return { likeType: null }; // 강제 fallback
+        throw new Error(res.status+"");
     }
     const data = await res.json();
-    return { likeType: data?.likeType ?? null };
+    return data;
 }
 export async function ToggleCommentLike({userNo,commentNo,likeType}){
     const URL = `${ServerUrl}/comments/${commentNo}`;
@@ -47,37 +47,31 @@ export async function GetPostLikeType(userNo, postNo){
     if(!res.ok){
         throw new Error(res.status+"");
     }
-    if (res.status === 204) {
-        return { likeType: null };
-    }
     // 정상 JSON 응답 처리
     const data = await res.json();
-    return data ?? null;
+    return data;
 }
-export async function TogglePostLike({userNo,postNo,likeType}){
+export async function TogglePostLike({ userNo, postNo, likeType }) {
     const URL = `${ServerUrl}/posts/${postNo}`;
+
+    const body = { userNo, postNo, likeType:likeType };
+
     const res = await fetch(URL, {
         method: "POST",
         headers: {
             // Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({userNo,postNo,likeType}),
+        body: JSON.stringify(body),
     });
+
     if (!res.ok) {
-        throw new Error(`오류번호: ${res.status}`);
-    }
-    const text = await res.text();
-    if (!text) {
-        // 응답 본문이 비었으면 null 반환
+        console.error("API 요청 실패:", res.status);
         return null;
     }
-    try {
-        // 데이터가 정상일때 이 text를 json을 형변환 하겠다
-        const data = JSON.parse(text);
-        return data ?? null;
-    } catch (e) {
-        console.error("JSON 파싱 오류:", e);
-        return null;
+    if (res.status === 204) {
+        return { userNo:userNo,postNo:postNo,likeType: null };
     }
+    const data = await res.json();  // 바로 JSON 형태로 변환
+    return data ?? null;
 }
