@@ -88,20 +88,6 @@
     color: #0984e3;
 }
 
-/* 반응형 대응 */
-@media (max-width: 600px) {
-    .asset-card {
-        width: 90%;
-    }
-
-    .asset-summary h2 {
-        font-size: 1.5rem;
-    }
-
-    .asset-summary p {
-        font-size: 1rem;
-    }
-}
 
 .form-buttons {
     display: flex;
@@ -138,4 +124,50 @@
 
 .cancel-button:hover {
     background-color: #c0c0c0;
+}
+.portfolio-legend-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.portfolio-legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #444;
+    background: #f1f1f1;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.portfolio-legend-item .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+/* 반응형 대응 */
+@media (max-width: 600px) {
+    .asset-card {
+        width: 90%;
+    }
+
+    .asset-summary h2 {
+        font-size: 1.5rem;
+    }
+
+    .asset-summary p {
+        font-size: 1rem;
+    }
+    .portfolio-chart-wrapper {
+        margin-top: 0.5rem;
+    }
+    .portfolio-chart-container {
+        padding: 0.5rem 0.5rem 2rem;
+    }
+
 }
