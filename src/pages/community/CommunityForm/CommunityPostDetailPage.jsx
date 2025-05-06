@@ -69,10 +69,10 @@ export default function CommunityPostDetailPage() {
                 <div className="CommunityPostDetail">
                     <CommunityNavbar/>
                     {post && post.map(post => (
-                        <div key={post.id} style={{maxWidth: "100rem", minWidth: "20rem", width: "95%",marginTop: "1.5rem"}}>
+                        <div key={post.id} style={{maxWidth: "100rem", minWidth: "20rem", width: "95%",marginTop: "0.5rem"}}>
                             <Link to={`/community/${post.category}`} className={"Community-BackLink"}>
                                <img src="/images/LeftArrow.png" alt={""} width={"17.5rem"}
-                                    height={"20rem"} style={{marginBottom:"0.25rem"}}/>{categoryText[post.category]}게시판으로 돌아가기
+                                    height={"20rem"} style={{marginBottom:"2rem"}}/>{categoryText[post.category]}게시판으로 돌아가기
                             </Link>
                             <div className={"Community-PostModify"}>
                                 <div className={"Community-UserInfo"}>

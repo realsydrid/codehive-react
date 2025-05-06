@@ -12,6 +12,7 @@ export default function CommentComponent(props){
     // const [loginUser,]=useContext(UseLoginUserContext);
     // const loginUserNo=loginUser.id
     const postNo = props.postNo;
+
     const loginUserNo=1;//임시 하드코딩
     const [openReplyForm, setOpenReplyForm] = useState(null);
     const [editingComment, setEditingComment] = useState(null);
@@ -99,7 +100,7 @@ export default function CommentComponent(props){
                                     }}
                                     category={"Modify"}
                                 />)}
-                            <h2>{c.commentCont}</h2>
+                            <h2 className={"Community-commentCont"}>{c.commentCont}</h2>
                             <div style={{display: "flex", justifyContent: "space-between" ,flexDirection:"row" }}>
                                 <span className="Community-ButtonFlex">
                                 <Button variant="secondary" onClick={() => handleReplyClick(c.id)}>

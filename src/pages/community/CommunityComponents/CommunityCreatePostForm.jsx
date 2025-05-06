@@ -5,7 +5,7 @@ import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
 import "../CommunityPost.css";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
-import Loading from "./Loading.jsx";
+import Loading from "../CommunityForm/Loading.jsx";
 
 export default function CommunityCreatePostForm(category){
     // const [loginUser,]=useContext(UseLoginUserContext)
@@ -32,9 +32,7 @@ export default function CommunityCreatePostForm(category){
             alert("게시글이 성공적으로 등록되었습니다.");
             setPostCont("");}
         } catch (error) {
-            console.error("게시글 생성 실패:", error.message);
-            alert("게시글 등록 중 오류가 발생했습니다.");
-            console.log("not OK")
+            alert("게시글 등록 중 오류가 발생했습니다."+error.message);
             setIsSubmitting(false);
             e.preventDefault()
         } finally {
