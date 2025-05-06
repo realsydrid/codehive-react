@@ -1,7 +1,7 @@
 const ServerUrl='http://localhost:8801/api/community'
 // const jwt=localStorage.getItem('jwt');
 
-export async function ReadPost(postNo){
+export async function GetPost(postNo){
     const URL=`${ServerUrl}/posts/detail?postNo=${postNo}`
     const res = await fetch(URL, {
         method: "GET",
@@ -24,7 +24,7 @@ export async function GetPosts(category,page,size){
     const data= await res.json();
     return data
 }
-export async function CreatePosts(category,postCont){
+export async function CreatePost(category, postCont){
     const URL=`${ServerUrl}/posts?category=${category}`;
     const res = await fetch(URL, {
         method: "POST",

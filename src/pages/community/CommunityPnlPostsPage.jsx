@@ -10,8 +10,7 @@ export default function CommunityPnlPostsPage() {
     return (
         <div className={"container"}>
             <CommunityNavbar/>
-            <div>
-                <Link to="/community/search">검색</Link>
+            <div className={"AllPosts"}>
                 <CommunityTitle category={"pnl"}/>
                 <CommunityCreatePostForm category={"pnl"}/>
                 <CommunityPostsPage category={"pnl"}/>

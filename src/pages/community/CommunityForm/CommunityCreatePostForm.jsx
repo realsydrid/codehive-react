@@ -1,6 +1,6 @@
-import {CreatePosts} from "../CommunityUtil/CommunityPostFetch.js";
+import {CreatePost} from "../CommunityUtil/CommunityPostFetch.js";
 import {useContext, useState} from "react";
-import {redirect, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
 import "../CommunityPost.css";
@@ -8,6 +8,8 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 import Loading from "./Loading.jsx";
 
 export default function CommunityCreatePostForm(category){
+    // const [loginUser,]=useContext(UseLoginUserContext)
+    // const loginUserNo=loginUser.id;
     const navigate = useNavigate();
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,7 +28,7 @@ export default function CommunityCreatePostForm(category){
                  return navigate("/login")
              }
             else{
-                await CreatePosts(selectedCategory,postCont);
+                await CreatePost(selectedCategory,postCont);
             alert("게시글이 성공적으로 등록되었습니다.");
             setPostCont("");}
         } catch (error) {
@@ -42,12 +44,12 @@ export default function CommunityCreatePostForm(category){
 
 
     return (
-        <div className={"AllPosts"}>
-            <Form onSubmit={handleSubmit} className={"AllPosts"}>
-                <Form.Group controlId="postCont"  className={"AllPosts"}>
-                    <Form.Label column={"lg"} style={{display:"none",width:"95%",maxWidth:"100rem",minWidth:"30rem"}}>게시글 내용</Form.Label>
+        <div>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="postCont" className={"CreatePostForm"}>
+                    <Form.Label column={"lg"} style={{display:"none",width:"95%",maxWidth:"100rem",minWidth:"20rem"}}>게시글 내용</Form.Label>
                     <Form.Control
-                        style={{width:"95%",minWidth:"30rem",maxWidth:"100rem",resize:"none", minHeight: "20rem",marginBottom:"2px"}}
+                        style={{width:"95%",minWidth:"20rem",maxWidth:"100rem",resize:"none", minHeight: "20rem",marginBottom:"2px"}}
                         as="textarea"
                         name="postCont"
                         placeholder="안녕하세요! 자유롭게 이용하시되 이용정첵에 위배되는 글을 게시할 경우에는 제재가 될 수 있습니다."

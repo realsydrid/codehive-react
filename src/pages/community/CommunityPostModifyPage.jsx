@@ -1,6 +1,6 @@
 import CommunityModifyPostForm from "./CommunityForm/modifyPostForm.jsx";
 import {useEffect, useState} from "react";
-import {ModifyPost, ReadPost} from "./CommunityUtil/CommunityPostFetch.js";
+import {ModifyPost, GetPost} from "./CommunityUtil/CommunityPostFetch.js";
 import Loading from "./CommunityForm/Loading.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 
@@ -12,7 +12,7 @@ export default function CommunityPostModifyPage(){
     useEffect(()=>{
         if(!postNo){return;}
         const BeforePost = async () => {
-            const res = await ReadPost(postNo); // res = { 0: {...} }
+            const res = await GetPost(postNo); // res = { 0: {...} }
             const values = Object.values(res);
             const postData = values[0];
             setPost(postData);

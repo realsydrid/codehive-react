@@ -8,7 +8,7 @@ import CommunityPostsPage from "./CommunityForm/CommunityPostPage.jsx";
 
 export default function CommunityFreePostsPage(){
     return (
-        <div>
+        <div className="container">
             <CommunityNavbar/>
             <div className={"AllPosts"}>
                 <CommunityTitle category={"free"}/>
