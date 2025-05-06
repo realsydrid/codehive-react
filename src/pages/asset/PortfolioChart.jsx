@@ -78,7 +78,7 @@ export default function PortfolioDonutChart({ data }) {
                             paddingAngle={2}
                             dataKey="value"
                             nameKey="name"
-                            labelLine={false} // 도넛 안에 선도 제거
+                            // labelLine={false}
                         >
                             {chartData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
