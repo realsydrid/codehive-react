@@ -10,8 +10,7 @@ export default function CommunityChartPostsPage(){
     return (
         <div className={"container"}>
             <CommunityNavbar/>
-            <div className={"mt-50"}>
-                <Link to="/community/search">검색</Link>
+            <div className={"AllPosts"}>
                 <CommunityTitle category={"chart"}/>
                 <CommunityCreatePostForm category="chart"/>
                 <CommunityPostsPage category={"chart"}/>

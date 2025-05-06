@@ -24,7 +24,7 @@ export default function CommunityModifyPostForm({post,onSubmit}){
                     as="textarea"
                     name="postCont"
                     placeholder={post.postCont}
-                    style={{width:"95%",minWidth:"30rem",maxWidth:"100rem",resize:"none", minHeight: "20rem",marginBottom:"2px"}}
+                    style={{width:"95%",minWidth:"20rem",maxWidth:"100rem",resize:"none", minHeight: "20rem",marginBottom:"2px"}}
                     defaultValue={post.postCont}
                     disabled={isSubmitting}
                 />
