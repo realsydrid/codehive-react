@@ -6,10 +6,7 @@ export default function SettingsNotificationsTargetPricePage() {
     useEffect(() => {
         fetch('http://localhost:8801/api/target_price_alerts/me')
             .then(res => res.json())
-            .then(data => {
-                console.log("불러온 알림 데이터:", data.targetPriceAlerts); // 이거 추가
-                setAlerts(data.targetPriceAlerts);
-            })
+            .then(data => setAlerts(data.targetPriceAlerts))
             .catch(err => console.error('알림 로드 실패:', err));
     }, []);
 
@@ -49,6 +46,7 @@ export default function SettingsNotificationsTargetPricePage() {
                 {alerts.map(alert => (
                     <tr key={alert.id}>
                         <td>{alert.market.replace(' (OFF)', '')}</td>
+                        <td>{alert.targetPrice}</td> {/* 지정가 추가 */}
                         <td>
                             <div className="form-check form-switch">
                                 <input
