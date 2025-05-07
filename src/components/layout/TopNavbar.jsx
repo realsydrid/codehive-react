@@ -63,8 +63,12 @@ export default function TopNavbar() {
                     </a>
                 </div>
                 <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-                    <img className="topNavbar-profileImg" src={userSummary?.profileImgUrl || "/images/user_icon_default.png"} alt="프로필로고"
-                         onClick={loadSideProfile}/>
+                    <img
+                        className="topNavbar-profileImg"
+                        src={userSummary?.profileImgUrl ? userSummary.profileImgUrl : "/images/user_icon_default.png"}
+                        alt="프로필로고"
+                        onClick={loadSideProfile}
+                    />
                     {loginUser ? (
                         <>
                             <span>{loginUser.nickname}님</span>

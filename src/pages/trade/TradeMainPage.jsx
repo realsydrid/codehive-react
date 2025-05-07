@@ -52,7 +52,11 @@ export default function TradeMainPage() {
         staleTime: 0,
         retry: 3,
         queryFn: async () => {
-            const res = await fetch("http://localhost:8801/api/asset/me");
+            const res = await fetch("http://localhost:8801/api/asset/me", {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                }
+            });
             if (!res.ok) throw new Error(res.status + "");
             return res.json();
         }
@@ -63,7 +67,11 @@ export default function TradeMainPage() {
         enabled: activeTab === "관심",
         staleTime: 1000 * 60 * 5,
         queryFn: async () => {
-            const res = await fetch("http://localhost:8801/api/favorites/me");
+            const res = await fetch("http://localhost:8801/api/favorites/me", {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                }
+            });
             if (!res.ok) throw new Error(res.status + "");
             return res.json();
         }
@@ -253,7 +261,19 @@ export default function TradeMainPage() {
                 {error && <ErrorComponent msg={error.message}/>}
                 {holdingCoinsError && <ErrorComponent msg={holdingCoinsError.message}/>}
                 {favoriteCoinsError && <ErrorComponent msg={favoriteCoinsError.message}/>}
-                {combinedData && combinedData.map((m) => (
+                
+                {!isLoading && !holdingCoinsLoading && !favoriteCoinsLoading && 
+                 combinedData && combinedData.length === 0 && (
+                    <tr>
+                        <td colSpan="4" style={{textAlign: "center", padding: "20px"}}>
+                            {activeTab === "보유" ? "보유 코인이 없습니다." : 
+                             activeTab === "관심" ? "관심등록 된 코인이 없습니다." : 
+                             "검색 결과가 없습니다."}
+                        </td>
+                    </tr>
+                )}
+                
+                {combinedData && combinedData.length > 0 && combinedData.map((m) => (
                     activeTab === "보유" ? (
                         <tr key={m.market} onClick={() => handleRowClick(m.market)} className={`${m.change} tradeMain-myAssetTr`}>
                             <td><p>{m.korean_name}<span>{m.market.split('-').reverse().join('/')}</span></p></td>

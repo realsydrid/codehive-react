@@ -342,7 +342,10 @@ export default function Order({combinedData, orderBook}) {
         try {
             const response = await fetch(BUY_URL, {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                },
                 body: JSON.stringify(transaction),
             });
 
@@ -370,7 +373,12 @@ export default function Order({combinedData, orderBook}) {
     // 잔액(deposit) 정보 가져오기 함수
     const fetchDeposit = async () => {
         try {
-            const response = await fetch("http://localhost:8801/api/trade/me/deposit");
+            const response = await fetch("http://localhost:8801/api/trade/me/deposit", {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                }
+            });
             if (response.ok) {
                 const data = await response.json();
                 console.log("잔액:", data);
@@ -389,7 +397,10 @@ export default function Order({combinedData, orderBook}) {
         
         try {
             const response = await fetch(`http://localhost:8801/api/trade/me/remainCnt?market=${combinedData.market}`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                }
             });
             if (response.ok) {
                 const data = await response.json();

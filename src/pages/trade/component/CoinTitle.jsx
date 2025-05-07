@@ -15,7 +15,11 @@ export default function coinTitle({combinedData}) {
     // 해당 코인이 즐겨찾기에 있는지 확인
     const checkFavoriteStatus = async () => {
         try {
-            const response = await fetch("http://localhost:8801/api/favorites/me");
+            const response = await fetch("http://localhost:8801/api/favorites/me", {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                }
+            });
             if (response.ok) {
                 const favoritesList = await response.json();
                 // 현재 코인이 즐겨찾기 목록에 있는지 확인
