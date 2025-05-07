@@ -15,7 +15,7 @@ export default function SettingsNotificationsPage() {
     });
 
     useEffect(() => {
-        fetch('/setting/support/notifications/notification_setting_json.do')
+        fetch('http://localhost:8801/api/notifications/me')
             .then(res => res.json())
             .then(data => setSettings(data))
             .catch(err => console.error('불러오기 실패:', err));
@@ -25,7 +25,7 @@ export default function SettingsNotificationsPage() {
         const updatedValue = !settings[field];
         setSettings(prev => ({ ...prev, [field]: updatedValue }));
 
-        fetch('/setting/support/notifications/save-auto', {
+        fetch('http://localhost:8801/api/notifications/me', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ field, value: updatedValue })
@@ -39,7 +39,7 @@ export default function SettingsNotificationsPage() {
         Object.keys(settings).forEach(key => updatedSettings[key] = newValue);
         setSettings(updatedSettings);
 
-        fetch('/setting/support/notifications/save-auto', {
+        fetch('http://localhost:8801/api/notifications/me', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ field: "allNotifications", value: newValue })
