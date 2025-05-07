@@ -1,7 +1,7 @@
 const ServerUrl='http://localhost:8801/api/community/LikeStatus'
 // const jwt=localStorage.getItem('jwt');
 
-export async function GetCommentLikeType(userNo,postNo){
+export async function GetCommentLikeType(postNo,userNo){
     const URL = `${ServerUrl}/posts/${postNo}/comments?userNo=${userNo}`;
     const res = await fetch(URL, {
         method: "GET",
@@ -30,7 +30,7 @@ export async function ToggleCommentLike({userNo,commentNo,likeType}){
         throw new Error("좋아요/싫어요 상태변경 실패!");
     }
     if (res.status === 204) {
-        return { likeType: null };
+        return {userNo:userNo,commentNo:commentNo,likeType: null };
     }
     // 정상 JSON 응답 처리
     const data = await res.json();

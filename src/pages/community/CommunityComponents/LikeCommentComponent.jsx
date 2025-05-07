@@ -6,21 +6,27 @@ import { useQueryClient } from "@tanstack/react-query";
 export function CommentLikeComponent({ loginUserNo, comment }) {
     const queryClient = useQueryClient();
 
-    // 현재 좋아요 상태 가져오기
-    const { data: likeStatus } = useGetCommentLikeStatus(loginUserNo, comment.id);
+    const { data: likeStatus } = useGetCommentLikeStatus(loginUserNo, comment.id, comment.postNo);
     const { mutate: toggleLike } = useToggleCommentLike();
 
     const currentLikeType = likeStatus?.likeType ?? null;
 
+    // 🔥 최신 댓글 리스트 캐시에서 현재 댓글 정보 추출
+    const cachedComments = queryClient.getQueryData(["commentDto", comment.postNo]);
+    const cachedComment = cachedComments?.find(c => c.dto.commentId === comment.id);
+
+    // 최신 값 사용, 없으면 초기값 fallback
+    const likeCount = cachedComment?.dto.likeCount ?? comment.likeCount;
+    const dislikeCount = cachedComment?.dto.dislikeCount ?? comment.dislikeCount;
+
     const handleClick = (type) => {
         const newType = currentLikeType === type ? null : type;
 
-        // 1. 개별 상태 먼저 선반영
+        // 선반영 상태 캐시에 바로 반영
         queryClient.setQueryData(["commentLikeStatus", loginUserNo, comment.id], {
             likeType: newType,
         });
-        console.log("commentDto cache", queryClient.getQueryData(["commentDto", comment.postNo]));
-        // 2. 서버 요청 (postNo는 댓글에서 꺼내옴)
+
         toggleLike({
             commentNo: comment.id,
             userNo: loginUserNo,
@@ -34,41 +40,18 @@ export function CommentLikeComponent({ loginUserNo, comment }) {
             <Button
                 variant={currentLikeType === 1 ? "primary" : "outline-primary"}
                 onClick={() => handleClick(1)}
-                style={{
-                    borderRadius: "3000px",
-                    width: "2.75rem",
-                    height: "2.75rem",
-                    justifyContent: "center"
-                }}
             >
-                <img
-                    src="/images/like.png"
-                    alt=""
-                    width="20rem"
-                    height="20rem"
-                    style={{ marginBottom: "0.2rem" }}
-                />
+                <img src="/images/like.png" alt="" width="20rem" height="20rem" />
             </Button>{" "}
-            {comment.likeCount}
+            {likeCount}
             &nbsp;
             <Button
                 variant={currentLikeType === 0 ? "danger" : "outline-danger"}
                 onClick={() => handleClick(0)}
-                style={{
-                    borderRadius: "3000px",
-                    width: "2.75rem",
-                    height: "2.75rem"
-                }}
             >
-                <img
-                    src="/images/dislike.png"
-                    alt=""
-                    width="20rem"
-                    height="20rem"
-                    style={{ marginBottom: "0.2rem" }}
-                />
+                <img src="/images/dislike.png" alt="" width="20rem" height="20rem" />
             </Button>{" "}
-            {comment.dislikeCount}
+            {dislikeCount}
         </div>
     );
 }
