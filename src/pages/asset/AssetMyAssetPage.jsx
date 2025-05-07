@@ -158,7 +158,7 @@ export default function AssetMyAssetPage() {
 
         // 🔒 클라이언트 유효성 검사
         if (amount < min || amount > max) {
-            alert("보유자산은 최소 100만원, 최대 1억원까지만 입력 가능합니다.");
+            setToastMsg("❗️보유자산은 최소 100만원, 최대 1억원까지만 입력 가능합니다.");
             return;
         }
 
@@ -189,7 +189,7 @@ export default function AssetMyAssetPage() {
                 throw new Error(`자산 등록 실패: ${errMsg}`);
             }
 
-            alert("보유자산이 등록되었습니다.");
+            setToastMsg("보유자산이 등록되었습니다.");
             setShowForm(false);
             await refetchKrwBalance();
         } catch (e) {

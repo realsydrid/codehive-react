@@ -33,17 +33,6 @@
     margin-bottom: 20px;
 }
 
-/* 검색 입력창 */
-.search-input {
-    padding: 10px 15px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    outline: none;
-    flex: 1 1 250px;
-    transition: border-color 0.3s;
-}
-
 .search-input:focus {
     border-color: #4caf50;
 }
@@ -197,5 +186,12 @@ input:checked + .slider:before {
 
     .premium-container p {
         font-size: 0.9rem;
+    }
+    .search-input {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        height: 32px;
+        line-height: 1.2;
+        border-radius: 8px;
     }
 }
