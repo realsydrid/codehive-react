@@ -5,6 +5,7 @@ import "./AssetMyAssetPage.css";
 import PortfolioDonutChart from "./PortfolioChart.jsx";
 import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
 import { useNavigate, Navigate } from "react-router-dom";
+import Toast from "./Toast.jsx";
 
 const API = {
     BASE: "http://localhost:8801/api/transaction",
@@ -20,6 +21,7 @@ export default function AssetMyAssetPage() {
     const [showForm, setShowForm] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [chartData, setChartData] = useState([]);
+    const [toastMsg, setToastMsg] = useState("");
     const navigate = useNavigate();
     const token = localStorage.getItem("jwt");
 
@@ -137,20 +139,31 @@ export default function AssetMyAssetPage() {
             setCombinedData([]);
             setSummary({ eval: 0, profit: 0, rate: 0 });
             setChartData([]);
+            setToastMsg("보유자산이 초기화되었습니다.");
         } catch (e) {
             setErrorMsg(e.message);
         }
     };
 
     const handleRegister = async () => {
+        const min = 1_000_000;
+        const max = 100_000_000;
+        const amount = formData.amount;
+
+        // 🔒 클라이언트 유효성 검사
+        if (amount < min || amount > max) {
+            alert("보유자산은 최소 100만원, 최대 1억원까지만 입력 가능합니다.");
+            return;
+        }
+
         const date = new Date();
         const kstISOString = new Date(date.getTime() + 9 * 60 * 60 * 1000).toISOString().replace("Z", "");
 
         const payload = {
             market: "KRW-KRW",
             transactionType: "BUY",
-            price: formData.amount,
-            transactionCnt: 1.0,
+            price: 1.0,
+            transactionCnt: amount,
             transactionState: "COMPLETED",
             transactionDate: kstISOString
         };
@@ -164,12 +177,16 @@ export default function AssetMyAssetPage() {
                 },
                 body: JSON.stringify(payload)
             });
-            if (!res.ok) throw new Error("자산 등록 실패");
+
+            if (!res.ok) {
+                const errMsg = await res.text();
+                throw new Error(`자산 등록 실패: ${errMsg}`);
+            }
+
             alert("보유자산이 등록되었습니다.");
             setShowForm(false);
             await refetchKrwBalance();
         } catch (e) {
-            console.error(e);
             setErrorMsg(e.message);
         }
     };
@@ -244,6 +261,7 @@ export default function AssetMyAssetPage() {
                     </div>
                 ))}
             </div>
+            {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
         </>
     );
 }
