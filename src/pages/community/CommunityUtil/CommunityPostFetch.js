@@ -1,7 +1,7 @@
 const ServerUrl='http://localhost:8801/api/community'
-const token=localStorage.getItem('jwt');
+// const jwt=localStorage.getItem('jwt');
 
-export async function ReadPost(postNo){
+export async function GetPost(postNo){
     const URL=`${ServerUrl}/posts/detail?postNo=${postNo}`
     const res = await fetch(URL, {
         method: "GET",
@@ -24,37 +24,45 @@ export async function GetPosts(category,page,size){
     const data= await res.json();
     return data
 }
-export async function CreatePosts(category,postCont,userNo){
+export async function CreatePost(category, postCont){
     const URL=`${ServerUrl}/posts?category=${category}`;
     const res = await fetch(URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json"},
-        body: JSON.stringify({postCont,userNo})
+        headers: {
+            // Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json"
+            },
+        body: JSON.stringify({category:category,postCont:postCont})
     });
-    if(!res.ok) throw new Error(res.status+"");
+    if(!res.ok) {
+        throw new Error(res.status+"");
+    }
     const data= await res.json();
-    return data
+    console.log(data);
+    return data;
 }
-export async function DeletePost(postNo,userNo){
-    const URL=`${ServerUrl}/posts?postNo=${postNo}&userNo=${userNo}`;
+export async function DeletePost(postNo){
+    const URL=`${ServerUrl}/posts?postNo=${postNo}`;
     const res = await fetch(URL, {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${jwt}`
             },
     })
     if(!res.ok) throw new Error(res.status+"");
     alert("게시글이 삭제되었습니다.")
     return res;
 }
-export async function ModifyPost(postNo,userNo,postCont){
-    const URL=`${ServerUrl}/posts?postNo=${postNo}&userNo=${userNo}`;
+export async function ModifyPost(postNo,postCont){
+    const URL=`${ServerUrl}/posts?postNo=${postNo}`;
     const res = await fetch(URL, {
         method: "PUT",
-        headers: { "Content-Type": "application/json"},
-        body: JSON.stringify({postNo:postNo,userNo:userNo,postCont:postCont})
+        headers: { "Content-Type": "application/json",
+            // Authorization: `Bearer ${jwt}`
+        },
+        body: JSON.stringify({postNo:postNo,postCont:postCont})
     })
     if(!res.ok) throw new Error(res.status+"");
-    alert("게시글이 수정되었습니다.")
     return res.json();
 }

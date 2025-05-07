@@ -1,176 +1,124 @@
-import {DeletePost, ReadPost} from "../CommunityUtil/CommunityPostFetch.js";
+import {DeletePost, GetPost} from "../CommunityUtil/CommunityPostFetch.js";
 import {DeleteComment, GetComments} from "../CommunityUtil/CommunityCommentFetch.js";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import Loading from "./Loading.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
 import CommunityNavbar from "../CommunityComponents/CommunityNavbar.jsx";
-import CommunityCreateCommentForm from "./CommunityCreateCommentForm.jsx";
+import CommunityCommentForm from "./CommunityCommentTextManagement.jsx";
 import "../CommunityPost.css";
+import "../CommunityComponents/Component.css"
 import {Button} from "react-bootstrap";
-import {useContext} from "react";
-import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
+import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
+import CommentComponent from "../CommunityComponents/CommentComponent.jsx";
+
+
 
 export default function CommunityPostDetailPage() {
-    const {postNo}=useParams();
-    const navigate=useNavigate();
-    let loginUserNo=1
-    console.log(loginUserNo);
-    const {data:post,isLoading,error}=useQuery({
-        queryKey:["post",postNo],
-        queryFn:async ()=>ReadPost(postNo),
-        staleTime:1000*60*5,
-        cacheTime:1000*60*10,
-        retry : 1,
+    const {postNo} = useParams();
+    const navigate = useNavigate();
+    // const [loginUser,]=useContext(UseLoginUserContext)
+    // const loginUserNo=loginUser.id;
+    const loginUserNo = 1; //임시 하드코딩
+    const {data: post, isLoading, error} = useQuery({
+        queryKey: ["post", postNo],
+        queryFn: async () => GetPost(postNo),
+        staleTime: 0,
+        cacheTime: 1000 * 60 * 10,
+        retry: 1,
     })
-    const {data:commentDto}=useQuery(
-        {
-            queryKey:["commentDto",postNo],
-            queryFn:async ()=>GetComments(postNo),
-            staleTime:1000*60*5,
-            cacheTime:1000*60*10,
-            retry : 1,
-        }
-    )
-    function DeletePostBtn({postNo,userNo,category}) {
-        const  [loginUser, ]= useContext(UseLoginUserContext);
-        let DeletePostHandler = async () => {
-            if(!loginUser){
-                alert("로그인 해주세요!")
-                return navigate("/login")
-            }else if(userNo!==loginUser.id){
-                alert("삭제할 권한이 없습니다!");
-                return;
-            }
-            if (!confirm('정말 게시글을 삭제하시겠습니까?')) {
-                alert('게시글 삭제를 취소합니다.');
-                return;
-            }
-            try {
-                await DeletePost(postNo, userNo);
-                alert('게시글이 삭제되었습니다.');
-                navigate(`/community/${category}`);
-            } catch (error) {
-                alert(error + ' 오류로 인해 게시글 삭제에 실패했습니다.');
-            }}
-            return (
-                <Button variant="danger" onClick={DeletePostHandler}>
-                    삭제하기
-                </Button>
-            )
-        }
-        function DeleteCommentBtn({commentNo,userNo,postNo}) {
-        const navigate=useNavigate();
 
-        let DeletePostHandler = async () => {
-            if (!confirm('정말 댓글을 삭제하시겠습니까?')) {
-                alert('댓글 삭제를 취소합니다.');
-                return;
+        function DeletePostBtn({postNo, category}) {
+            let DeletePostHandler = async () => {
+                if (!loginUserNo) {
+                    alert("로그인 해주세요!")
+                    return navigate("/login")
+                }
+                // else if(userNo!==loginUserNo){
+                //     alert("삭제할 권한이 없습니다!");
+                //     return;
+                // }
+                if (!confirm('정말 게시글을 삭제하시겠습니까?')) {
+                    alert('게시글 삭제를 취소합니다.');
+                    return;
+                }
+                try {
+                    await DeletePost(postNo);
+                    alert('게시글이 삭제되었습니다.');
+                    navigate(`/community/${category}`);
+                } catch (error) {
+                    alert(error + ' 오류로 인해 게시글 삭제에 실패했습니다.');
+                }
             }
-            try {
-                await DeleteComment(commentNo,userNo);
-                navigate(`/community/posts/${postNo}`);
-            } catch (error) {
-                alert(error + ' 오류로 인해 게시글 삭제에 실패했습니다.');
-            }}
             return (
                 <Button variant="danger" onClick={DeletePostHandler}>
                     삭제하기
                 </Button>
             )
         }
-    return (
+    const categoryText={
+        "free": "자유",
+        "chart": "차트분석",
+        "pnl": "손익인증",
+        "expert": "전문가"
+    }
+        return (
             <div className={"AllPosts"}>
                 {isLoading && <h1><Loading/></h1>}
                 {error && <h1><ErrorMsg error={error}/></h1>}
                 <div className="CommunityPostDetail">
                     <CommunityNavbar/>
-                    {post && post.map(post=>(
-                            <div key={post.id} style={{maxWidth:"100rem",minWidth:"30rem",width:"95%"}}>
-                                <Link to={`/community/${post.category}`}>게시판으로 돌아가기</Link>
-
-                                <div className={"Community-PostModify"}>
-                                    <div className={"Community-UserInfo"}>
-                                        <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
-                                            <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
-                                                 className={"Community-ProfileImg"}/>
-                                            <div>
-                                                <span>{post.userNickname}</span>
-                                                <span>Lv.{post.userNo}</span>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                    <span style={{paddingTop:"2rem",display:Number(loginUserNo)===Number(post.userNo) ? "flex" : "none"}}>
-                                        <DeletePostBtn postNo={post.id} userNo={loginUserNo} category={post.category}/>&nbsp;
-                                    <Button variant="primary" type={"button"}>수정하기</Button>
-                                    </span>
+                    {post && post.map(post => (
+                        <div key={post.id} style={{maxWidth: "100rem", minWidth: "20rem", width: "95%",marginTop: "0.5rem"}}>
+                            <Link to={`/community/${post.category}`} className={"Community-BackLink"}>
+                               <img src="/images/LeftArrow.png" alt={""} width={"17.5rem"}
+                                    height={"20rem"} style={{marginBottom:"2rem"}}/>{categoryText[post.category]}게시판으로 돌아가기
+                            </Link>
+                            <div className={"Community-PostModify"}>
+                                <div className={"Community-UserInfo"}>
+                                    <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
+                                        <img
+                                            src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"}
+                                            alt=""
+                                            className={"Community-ProfileImg"}/>
+                                        <div>
+                                            <span>{post.userNickname}</span>
+                                            <span>Lv.{post.userNo}</span>
+                                        </div>
+                                    </Link>
                                 </div>
-                                <div className={"Community-PostCont"}>
-                                    <h1>{post.postCont}</h1>
-                                    <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"flex-start"}}>
+                                <span style={{
+                                    paddingTop: "2rem",
+                                    display: Number(loginUserNo) === Number(post.userNo) ? "flex" : "none"
+                                }}>
+                                        <DeletePostBtn postNo={post.id} userNo={loginUserNo}
+                                                       category={post.category}/>&nbsp;
+                                    <Link to={`/community/posts/${post.id}/modify`}><Button variant="primary"
+                                                                                            type={"button"}>수정하기</Button></Link>
+                                    </span>
+                            </div>
+                            <div className={"Community-PostCont"}>
+                                <h1>{post.postCont}</h1>
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "flex-start"
+                                }}>
                                     <span>{post.postCreatedAt}</span>
                                     <div>
                                     <span>
-                                    <Button variant="primary">좋아요</Button>&nbsp;{post.likeCount}&nbsp;
-                                    <Button variant="danger">싫어요</Button>&nbsp;{post.dislikeCount}&nbsp;
-                                        <span>댓글 {post.commentCount} 개</span>
+                                    <PostLikeComponent loginUserNo={loginUserNo} post={post}/>&nbsp;
+                                        댓글 {post.commentCount} 개
                                             </span>
                                     </div>
-                                    </div>
-                                </div>
-                                <CommunityCreateCommentForm postNo={post.id} userNo={loginUserNo}/>
-                            </div>
-
-                    ))}
-                    {commentDto && commentDto.map(c => (
-                        <div
-                            key={c.id}
-                            className="Community-comment"
-                            style={{ display:c.parentNo ? "none" : "flex" }} // ✅ parentNo가 있으면 숨김
-                        >
-                            <div style={{display:"flex", flexDirection:"row",justifyContent:"space-between"}}>
-                            <div className={"Community-UserInfo"}>
-                            <Link to={"/users/profile/" + c.userNo} className={"Community-PostLink"}>
-                                {/*<img src={c.userProfileImg ? c.userProfileImg : "/images/user_icon_default.png"} alt=""*/}
-                                {/*     className={"Community-ProfileImg"}/>*/}
-                                {/*저장소 활성화 된 다음 쓸 예정*/}
-                                <img src={"/images/user_icon_default.png"} alt=""
-                                     className={"Community-ProfileImg"}/>
-                                <div>
-                                    <span>{c.userNickname}</span>
-                                    <span>Lv.{c.userNo}</span>
-                                </div>
-                            </Link>
-                            </div>
-                                <div style={{marginBottom:"3%"}}>
-                                <span>{c.commentCreatedAt}</span>
-                                <div style={{display:loginUserNo===c.userNo ? "flex" : "none",alignItems:"flex-end",justifyContent:"end"}}>
-                                    <span><DeleteCommentBtn userNo={c.userNo} commentNo={Number(c.id)} postNo={c.postNo}/></span>
-                                    &nbsp;<span><Button variant="primary" type={"button"}>수정하기</Button></span>
-                                </div>
                                 </div>
                             </div>
-                            <h2>{c.commentCont}</h2>
-                            <div>
-                                <div className={"Community-commentCont"}>
-                                        <Button variant="secondary">대댓글 달기</Button>
-                                        <div style={{display:c.replyCount === 0 ?  "flex" : "none",alignItems:"flex-end"}}>
-                                        <Button variant="primary">&nbsp;좋아요</Button>&nbsp;{c.likeCount}&nbsp;
-                                        <Button variant="danger">&nbsp;싫어요</Button>&nbsp;{c.dislikeCount}&nbsp;
-                                        </div>
-                                </div>
-                                <div className={"Community-commentCont"}>
-                                <Button variant="primary" style={{display:c.replyCount === 0 ? "none" : "block"}} type="button">대댓글 {c.replyCount}개 보기</Button>
-                                <div style={{display:c.replyCount === 0 ?  "none" : "flex",alignItems:"flex-end"}}>
-                                    <Button variant="primary">&nbsp;좋아요</Button>&nbsp;{c.likeCount}&nbsp;
-                                    <Button variant="danger">&nbsp;싫어요</Button>&nbsp;{c.dislikeCount}&nbsp;
-                                </div>
-                                </div>
-                            </div>
+                            <CommunityCommentForm postNo={postNo} userNo={loginUserNo} category={"Create"}/>
+                            <br/>
+                            <CommentComponent postNo={postNo}/>
                         </div>
                     ))}
-                        </div>
+                </div>
             </div>)
-    //post =>
-        //comment =>
-    }
+}

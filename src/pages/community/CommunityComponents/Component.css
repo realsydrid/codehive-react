@@ -1,0 +1,66 @@
+.Community-navLinkSetting{
+    color:white;
+    margin:0.5rem 0 0.2rem 0;
+    width: 25%;
+    min-width: 2.5rem;
+    max-width: 5rem;
+    border-right:1px solid white;
+}
+.Community-ChildComment{
+    width:90%;
+    min-width: 16rem;
+    max-width: 85rem;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid black;
+    height: fit-content;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    color:black;
+    text-decoration: none;
+    padding-bottom: 5px;
+    margin: 1px;
+    border-radius: 5px;
+    text-align: left;
+}
+.Community-ButtonFlex{
+    width:30%;
+    min-width: 8.5rem;
+    max-width: 15rem;
+    display: flex;
+    flex-direction: column;
+}
+.Community-PostContent,.Community-CommentContent{
+    display: flex;
+    flex-wrap: wrap;
+    overflow: scroll;
+    text-overflow:ellipsis;
+    min-width: 17rem;
+    max-width: 85rem;
+    font-size: 30px;
+}
+.Community-PostContent{
+    width: 80%;
+}
+.Community-CommentContent{
+    width: 70%;
+}
+.Community-BackLink,.Community-SearchLink{
+    color:black;
+    text-decoration: none;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 0.5rem;
+    font-size:  1.1rem;
+ }
+.Community-commentCont{
+    justify-content: space-between;
+    display: block;
+    overflow: scroll;
+    text-overflow:ellipsis;
+    flex-direction: row;
+    white-space: pre-wrap;
+    margin: 0.2em 0 0.2em 0.2em;
+}

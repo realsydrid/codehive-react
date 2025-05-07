@@ -2,51 +2,34 @@ import { ModifyComment} from "../CommunityUtil/CommunityCommentFetch.js";
 import {useState} from "react";;
 import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
+import {ModifyPost} from "../CommunityUtil/CommunityPostFetch.js";
+import {useNavigate} from "react-router-dom";
 
-export default function CommunityModifyCommentForm(comment){
-    const [commentCont, setCommentCont] = useState(commentCont);
+export default function CommunityModifyPostForm({post,onSubmit}){
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const selectedComment=comment.commentNo;
-    const userNo=comment.userNo;
-    console.log(comment);
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(comment.postNo)
-        console.log(commentCont)
-        // if (!postCont.trim()) return;
+    const navigate = useNavigate();
+    const handleSubmit = (e) => {
+        const formData = new FormData(e.target);
+        const postCont = formData.get("postCont");
+        onSubmit(postCont);
         setIsSubmitting(true);
-        if(commentCont === comment.commentCont){
-            setIsSubmitting(false);
-            alert("수정된 내용이 없습니다!")
-            e.preventDefault()
+        alert("성공적으로 수정했습니다!")
+        navigate(`/community/posts/${post.id}`);
         }
-        else{
-            setCommentCont(comment.commentCont);}
-        alert("댓글이 성공적으로 수정되었습니다.");
-        try {
-            await ModifyComment(selectedComment,userNo,commentCont);
-        } catch (error) {
-            console.error("댓글 수정 실패:", error);
-            alert("댓글 수정 중 오류가 발생했습니다.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
     return (
         <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="commentCont">
-                <Form.Label column={"lg"}>댓글 수정</Form.Label>
+            <Form.Group controlId="postCont">
+                <Form.Label column={"lg"}>게시글 수정</Form.Label>
                 <Form.Control
                     as="textarea"
-                    name="commentCont"
-                    placeholder="안녕하세요! 자유롭게 이용하시되 이용정첵에 위배되거나 특정 사용자를 무분별한 비난하는 글을 게시할 경우에는 제재가 될 수 있습니다."
-                    className={"CreateComment"}
-                    value={comment.commentCont}
+                    name="postCont"
+                    placeholder={post.postCont}
+                    style={{width:"95%",minWidth:"20rem",maxWidth:"100rem",resize:"none", minHeight: "20rem",marginBottom:"2px"}}
+                    defaultValue={post.postCont}
                     disabled={isSubmitting}
-                    onChange={(e) => setCommentCont(e.target.value)}
                 />
             </Form.Group>
-
+            <hr/>
             <div className="d-flex justify-content-between mt-2">
                 <Button variant="primary" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? "게시 중..." : "게시하기"}

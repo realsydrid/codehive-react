@@ -1,18 +1,26 @@
 .AllPosts,.InfiniteScrolls{
     flex-direction: column;
-    min-width: 32rem;
+    min-width: 20rem;
     max-width: 100rem;
+    width: 98%;
+    align-items: center;
+}
+.InfiniteScrolls{
+    min-width: 20rem;
+    max-width: 100rem;
+    width: 98%;
+    align-items: center;
 }
 .AllPosts{
     justify-content: center;
     align-items: center;
 }
 .infiniteScrolls{
-    width:95%!important;
+    width:95%;
     display: flex!important;
     flex-direction: column!important;
-    min-width: 32rem!important;
-    max-width: 100rem!important;
+    min-width: 20rem;
+    max-width: 100rem;
 }
 .Community-list-group,.Community-comment,.Community-PostCont{
     border: 1px solid black;
@@ -31,10 +39,10 @@
 .Community-list-group,.Community-comment{
     min-height: 120px;
 }
-.Community-PostPage,.Community-postForm,.Community-list-group,.Community-comment,
+.Community-PostPage,.Community-list-group,.Community-comment,
 .Community-PostCont,.CommunityPostDetail,.Community-PostModify,.Community-Link,.Community-commentCont{
     width: 99%;
-    min-width: 30rem;
+    min-width: 20rem;
     max-width: 100rem;
     white-space: nowrap;
     overflow: hidden;
@@ -43,6 +51,7 @@
 .Community-PostCont{
     min-height: 5rem;
     height: auto;
+    white-space: pre-wrap;
 }
 .Community-PostCont>h1{
     margin-bottom: 7.8em;
@@ -75,9 +84,16 @@
     align-items: flex-end;
 }
 .Community-postForm{
-    display: flex;
+    font-size: 1.1rem;
+    display: block;
+    width: 95%;
+    min-width: 15rem;
+    max-width: 80rem;
     flex-direction: column;
     margin-bottom:2.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .Community-postForm>h2{
     display: flex;
@@ -94,12 +110,6 @@
     flex-direction: column;
     align-items: center;
     color: black;
-}
-.Community-commentCont{
-    justify-content: space-between;
-    display: flex;
-    flex-direction: row;
-    margin: 0.2em 0 0.2em 0.2em;
 }
 .Community-PostModify,.Community-postInfo{
     display: flex;
@@ -122,4 +132,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.Community-PostInside{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
