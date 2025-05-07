@@ -83,13 +83,12 @@ export default function LoadAssetHistory() {
         <>
             <AssetNavBar />
             <div className="asset-history-container">
-                <h1 className="asset-history-title">거래내역</h1>
-
-                <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-                    <Container>
+                {/* 테이블 상단 필터 정렬 영역 */}
+                <div className="asset-history-filter-bar">
+                    <Navbar collapseOnSelect expand="lg" className="p-0 bg-transparent" variant="light">
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">
-                            <Nav className="me-auto">
+                            <Nav className="filter-nav">
                                 {/* 거래 전체 */}
                                 <NavDropdown title="거래 전체">
                                     {['BUY', 'SELL', 'ALL'].map(type => (
@@ -119,7 +118,7 @@ export default function LoadAssetHistory() {
                                             setPage(0);
                                         }}>{days}일</NavDropdown.Item>
                                     ))}
-                                    <div style={{ padding: "0.5rem 1rem" }}>
+                                    <div className="px-3 py-2">
                                         <label>시작일: </label>
                                         <input type="date" value={filter.startDate} onChange={(e) => {
                                             setFilter(prev => ({ ...prev, startDate: e.target.value }));
@@ -177,42 +176,42 @@ export default function LoadAssetHistory() {
                                 </NavDropdown>
                             </Nav>
                         </Navbar.Collapse>
-                    </Container>
-                </Navbar>
-
-                {/* 테이블 출력 */}
-                <table className="asset-history-table">
-                    <thead>
-                    <tr>
-                        <th>거래일시</th>
-                        <th>자산</th>
-                        <th>거래구분</th>
-                        <th>거래수량</th>
-                        <th>체결가격</th>
-                        <th>거래금액</th>
-                        <th>상태</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {filteredData.map((tx) => (
-                        <tr key={`${tx.id}-${new Date(tx.transactionDate).getTime()}`}>
-                            <td>{new Date(tx.transactionDate).toLocaleString('ko-KR')}</td>
-                            <td>{tx.koreanName}<br />{tx.market.replace("-", "/")}</td>
-                            <td className={tx.transactionType === "BUY" ? "transaction-type-buy" : "transaction-type-sell"}>
-                                {tx.transactionType === "BUY" ? "매수" : "매도"}
-                            </td>
-                            <td>{tx.transactionCnt.toLocaleString()}</td>
-                            <td>{formatDecimalsWithCommas(tx.price, true)} 원</td>
-                            <td>{formatDecimalsWithCommas(tx.price * tx.transactionCnt)} 원</td>
-                            <td>{tx.transactionState === "COMPLETED" ? "체결완료" : "미체결"}</td>
+                    </Navbar>
+                </div>
+                <div className="asset-history-scroll-wrapper">
+                    <table className="asset-history-table">
+                        <thead>
+                        <tr>
+                            <th>거래일시</th>
+                            <th>자산</th>
+                            <th>거래구분</th>
+                            <th>거래수량</th>
+                            <th>체결가격</th>
+                            <th>거래금액</th>
+                            <th>상태</th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {filteredData.map((tx) => (
+                            <tr key={`${tx.id}-${new Date(tx.transactionDate).getTime()}`}>
+                                <td>{new Date(tx.transactionDate).toLocaleString('ko-KR')}</td>
+                                <td>{tx.koreanName}<br />{tx.market.replace("-", "/")}</td>
+                                <td className={tx.transactionType === "BUY" ? "transaction-type-buy" : "transaction-type-sell"}>
+                                    {tx.transactionType === "BUY" ? "매수" : "매도"}
+                                </td>
+                                <td>{tx.transactionCnt.toLocaleString()}</td>
+                                <td>{formatDecimalsWithCommas(tx.price, true)} 원</td>
+                                <td>{formatDecimalsWithCommas(tx.price * tx.transactionCnt)} 원</td>
+                                <td>{tx.transactionState === "COMPLETED" ? "체결완료" : "미체결"}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
 
                 {hasMore && (
                     <div className="text-center my-4">
-                        <button className="btn btn-outline-primary" onClick={handleLoadMore}>
+                        <button className="btn btn-outline-primary w-100 text-nowrap" onClick={handleLoadMore}>
                             거래내역 더 보기
                         </button>
                     </div>

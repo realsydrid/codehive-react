@@ -2,7 +2,8 @@ import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from 'recharts';
 import { useState } from 'react';
 
 const COLORS = [
-    '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28EFF', '#FF6699', '#66CCFF', '#FF6666', '#99CC33'
+    '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28EFF',
+    '#FF6699', '#66CCFF', '#FF6666', '#99CC33'
 ];
 
 export default function PortfolioDonutChart({ data }) {
@@ -10,7 +11,6 @@ export default function PortfolioDonutChart({ data }) {
 
     const filtered = data.filter(item => item.market !== 'KRW-KRW' && item.evalValue > 0);
     const krwItem = data.find(item => item.market === 'KRW-KRW');
-
     const totalValue = data.reduce((sum, item) => sum + item.evalValue, 0);
 
     const chartData = filtered.map(item => ({
@@ -34,13 +34,7 @@ export default function PortfolioDonutChart({ data }) {
     }
 
     return (
-        <div style={{
-            width: '100%',
-            maxWidth: '600px',
-            margin: '0 auto',
-            padding: '1rem',
-            fontSize: '0.9rem'
-        }}>
+        <div className="portfolio-chart-container">
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -48,9 +42,7 @@ export default function PortfolioDonutChart({ data }) {
                 marginBottom: '0.5rem'
             }}>
                 <h3 style={{ margin: 0, fontSize: '1.1rem' }}>보유자산 포트폴리오</h3>
-                <button onClick={() => setShowChart(false)} style={buttonStyle}>
-                    접기
-                </button>
+                <button onClick={() => setShowChart(false)} style={buttonStyle}>접기</button>
             </div>
 
             {krwItem && (
@@ -67,41 +59,42 @@ export default function PortfolioDonutChart({ data }) {
             {chartData.length === 0 ? (
                 <p style={{ textAlign: 'center', marginTop: '2rem' }}>보유 자산이 없습니다.</p>
             ) : (
-                <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                        <Pie
-                            data={chartData}
-                            cx="50%"
-                            cy="45%"
-                            innerRadius={50}
-                            outerRadius={90}
-                            paddingAngle={2}
-                            dataKey="value"
-                            nameKey="name"
-                            labelLine={false} // 도넛 안에 선도 제거
-                        >
-                            {chartData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
-                        <Legend
-                            layout="horizontal"
-                            verticalAlign="bottom"
-                            align="center"
-                            iconType="circle"
-                            wrapperStyle={{
-                                fontSize: '0.75rem',
-                                marginTop: '1rem',
-                                lineHeight: '1.2rem',
-                                textAlign: 'center'
-                            }}
-                            formatter={(value) => {
-                                const item = chartData.find(d => d.name === value);
-                                return `${value} (${item?.percent}%)`;
-                            }}
-                        />
-                    </PieChart>
-                </ResponsiveContainer>
+                <>
+                    <div className="donut-chart-wrapper">
+                        <ResponsiveContainer width="100%" height={320}>
+                            <PieChart margin={{ top: 50, bottom: 20 }}>
+                                <Pie
+                                    data={chartData}
+                                    cx="50%"
+                                    cy="60%"
+                                    innerRadius={50}
+                                    outerRadius={90}
+                                    paddingAngle={2}
+                                    dataKey="value"
+                                    nameKey="name"
+                                >
+                                    {chartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                    {/* 🔥 구분선 추가 */}
+                    <hr style={{ marginTop: "2rem", marginBottom: "1rem" }} />
+
+                    {/* ✅ Legend를 차트 아래에 수동 출력 */}
+                    <div className="portfolio-legend-list">
+                        {chartData.map((item, index) => (
+                            <div key={item.name} className="portfolio-legend-item">
+                                <span className="dot" style={{ backgroundColor: COLORS[index % COLORS.length] }}></span>
+                                <span className="label">{item.name}</span>
+                                <span className="percent">({item.percent}%)</span>
+                            </div>
+                        ))}
+                    </div>
+                </>
             )}
         </div>
     );

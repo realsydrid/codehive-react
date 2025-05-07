@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import NewsNavBar from "./NewsNavBar.jsx";
 import "./NewsCoinRanking.css";
+import Loading from "../community/CommunityForm/Loading.jsx";
 
 const EXCHANGE_API = import.meta.env.VITE_EXCHANGE_API_URL;
 
@@ -9,6 +10,7 @@ export default function NewsCoinRanking() {
     const [coins, setCoins] = useState([]);
     const [exchangeRate, setExchangeRate] = useState(0);
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchCoins = async () => {
@@ -36,12 +38,16 @@ export default function NewsCoinRanking() {
                 setExchangeRate(data.conversion_rate);
             } catch (err) {
                 setError(err.message);
+            }finally {
+                setIsLoading(false);
             }
         };
 
         fetchCoins();
         fetchExchangeRate();
     }, []);
+
+    if (isLoading) return <Loading />;
 
     return (
         <>
@@ -50,7 +56,7 @@ export default function NewsCoinRanking() {
                 <h1 className="news-title">시가총액 순위</h1>
                 {error && <p className="error">{error}</p>}
                 <div className="table-wrapper">
-                    <table className="ranking-table">
+                    <table className="ranking-table mt-5">
                         <thead>
                         <tr>
                             <th>순위</th>
