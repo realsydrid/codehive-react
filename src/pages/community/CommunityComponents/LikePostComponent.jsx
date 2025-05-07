@@ -34,7 +34,7 @@ export function PostLikeComponent({ loginUserNo, post }) {
     };
 
     return (
-        <div>
+        <div style={{display: "flex"}}>
             <Button
                 variant={localLikeType === true ? "primary" : "outline-primary"}
                 onClick={() => handleClick(true)}
@@ -44,6 +44,7 @@ export function PostLikeComponent({ loginUserNo, post }) {
                     width: "2.75rem",
                     height: "2.75rem",
                     justifyContent: "center",
+                    display: "flex",
                 }}
             >
                 <img
@@ -53,8 +54,8 @@ export function PostLikeComponent({ loginUserNo, post }) {
                     height="20rem"
                     style={{ marginBottom: "0.2rem" }}
                 />
-            </Button>{" "}
-            {post.likeCount}
+                {post.likeCount}
+            </Button>
             <Button
                 variant={localLikeType === false ? "danger" : "outline-danger"}
                 onClick={() => handleClick(false)}
@@ -63,6 +64,7 @@ export function PostLikeComponent({ loginUserNo, post }) {
                     borderRadius: "300px",
                     width: "2.75rem",
                     height: "2.75rem",
+                    display: "flex",
                 }}
             >
                 <img
@@ -72,8 +74,8 @@ export function PostLikeComponent({ loginUserNo, post }) {
                     height="20rem"
                     style={{ marginBottom: "0.2rem" }}
                 />
-            </Button>{" "}
-            {post.dislikeCount}
+                {post.dislikeCount}
+            </Button>
 
             {error && <ErrorMsg error={error} />}
         </div>

@@ -1,7 +1,7 @@
 const ServerUrl='http://localhost:8801/api/community/LikeStatus'
 const jwt=localStorage.getItem('jwt');
 
-export async function GetCommentLikeType(postNo){
+export async function GetCommentLikeType(postNo,userNo){
     const URL = `${ServerUrl}/posts/${postNo}/comments`;
     const res = await fetch(URL, {
         method: "GET",
@@ -16,7 +16,7 @@ export async function GetCommentLikeType(postNo){
     const data = await res.json();
     return data;
 }
-export async function ToggleCommentLike({commentNo,likeType}){
+export async function ToggleCommentLike({userNo,commentNo,likeType}){
     const URL = `${ServerUrl}/comments/${commentNo}`;
     const res = await fetch(URL, {
         method: "POST",
@@ -24,20 +24,20 @@ export async function ToggleCommentLike({commentNo,likeType}){
             Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({commentNo,likeType}),
+        body: JSON.stringify({userNo,commentNo,likeType}),
     });
     if(!res.ok){
         alert("입력실패!")
         throw new Error("좋아요/싫어요 상태변경 실패!");
     }
     if (res.status === 204) {
-        return {commentNo:commentNo,likeType: null };
+        return {userNo:userNo,commentNo:commentNo,likeType: null };
     }
     // 정상 JSON 응답 처리
     const data = await res.json();
     return data ?? null;
 }
-export async function GetPostLikeType(postNo){
+export async function GetPostLikeType(userNo, postNo){
     const URL = `${ServerUrl}/posts/${postNo}`;
     const res = await fetch(URL, {
         method: "GET",
@@ -66,7 +66,7 @@ export async function TogglePostLike({ userNo, postNo, likeType }) {
         },
         body: JSON.stringify(body),
     });
-
+    console.log("이게 요청은 들어갔나?")
     if (!res.ok) {
         console.error("API 요청 실패:", res.status);
         return null;
