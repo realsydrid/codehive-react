@@ -1,27 +1,55 @@
-import ErrorMsg from "./ErrorMsg.jsx";
 import Loading from "./Loading.jsx";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {Link} from "react-router-dom";
 import "../CommunityPost.css";
-import CommunityPageNationData from "../CommunityHook/CommunityPageNationData.js";
-import {Button} from "react-bootstrap";
+import InfinitePageNationData from "../CommunityHook/InfinitePageNationData.js";
+import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
+import {useContext} from "react";
+import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
-export default function CommunityPostsPage(category){
-    const { data: posts, fetchPosts, hasMore, isLoading, isError } = CommunityPageNationData(category.category);
-    return (
-        <div style={{display: "flex", justifyContent: "center"}}>
-                {isError && <ErrorMsg error={isError}/>}
-                {isLoading && <Loading/>}
+//InfiniteScroll 만을 썼다가 InfiniteQuery+InfiniteScroll 을 사용하니 중복도 피해지고
+// 캐싱된 좋아요 싫어요 데이터도 서버에서 불러옴과 동시에 Optimistic Update 구조도 불러와짐
+export default function CommunityPostsPage({category}){
+    const loginUserNo=1//임시 하드코딩
+    // 원래는
+    // const[loginUser,]=useContext(UseLoginUserContext)
+    // const loginUserNo=loginUser.id
+        const {
+            data,
+            fetchNextPage,
+            hasNextPage,
+            isFetchingNextPage,
+            isError,
+            isLoading
+        } = InfinitePageNationData(category);
+
+        const posts = data?.pages.flatMap(page => page.content) ?? [];
+
+        if (isError) return <div>에러가 발생했습니다.</div>;
+        if (isLoading && posts.length === 0) return <Loading />;
+
+        return (
             <InfiniteScroll
-                dataLength= {posts.length}
-                next={fetchPosts}
-                hasMore={hasMore}
-                loader={<Loading/>}
-                endMessage={<p style={{ textAlign: "center" }}><b>더 이상 게시글이 없습니다.</b></p>}
-                className={"Community-PostPage"}
+                dataLength={posts.length}
+                next={fetchNextPage}
+                hasMore={hasNextPage}
+                loader={isFetchingNextPage && <Loading/>}
+                style={{
+                    width: "100%",
+                    minWidth: "20rem",
+                    maxWidth: "100rem",
+                    display: "flex",
+                    alignItems: "center"
+                }}
+                className="infiniteScrolls"
+                endMessage={
+                    <p style={{ textAlign: "center" }}>
+                        <b>더 이상 게시글이 없습니다.</b>
+                    </p>
+                }
             >
-                {posts && posts.map((post) => (
-                    <div key={post.id}>
+                {posts.map((post) => (
+                    <div key={post.id} className={"infiniteScrolls"}>
                         <div className={"Community-UserInfo"}>
                             <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
                                 <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
@@ -33,25 +61,23 @@ export default function CommunityPostsPage(category){
                             </Link>
                         </div>
                         <div className={"Community-list-group"}>
-                            <Link to={`/community/posts/${post.id}`} className={"Community-PostLink"}>
-                                <div className={"Community-postForm"}>
-                                    <h2 className={"Community-postForm"}>{post.postCont}<img src={post.imgUrl ? "/images/ImageIcon.png" : null} alt=""
-                                                            style={{width:"20px",height:"20px",display:post.imgUrl ? "" : "none"}}/></h2>
-                                    <div className={"Community-postInfo"}>
-                                        <div>{post.postCreatedAt}</div>
-                                        <div>
-                                    <span>
-                                    <Button variant="primary">좋아요</Button> {post.likeCount}&nbsp;
-                                    <Button variant="danger">싫어요</Button> {post.dislikeCount}&nbsp;
-                                        <span>댓글 {post.commentCount}개</span>
-                                            </span>
+                            <div className={"Community-PostInside"}>
+                                <Link to={`/community/posts/${post.id}`} className={"Community-PostLink"}>
+                                    <h2 className={"Community-postForm"}>{post.postCont}</h2>
+                                </Link>
+                                <div>
+                                    <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                        <span style={{display: "flex", alignItems: "flex-end"}}>{post.postCreatedAt}</span>
+                                        <div style={{display: "flex", alignItems: "flex-end", flexDirection: "column"}}>
+                                            <PostLikeComponent loginUserNo={loginUserNo} post={post} />
+                                            <span style={{display: "flex", alignItems: "flex-end"}}>댓글 {post.commentCount}개</span>
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
-                        </div></div>
+                            </div>
+                        </div>
+                    </div>
                 ))}
             </InfiniteScroll>
-        </div>
     )
 }

@@ -1,18 +1,18 @@
 import CommunityNavbar from "./CommunityComponents/CommunityNavbar.jsx";
-import CommunityCreatePostForm from "./CommunityForm/CommunityCreatePostForm.jsx";
-import {Link} from "react-router-dom";
+import CommunityCreatePostForm from "./CommunityComponents/CommunityCreatePostForm.jsx";
 import "./CommunityPost.css";
+import "./CommunityTextArea.css";
 import CommunityTitle from "./CommunityForm/CommunityTitle.jsx";
 import CommunityPostsPage from "./CommunityForm/CommunityPostPage.jsx";
 
-export default function CommunityFreePostsPage(){
 
+export default function CommunityFreePostsPage(){
     return (
-        <div className={"AllPosts"}>
+        <div className="container">
             <CommunityNavbar/>
-            <div>
+            <div className={"AllPosts"}>
                 <CommunityTitle category={"free"}/>
-                <CommunityCreatePostForm category="free" userNo={1}/>
+                <CommunityCreatePostForm category={"free"}/>
                 <CommunityPostsPage category={"free"}/>
             </div>
         </div>

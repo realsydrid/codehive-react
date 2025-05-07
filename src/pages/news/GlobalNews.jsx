@@ -1,7 +1,14 @@
+import NewsNavBar from "./NewsNavBar.jsx";
+import "./CategoryNews.css";
+import NewsList from "./NewsList.jsx";
+
 export default function GlobalNews() {
     return (
         <>
-            <h1>글로벌 증시</h1>
+            <NewsNavBar />
+            <NewsList title="글로벌 증시"
+                      fetchUrl="http://localhost:8801/api/news?category=global"
+                      />
         </>
-    )
+    );
 }

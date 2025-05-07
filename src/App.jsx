@@ -52,8 +52,6 @@ import OAuthSignupPage from "./pages/OAuthSignupPage.jsx";
 
 
 function App() {
-
-
     return (
         <BrowserRouter>
             <Routes>

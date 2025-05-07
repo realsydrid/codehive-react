@@ -21,6 +21,7 @@ const TIME_FRAMES = {
 
 export default function Chart({ market, combinedData }) {
     const [timeFrame, setTimeFrame] = useState('MIN1'); // 기본값: 1분
+    const [selectedButton, setSelectedButton] = useState(null);
     const chartContainerRef = useRef(null);
     const chartInstanceRef = useRef(null);
     const candleSeriesRef = useRef(null);
@@ -72,14 +73,14 @@ export default function Chart({ market, combinedData }) {
             }
 
             const data = await response.json();
-            
+
             // 평균 가격 계산
             if (data && data.length > 0) {
                 const sum = data.reduce((acc, candle) => acc + candle.trade_price, 0);
                 const avg = sum / data.length;
                 setAveragePrice(avg);
             }
-            
+
             return data;
         },
         refetchInterval: 500,
@@ -199,15 +200,15 @@ export default function Chart({ market, combinedData }) {
             // 차트 모든 콘텐츠 표시 (초기 로드 시에만)
             if (chartInstanceRef.current && formattedData.length > 0) {
                 const timeScale = chartInstanceRef.current.timeScale();
-                
+
                 // 최근 N개의 캔들만 보이도록 설정
                 const visibleBars = 50; // 초기에 보이는 캔들 개수 (원하는 값으로 조정)
                 const dataLength = formattedData.length;
-                
+
                 if (dataLength > 0) {
                     // 오른쪽 끝(최신 데이터)부터 visibleBars 개수만큼 보이도록 설정
                     timeScale.setVisibleLogicalRange({
-                        from: dataLength - visibleBars, 
+                        from: dataLength - visibleBars,
                         to: dataLength
                     });
                 }
@@ -223,19 +224,54 @@ export default function Chart({ market, combinedData }) {
         }
     }, [candleData]);
 
+    const timeFrameBtnHandler =(e)=>{
+        const value = e.target.value;
+        console.log(value);
+        setTimeFrame(value);
+        setSelectedButton(value);
+    }
+
+    const handleSelectChange = (e) => {
+        setTimeFrame(e.target.value);
+        setSelectedButton(null);
+    };
+
     return (
         <div className="chart-contentsContainer">
             <div>
                 <div className="chart-timeframe-tabs">
-                    {/*<span>차트시간설정 </span>*/}
-                    <button>1분</button>
-                    <button>15분</button>
-                    <button>30분</button>
-                    <button>1시간</button>
+                    <button
+                        onClick={timeFrameBtnHandler}
+                        value={"MIN1"}
+                        className={selectedButton === "MIN1" ? "active" : ""}
+                    >
+                        1분
+                    </button>
+                    <button
+                        onClick={timeFrameBtnHandler}
+                        value={"MIN15"}
+                        className={selectedButton === "MIN15" ? "active" : ""}
+                    >
+                        15분
+                    </button>
+                    <button
+                        onClick={timeFrameBtnHandler}
+                        value={"MIN30"}
+                        className={selectedButton === "MIN30" ? "active" : ""}
+                    >
+                        30분
+                    </button>
+                    <button
+                        onClick={timeFrameBtnHandler}
+                        value={"MIN60"}
+                        className={selectedButton === "MIN60" ? "active" : ""}
+                    >
+                        1시간
+                    </button>
                     <select
                         value={timeFrame}
-                        onChange={e => setTimeFrame(e.target.value)}
-                        className="chart-timeframe-select"
+                        onChange={handleSelectChange}
+                        className={`chart-timeframe-select ${selectedButton === null ? "active" : ""}`}
                     >
                         {Object.entries(TIME_FRAMES).map(([key, { display }]) => (
                             <option key={key} value={key}>

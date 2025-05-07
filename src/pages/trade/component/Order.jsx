@@ -2,13 +2,33 @@ import {formatDecimalsWithCommas, formatDecimal} from "../../../utils/numberForm
 import './Order.css'
 import {useEffect, useState, useRef} from "react";
 import {useQuery} from "@tanstack/react-query";
+import {Ratio} from "react-bootstrap";
+
+
+const RATIO_FRAME = {
+    PERCENT10: {value: 0.1, display: '10%'},
+    PERCENT20: {value: 0.2, display: '20%'},
+    PERCENT30: {value: 0.3, display: '30%'},
+    PERCENT40: {value: 0.4, display: '40%'},
+    PERCENT50: {value: 0.5, display: '50%'},
+    PERCENT60: {value: 0.6, display: '60%'},
+    PERCENT70: {value: 0.7, display: '70%'},
+    PERCENT80: {value: 0.8, display: '80%'},
+    PERCENT90: {value: 0.9, display: '90%'},
+    PERCENT100: {value: 1, display: '최대'},
+}
 
 export default function Order({combinedData, orderBook}) {
     const orderUnits = orderBook?.[0]?.orderbook_units;
     const maxSize = Math.max(...orderUnits.map(unit => Math.max(unit.ask_size, unit.bid_size)));
     const [formActiveTab, setFormActiveTab] = useState("매수");
     const [totalAmount, setTotalAmount] = useState(0);
+    const [ratio, setRatio] = useState('');
 
+    const handleSelectChange = (e) => {
+        setRatio(e.target.value);
+        console.log(ratio)
+    }
     // 호가창 컨테이너 참조 생성
     const orderBookRef = useRef(null);
     // 사용자가 수동으로 스크롤 했는지 추적
@@ -91,7 +111,7 @@ export default function Order({combinedData, orderBook}) {
         setTotalPriceInputValue(formatDecimalsWithCommas(roundedValue, false, 0));
     };
     useEffect(() => {
-        setTotalAmount(formatDecimalsWithCommas(totalPriceInputValue / combinedData?.trade_price, true,8));
+        setTotalAmount(formatDecimalsWithCommas(totalPriceInputValue / combinedData?.trade_price, true, 8));
     }, [combinedData?.trade_price, totalPriceInputValue]);
 
 
@@ -137,8 +157,8 @@ export default function Order({combinedData, orderBook}) {
         setAmountInputValue(0);
     }
 
-    const BUY_URL="http://localhost:8801/trade/api/transaction";
-    const handleBuyRequest=async ()=> {
+    const BUY_URL = "http://localhost:8801/trade/api/transaction";
+    const handleBuyRequest = async () => {
         if (
             (radioTab === "지정" && (!priceInputValue || !amountInputValue)) ||
             (radioTab === "시장" && !totalPriceInputValue)
@@ -147,14 +167,13 @@ export default function Order({combinedData, orderBook}) {
             return;
         }
 
-        const priceValue = radioTab === "지정" 
+        const priceValue = radioTab === "지정"
             ? Math.round(Number(String(priceInputValue).replace(/,/g, '')))
             : Math.round(combinedData.trade_price);
-        
+
         const totalPrice = String(totalPriceInputValue).replace(/,/g, '');
 
         const transaction = {
-            userNo: 1,
             market: combinedData.market,
             transactionType: formActiveTab === "매수" ? "BUY" : "SELL",
             price: priceValue, // Long 타입
@@ -184,7 +203,6 @@ export default function Order({combinedData, orderBook}) {
             alert("네트워크오류!?!")
         }
     };
-
 
 
     return (
@@ -235,44 +253,62 @@ export default function Order({combinedData, orderBook}) {
                                 <div>
                                     <input type="radio" id="targetPrice" checked={radioTab === "지정"}
                                            onChange={() => handleChecked("지정")}/>
-                                    <label htmlFor="targetPrice">지정</label>
+                                    <label htmlFor="targetPrice"
+                                           className={radioTab === "지정" ? "active" : ""}>지정</label>
                                 </div>
                                 <div>
                                     <input type="radio" id="currentPrice" checked={radioTab === "시장"}
                                            onChange={() => handleChecked("시장")}/>
-                                    <label htmlFor="currentPrice">시장</label>
+                                    <label htmlFor="currentPrice"
+                                           className={radioTab === "시장" ? "active" : ""}>시장</label>
                                 </div>
                             </div>
 
-                            <form>
-                                <p><span>주문가능</span><span>0</span><span>원</span></p>
+                            <form className="order-buyForm">
+                                <div className="order-depositDiv">
+                                    <span>주문가능</span>
+                                    <div>
+                                        <span>0</span><span> 원</span>
+                                    </div>
+                                </div>
                                 {radioTab === "지정" ? (
                                     <>
                                         <div className="order-amountSelectDiv">
-                                            <div className="order-amountInputDiv">
-                                                <p>
-                                                    <span>수량</span><input type="text"
-                                                                          onChange={handleAmountChange}
-                                                                          value={amountInputValue}/>
-                                                </p>
-                                                <div>비율</div>
-                                            </div>
+                                            <p>
+                                                <span>수량</span><input type="text"
+                                                                      onChange={handleAmountChange}
+                                                                      value={amountInputValue}/>
+                                            </p>
+                                            <select
+                                                value={ratio}
+                                                onChange={handleSelectChange}>
+                                                <option value="" disabled hidden>
+                                                    비율
+                                                </option>
+                                                {Object.entries(RATIO_FRAME).map(([key, {display, value}]) => (
+                                                    <option key={key} value={value}>
+                                                        {display}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
                                         <div className="order-priceSelectDiv">
-                                            <div className="order-priceInputDiv">
-                                                <p>
-                                                    <span>가격</span><input type="text" onChange={() => handlePriceChange}
-                                                                          value={formatDecimalsWithCommas(priceInputValue, true)}/>
-                                                </p>
-                                                <div>
-                                                    <button type="button" onClick={() => adjustPrice(-1)}>-</button>
-                                                    <button type="button" onClick={() => adjustPrice(1)}>+</button>
-                                                </div>
+                                            <p>
+                                                <span>가격</span><input type="text" onChange={() => handlePriceChange}
+                                                                      value={formatDecimalsWithCommas(priceInputValue, true)}/>
+                                            </p>
+                                            <div>
+                                                <button type="button" onClick={() => adjustPrice(-1)}>-</button>
+                                                <button type="button" onClick={() => adjustPrice(1)}>+</button>
                                             </div>
                                         </div>
-                                        <p><span>총액</span><input type="text" onChange={handleTotalPriceChange}
-                                                                 value={totalPriceInputValue}/><span>원</span></p>
-                                        <div>
+                                        <div className="order-totalPriceDiv">
+                                            <p><span>총액</span>
+                                                <div>
+                                                    <input type="text" onChange={handleTotalPriceChange}
+                                                           value={totalPriceInputValue}/><span>원</span>
+                                                </div>
+                                            </p>
                                         </div>
                                     </>
                                 ) : (
@@ -295,9 +331,11 @@ export default function Order({combinedData, orderBook}) {
                                         </p>
                                     </>
                                 )}
-
-                                <button type="reset" onClick={resetHandler} className="order-resetBtn">초기화</button>
-                                <button type="button" onClick={handleBuyRequest} className="order-buyConfirmBtn">매수</button>
+                                <div className="order-submitBtnDiv">
+                                    <button type="reset" onClick={resetHandler} className="order-resetBtn">초기화</button>
+                                    <button type="button" onClick={handleBuyRequest} className="order-buyConfirmBtn">매수
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     }
