@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {
     formatDecimalsWithCommas,
@@ -165,6 +165,30 @@ export default function TradeMainPage() {
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
+    const location = useLocation();
+    // URL 파라미터에 따라 활성 탭 설정
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const tabParam = queryParams.get("tab");
+        
+        if (tabParam) {
+            switch (tabParam) {
+                case "krw":
+                    setActiveTab("원화");
+                    break;
+                case "holdings":
+                    setActiveTab("보유");
+                    break;
+                case "favorites":
+                    setActiveTab("관심");
+                    break;
+                default:
+                    setActiveTab("원화");
+            }
+        }
+    }, [location.search]);
+    
+    
 
     return (
         <>
