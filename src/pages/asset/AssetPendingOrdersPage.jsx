@@ -93,27 +93,36 @@ export default function AssetPendingOrdersPage() {
         <>
             <AssetNavBar />
             <h1 className="pending-orders-title">미체결</h1>
-            <button onClick={handleCancelAll} className="cancel-all-button mb-5 mt-5">전체 주문 취소</button>
-            {combinedData.length === 0 ? (
-                <p>미체결 주문이 없습니다.</p>
-            ) : (
-                combinedData.map(tx => (
-                    <div key={tx.id} className="order-card">
-                        <div className="order-card-header">
-                            <strong className="order-market">{tx.koreanName}<br />{tx.market.replace("-", "/")}</strong>
-                            <button className="cancel-button" onClick={() => handleCancelOne(tx.id)}>주문 취소</button>
-                        </div>
-                        <div className="order-card-body">
-                            <p>거래 ID : {tx.id}</p>
-                            <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>{tx.transactionType === 'BUY' ? '매수' : '매도'}</p>
-                            <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString('ko-KR')}</p>
-                            <p>주문 수량 : {tx.transactionCnt.toLocaleString()}</p>
-                            <p>주문 금액 : {tx.price.toLocaleString()}</p>
-                            <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
-                        </div>
-                    </div>
-                ))
+
+            {combinedData.length > 0 && (
+                <button onClick={handleCancelAll} className="cancel-all-button mb-5 mt-5">전체 주문 취소</button>
             )}
+
+            <div className="pending-orders-body">
+                {combinedData.length === 0 ? (
+                    <p className="no-orders-msg"> 미체결 주문이 없습니다.</p>
+                ) : (
+                    combinedData.map(tx => (
+                        <div key={tx.id} className="order-card">
+                            <div className="order-card-header">
+                                <strong className="order-market">{tx.koreanName}<br />{tx.market.replace("-", "/")}</strong>
+                                <button className="cancel-button" onClick={() => handleCancelOne(tx.id)}>주문 취소</button>
+                            </div>
+                            <div className="order-card-body">
+                                <p>거래 ID : {tx.id}</p>
+                                <p className={tx.transactionType === 'BUY' ? "transaction-type-buy" : "transaction-type-sell"}>
+                                    {tx.transactionType === 'BUY' ? '매수' : '매도'}
+                                </p>
+                                <p>주문 일자 : {new Date(tx.transactionDate).toLocaleString('ko-KR')}</p>
+                                <p>주문 수량 : {tx.transactionCnt.toLocaleString()}</p>
+                                <p>주문 금액 : {tx.price.toLocaleString()}</p>
+                                <p>정산 금액 : {(tx.price * tx.transactionCnt).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+
             {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
         </>
     );
