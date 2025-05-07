@@ -7,7 +7,7 @@ export function useGetPostLikeStatus(userNo, postNo) {
         queryKey: ["postLikeStatus", userNo, postNo],
         queryFn: async () => {
             const res = await GetPostLikeType(userNo, postNo);
-            return res ?? { likeType: null };
+            return res ?? {userNo:userNo,postNo:postNo, likeType: null };
         },
         enabled: !!userNo && !!postNo,
         staleTime: 0,

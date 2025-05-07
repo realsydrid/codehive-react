@@ -13,7 +13,7 @@ export function CommentLikeComponent({ loginUserNo, comment }) {
 
     // 🔥 최신 댓글 리스트 캐시에서 현재 댓글 정보 추출
     const cachedComments = queryClient.getQueryData(["commentDto", comment.postNo]);
-    const cachedComment = cachedComments?.find(c => c.dto.commentId === comment.id);
+    const cachedComment = cachedComments?.find(c => c.dto.commentNo === comment.id);
 
     // 최신 값 사용, 없으면 초기값 fallback
     const likeCount = cachedComment?.dto.likeCount ?? comment.likeCount;

@@ -11,15 +11,14 @@ import "../CommunityComponents/Component.css"
 import {Button} from "react-bootstrap";
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import CommentComponent from "../CommunityComponents/CommentComponent.jsx";
-
-
+import {useContext} from "react";
+import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
 export default function CommunityPostDetailPage() {
     const {postNo} = useParams();
     const navigate = useNavigate();
-    // const [loginUser,]=useContext(UseLoginUserContext)
-    // const loginUserNo=loginUser.id;
-    const loginUserNo = 1; //임시 하드코딩
+    const [loginUser,]=useContext(UseLoginUserContext)
+    const loginUserNo=loginUser?.id;
     const {data: post, isLoading, error} = useQuery({
         queryKey: ["post", postNo],
         queryFn: async () => GetPost(postNo),

@@ -1,5 +1,5 @@
 const ServerUrl='http://localhost:8801/api/community'
-// const jwt=localStorage.getItem('jwt');
+const jwt=localStorage.getItem('jwt');
 
 export async function GetPost(postNo){
     const URL=`${ServerUrl}/posts/detail?postNo=${postNo}`
@@ -29,7 +29,7 @@ export async function CreatePost(category, postCont){
     const res = await fetch(URL, {
         method: "POST",
         headers: {
-            // Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
             },
         body: JSON.stringify({category:category,postCont:postCont})
@@ -47,7 +47,7 @@ export async function DeletePost(postNo){
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${jwt}`
+            Authorization: `Bearer ${jwt}`
             },
     })
     if(!res.ok) throw new Error(res.status+"");
@@ -59,7 +59,7 @@ export async function ModifyPost(postNo,postCont){
     const res = await fetch(URL, {
         method: "PUT",
         headers: { "Content-Type": "application/json",
-            // Authorization: `Bearer ${jwt}`
+            Authorization: `Bearer ${jwt}`
         },
         body: JSON.stringify({postNo:postNo,postCont:postCont})
     })

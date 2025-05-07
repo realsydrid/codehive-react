@@ -21,11 +21,12 @@ export default function CommentForm
     ({
         postNo,           //해당 게시물에 해당하는 댓글인지를 알기 위함
         parentNo = null, //null이 아닐때는 대댓글 수정
-        loginUserNo,                 //사용자 정보=loginUserNo
         commentNo = null, // 댓글 id(=commentNo)가 있으면 수정 모드
         initialContent = "", // 수정 시 초기값
         category                  //제목 지정
     }) {
+    const [loginUser,]=useContext(UseLoginUserContext);
+    const loginUserNo=loginUser?.id
     const [commentCont, setCommentCont] = useState(initialContent);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();

@@ -10,10 +10,8 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 //InfiniteScroll 만을 썼다가 InfiniteQuery+InfiniteScroll 을 사용하니 중복도 피해지고
 // 캐싱된 좋아요 싫어요 데이터도 서버에서 불러옴과 동시에 Optimistic Update 구조도 불러와짐
 export default function CommunityPostsPage({category}){
-    const loginUserNo=1//임시 하드코딩
-    // 원래는
-    // const[loginUser,]=useContext(UseLoginUserContext)
-    // const loginUserNo=loginUser.id
+    const [loginUser,]=useContext(UseLoginUserContext);
+    const loginUserNo=loginUser?.id
         const {
             data,
             fetchNextPage,
