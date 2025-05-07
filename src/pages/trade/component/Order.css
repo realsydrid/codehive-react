@@ -187,6 +187,17 @@
     font-size: 1rem;
     font-weight: normal;
 }
+.order-sellConfirmBtn {
+    background-color: #1375ec;
+    color: white;
+    border-radius: 0.2rem;
+    padding: 0;
+    height: 2rem;
+    width: 68%;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
 
 .order-amountSelectDiv {
     border: 1px solid #e5e5e5;
@@ -309,13 +320,13 @@
 .order-totalPriceDiv {
    border: 1px solid #e5e5e5;
 }
-.order-totalPriceDiv>p {
+.order-totalPriceDiv>div {
     display: flex;
     justify-content: space-between;
     margin: 0;
     width: 100%;
 }
-.order-totalPriceDiv>p>span {
+.order-totalPriceDiv>div>span {
     padding : 0 0.2rem
 }
 .order-totalPriceDiv input{
