@@ -4,6 +4,8 @@
   text-align: center;
   box-sizing: border-box;
   width: 100%;
+  overflow-x: hidden;
+
 }
 
 .logo {
@@ -42,42 +44,14 @@
   color: #888;
 }
 
-#topNavbar{
 
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3rem;
-  background-color: pink;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 10px 0;
-  box-sizing: border-box;
-  align-items: center;
-  z-index: 100;
-}
 
 
 #topNavbar div:nth-child(1) a img {
   width: 70%;
 }
 
-#bottomNavbar{
-  border: 1px solid black;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3rem;
-  background-color: pink;
-  display: flex;
-  justify-content: center;
-  box-sizing: border-box;
-  z-index: 100;
 
-}
 
 #communityNavbar, #newsNavBar, #assetNavBar {
   position: fixed;

@@ -24,10 +24,13 @@ export default function Order({combinedData, orderBook}) {
     const [formActiveTab, setFormActiveTab] = useState("매수");
     const [totalAmount, setTotalAmount] = useState(0);
     const [ratio, setRatio] = useState('');
+    const [deposit, setDeposit] = useState(0);
+    const [remainCnt, setRemainCnt] = useState(0);
 
     const handleSelectChange = (e) => {
-        setRatio(e.target.value);
-        console.log(ratio)
+        const selectedRatio = e.target.value;
+        setRatio(selectedRatio);
+        applyRatio(selectedRatio);
     }
     // 호가창 컨테이너 참조 생성
     const orderBookRef = useRef(null);
@@ -36,6 +39,8 @@ export default function Order({combinedData, orderBook}) {
 
     const handleFormTabClick = (tab) => {
         setFormActiveTab(tab);
+        handleChecked();
+        setRadioTab("지정");
     };
     const [priceInputValue, setPriceInputValue] = useState(combinedData?.trade_price || "");
 
@@ -81,13 +86,114 @@ export default function Order({combinedData, orderBook}) {
 
     const [radioTab, setRadioTab] = useState("지정");
     const [amountInputValue, setAmountInputValue] = useState(0);
-    const [totalPriceInputValue, setTotalPriceInputValue] = useState(0);
-    const handleAmountChange = (e) => {
-        setAmountInputValue(e.target.value);
-        // 소수점 이하 금액 반올림하여 정수로 변환
-        const totalPrice = Math.round(e.target.value * priceInputValue);
-        setTotalPriceInputValue(formatDecimalsWithCommas(totalPrice, false, 0)); // 소수점 없이 표시
+    const [formattedAmountValue, setFormattedAmountValue] = useState("0");
+    const [rawInputValue, setRawInputValue] = useState(""); // 원본 입력값 저장
+    const [amountInputFocused, setAmountInputFocused] = useState(false);
+    const [totalPriceInputValue, setTotalPriceInputValue] = useState('');
+    
+    // 수량 입력값 변경 시 포맷팅된 값도 함께 업데이트
+    const updateAmountValue = (value) => {
+        const numericValue = parseFloat(value) || 0;
+        const maxAmount = getMaxAmount();
+        
+        // 최대값을 초과하는 경우 최대값으로 조정
+        let adjustedValue = numericValue;
+        if (formActiveTab === "매도" && adjustedValue > remainCnt) {
+            adjustedValue = remainCnt;
+        } else if (formActiveTab === "매수" && adjustedValue > maxAmount) {
+            adjustedValue = maxAmount;
+        }
+        
+        setAmountInputValue(adjustedValue);
+        setRawInputValue(adjustedValue.toString()); // 원본 입력값 저장
+        // 포맷팅된 값 업데이트 - 기본 옵션만 사용
+        setFormattedAmountValue(formatDecimalsWithCommas(adjustedValue));
+        
+        // 총액도 함께 업데이트
+        const totalPrice = Math.round(adjustedValue * priceInputValue);
+        setTotalPriceInputValue(formatDecimalsWithCommas(totalPrice));
+    };
+    
+    // 수량 입력 필드에 사용할 최대값 계산 함수
+    const getMaxAmount = () => {
+        if (formActiveTab === "매도") {
+            return remainCnt;
+        } else if (formActiveTab === "매수" && priceInputValue && priceInputValue !== 0) {
+            // deposit을 정확히 사용할 수 있도록 소수점 이하 자리수 추가
+            // 여유를 더 크게 설정 (1% -> 2%)
+            return (deposit / priceInputValue) * 0.98;
+        }
+        return Number.MAX_SAFE_INTEGER; // 기본값
     }
+    
+    const handleAmountChange = (e) => {
+        // 입력값에서 콤마 제거
+        const value = e.target.value.replace(/,/g, '');
+        // 숫자 또는 소수점만 허용
+        if (value === '' || /^[0-9]*\.?[0-9]*$/.test(value)) {
+            const numericValue = parseFloat(value) || 0;
+            const maxAmount = getMaxAmount();
+            
+            // 최대값 체크
+            let finalValue = numericValue;
+            let useMaxValue = false;
+            
+            // 최대값을 초과하는 경우 최대값으로 조정
+            if (formActiveTab === "매도" && numericValue > remainCnt) {
+                finalValue = remainCnt;
+                useMaxValue = true;
+                console.log('최대값 초과 감지! 최대값으로 조정:', finalValue);
+            } else if (formActiveTab === "매수" && numericValue > maxAmount) {
+                finalValue = maxAmount;
+                useMaxValue = true;
+                console.log('최대값 초과 감지! 최대값으로 조정:', finalValue);
+            }
+            
+            // 유효한 입력값만 상태 업데이트
+            setAmountInputValue(finalValue);
+            // 최대값 초과시 최대값으로 설정, 그렇지 않으면 원본 입력값 유지
+            setRawInputValue(useMaxValue ? finalValue.toString() : value);
+            
+            // 포맷팅된 값도 업데이트 (포커스 없을 때 표시용)
+            setFormattedAmountValue(formatDecimalsWithCommas(finalValue));
+            
+            // 총액 업데이트
+            const totalPrice = Math.round(finalValue * priceInputValue);
+            setTotalPriceInputValue(formatDecimalsWithCommas(totalPrice));
+        }
+    }
+    
+    const handleAmountFocus = () => {
+        setAmountInputFocused(true);
+    }
+    
+    const handleAmountBlur = () => {
+        setAmountInputFocused(false);
+        
+        // 포커스를 잃을 때 최대값 체크 및 조정
+        const maxAmount = getMaxAmount();
+        let adjustedAmount = amountInputValue;
+        
+        // 최대값을 초과하는 경우 최대값으로 조정
+        if (formActiveTab === "매도" && adjustedAmount > remainCnt) {
+            adjustedAmount = remainCnt;
+        } else if (formActiveTab === "매수" && adjustedAmount > maxAmount) {
+            adjustedAmount = maxAmount;
+        }
+        
+        // 조정된 값으로 업데이트
+        if (adjustedAmount !== amountInputValue) {
+            console.log('최대값 초과 감지! 최대값으로 조정:', adjustedAmount);
+            setAmountInputValue(adjustedAmount);
+            setRawInputValue(adjustedAmount.toString());
+            setFormattedAmountValue(formatDecimalsWithCommas(adjustedAmount));
+            
+            // 총액도 업데이트
+            const totalPrice = Math.round(adjustedAmount * priceInputValue);
+            setTotalPriceInputValue(formatDecimalsWithCommas(totalPrice));
+        }
+    }
+    
     const handlePriceChange = (e) => {
         setPriceInputValue(e.target.value);
     }
@@ -106,13 +212,61 @@ export default function Order({combinedData, orderBook}) {
     const handleTotalPriceChange = (e) => {
         // 입력값에서 콤마 제거하고 숫자로 변환
         const inputValue = e.target.value.replace(/,/g, '');
-        // 소수점이 있다면 반올림
-        const roundedValue = Math.round(parseFloat(inputValue));
+        
+        // 입력값이 비어있으면 빈 문자열로 설정
+        if (!inputValue) {
+            setTotalPriceInputValue('');
+            setAmountInputValue(0); // 수량도 0으로 설정
+            return;
+        }
+        
+        const numericValue = parseFloat(inputValue) || 0;
+        
+        // 매수의 경우 최대 입력값을 deposit으로 제한
+        if (formActiveTab === "매수") {
+            if (numericValue > deposit) {
+                setTotalPriceInputValue(formatDecimalsWithCommas(deposit, false, 0));
+                
+                // 수량 계산 및 업데이트 (지정가 주문일 때)
+                if (radioTab === "지정" && priceInputValue && priceInputValue !== 0) {
+                    const calculatedAmount = deposit / priceInputValue;
+                    setAmountInputValue(calculatedAmount.toString());
+                }
+                return;
+            }
+        } 
+        // 매도의 경우 계산된 수량이 remainCnt를 초과하지 못하도록 제한
+        else if (formActiveTab === "매도" && radioTab === "지정" && priceInputValue && priceInputValue !== 0) {
+            const calculatedAmount = numericValue / priceInputValue;
+            if (calculatedAmount > remainCnt) {
+                // 최대 remainCnt만큼만 판매 가능
+                const maxTotal = Math.round(remainCnt * priceInputValue);
+                setTotalPriceInputValue(formatDecimalsWithCommas(maxTotal, false, 0));
+                setAmountInputValue(remainCnt.toString());
+                return;
+            }
+        }
+        
+        // 소수점이 있다면 반올림, NaN 방지를 위해 || 0 추가
+        const roundedValue = Math.round(numericValue);
         setTotalPriceInputValue(formatDecimalsWithCommas(roundedValue, false, 0));
+        
+        // 수량 계산 및 업데이트 (지정가 주문일 때)
+        if (radioTab === "지정" && priceInputValue && priceInputValue !== 0) {
+            const calculatedAmount = roundedValue / priceInputValue;
+            setAmountInputValue(calculatedAmount.toString());
+        }
     };
     useEffect(() => {
-        setTotalAmount(formatDecimalsWithCommas(totalPriceInputValue / combinedData?.trade_price, true, 8));
-    }, [combinedData?.trade_price, totalPriceInputValue]);
+        // 쉼표 제거 후 파싱, 빈 값이나 NaN일 경우 0으로 설정
+        const numericValue = totalPriceInputValue ? totalPriceInputValue.replace(/,/g, '') : '0';
+        const roundedValue = Math.round(parseFloat(numericValue) || 0);
+        
+        // 시장가 주문일 때만 totalAmount 업데이트 (수량 예측)
+        if (radioTab === "시장") {
+            setTotalAmount(formatDecimalsWithCommas(roundedValue / combinedData?.trade_price, true, 8));
+        }
+    }, [combinedData?.trade_price, totalPriceInputValue, radioTab]);
 
 
     const adjustPrice = (direction) => {
@@ -144,9 +298,12 @@ export default function Order({combinedData, orderBook}) {
 
     const adjustTotalPrice = (price) => {
         setTotalPriceInputValue(prev => {
-            const currentPrice = Number(prev.replace(/,/g, ''));
+            // prev가 문자열이 아닌 경우를 처리
+            const prevStr = String(prev || '');
+            const currentPrice = Number(prevStr.replace(/,/g, '') || 0);
             const newPrice = Math.round(currentPrice + Number(price));
-            setTotalAmount(formatDecimal(newPrice / combinedData?.trade_price, 8));
+            console.log(newPrice);
+            setTotalAmount(formatDecimalsWithCommas(newPrice / combinedData?.trade_price, true, 8));
             return formatDecimalsWithCommas(newPrice, false, 0);
         });
     }
@@ -157,7 +314,7 @@ export default function Order({combinedData, orderBook}) {
         setAmountInputValue(0);
     }
 
-    const BUY_URL = "http://localhost:8801/trade/api/transaction";
+    const BUY_URL = "http://localhost:8801/api/trade/me";
     const handleBuyRequest = async () => {
         if (
             (radioTab === "지정" && (!priceInputValue || !amountInputValue)) ||
@@ -178,8 +335,8 @@ export default function Order({combinedData, orderBook}) {
             transactionType: formActiveTab === "매수" ? "BUY" : "SELL",
             price: priceValue, // Long 타입
             transactionCnt: radioTab === "지정" ? Number(amountInputValue) : Number(totalAmount),
-            transactionState: "PENDING",
-            transactionAmount: Math.round(Number(totalPrice))
+            // transactionState: "PENDING",
+            // transactionAmount: Math.round(Number(totalPrice))
         };
 
         try {
@@ -193,6 +350,12 @@ export default function Order({combinedData, orderBook}) {
                 alert("거래성공!@!@");
                 resetHandler();
                 console.log(transaction);
+                
+                // 거래 성공 후 잔액과 코인 수량 업데이트
+                fetchDeposit();
+                if (formActiveTab === "매도") {
+                    fetchRemainCnt();
+                }
             } else {
                 const errorData = await response.json().catch(() => ({}));
                 alert(`거래오류!!!! 오류: ${errorData.message || response.status}`);
@@ -204,6 +367,65 @@ export default function Order({combinedData, orderBook}) {
         }
     };
 
+    // 잔액(deposit) 정보 가져오기 함수
+    const fetchDeposit = async () => {
+        try {
+            const response = await fetch("http://localhost:8801/api/trade/me/deposit");
+            if (response.ok) {
+                const data = await response.json();
+                console.log("잔액:", data);
+                setDeposit(data);
+            } else {
+                console.error("Failed to fetch deposit:", response.status);
+            }
+        } catch (error) {
+            console.error("Error fetching deposit:", error);
+        }
+    };
+
+    // 남은 코인 수량 가져오기 함수
+    const fetchRemainCnt = async () => {
+        if (!combinedData?.market) return;
+        
+        try {
+            const response = await fetch(`http://localhost:8801/api/trade/me/remainCnt?market=${combinedData.market}`, {
+                method: "GET"
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log("남은 코인 수량:", data);
+                setRemainCnt(data);
+            } else {
+                console.error("남은 코인 수량을 가져오는데 실패했습니다:", response.status);
+            }
+        } catch (error) {
+            console.error("남은 코인 수량 API 호출 오류:", error);
+        }
+    };
+
+    // 초기 잔액 로드
+    useEffect(() => {
+        fetchDeposit();
+    }, []);
+
+    // 선택된 코인이 변경되거나 formActiveTab이 '매도'로 변경될 때 남은 코인 수량 가져오기
+    useEffect(() => {
+        // 매도 탭이고 선택된 코인이 있을 때만 실행
+        if (formActiveTab === "매도" && combinedData?.market) {
+            fetchRemainCnt();
+        }
+    }, [formActiveTab, combinedData?.market]);
+
+    // RATIO_FRAME 비율 적용 함수
+    const applyRatio = (ratio) => {
+        if (!ratio) return;
+        
+        const maxValue = getMaxAmount();
+        const newAmount = maxValue * ratio;
+        
+        // 숫자 값과 포맷팅된 값 모두 업데이트
+        updateAmountValue(newAmount);
+    }
 
     return (
         <>
@@ -268,7 +490,7 @@ export default function Order({combinedData, orderBook}) {
                                 <div className="order-depositDiv">
                                     <span>주문가능</span>
                                     <div>
-                                        <span>0</span><span> 원</span>
+                                        <span>{formatDecimalsWithCommas(deposit, false)}</span><span> 원</span>
                                     </div>
                                 </div>
                                 {radioTab === "지정" ? (
@@ -277,7 +499,9 @@ export default function Order({combinedData, orderBook}) {
                                             <p>
                                                 <span>수량</span><input type="text"
                                                                       onChange={handleAmountChange}
-                                                                      value={amountInputValue}/>
+                                                                      onFocus={handleAmountFocus}
+                                                                      onBlur={handleAmountBlur}
+                                                                      value={amountInputFocused ? rawInputValue : formattedAmountValue}/>
                                             </p>
                                             <select
                                                 value={ratio}
@@ -303,12 +527,12 @@ export default function Order({combinedData, orderBook}) {
                                             </div>
                                         </div>
                                         <div className="order-totalPriceDiv">
-                                            <p><span>총액</span>
+                                            <div><span>총액</span>
                                                 <div>
                                                     <input type="text" onChange={handleTotalPriceChange}
                                                            value={totalPriceInputValue}/><span>원</span>
                                                 </div>
-                                            </p>
+                                            </div>
                                         </div>
                                     </>
                                 ) : (
@@ -341,7 +565,98 @@ export default function Order({combinedData, orderBook}) {
                     }
 
                     {formActiveTab === "매도" &&
-                        <p>매도</p>
+                        <div>
+                            <div className="order-formRadioNav">
+                                <div>
+                                    <input type="radio" id="targetPriceSell" checked={radioTab === "지정"}
+                                           onChange={() => handleChecked("지정")}/>
+                                    <label htmlFor="targetPriceSell"
+                                           className={radioTab === "지정" ? "active" : ""}>지정</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="currentPriceSell" checked={radioTab === "시장"}
+                                           onChange={() => handleChecked("시장")}/>
+                                    <label htmlFor="currentPriceSell"
+                                           className={radioTab === "시장" ? "active" : ""}>시장</label>
+                                </div>
+                            </div>
+
+                            <form className="order-sellForm">
+                                <div className="order-depositDiv">
+                                    <span>주문가능</span>
+                                    <div>
+                                        <span>{formatDecimalsWithCommas(remainCnt, false, 8)}</span><span> {combinedData.market ? combinedData.market.split("-")[1] : ""}</span>
+                                    </div>
+                                </div>
+                                {radioTab === "지정" ? (
+                                    <>
+                                        <div className="order-amountSelectDiv">
+                                            <p>
+                                                <span>수량</span><input type="text"
+                                                                      onChange={handleAmountChange}
+                                                                      onFocus={handleAmountFocus}
+                                                                      onBlur={handleAmountBlur}
+                                                                      value={amountInputFocused ? rawInputValue : formattedAmountValue}/>
+                                            </p>
+                                            <select
+                                                value={ratio}
+                                                onChange={handleSelectChange}>
+                                                <option value="" disabled hidden>
+                                                    비율
+                                                </option>
+                                                {Object.entries(RATIO_FRAME).map(([key, {display, value}]) => (
+                                                    <option key={key} value={value}>
+                                                        {display}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="order-priceSelectDiv">
+                                            <p>
+                                                <span>가격</span><input type="text" onChange={() => handlePriceChange}
+                                                                      value={formatDecimalsWithCommas(priceInputValue, true)}/>
+                                            </p>
+                                            <div>
+                                                <button type="button" onClick={() => adjustPrice(-1)}>-</button>
+                                                <button type="button" onClick={() => adjustPrice(1)}>+</button>
+                                            </div>
+                                        </div>
+                                        <div className="order-totalPriceDiv">
+                                            <div><span>총액</span>
+                                                <div>
+                                                    <input type="text" onChange={handleTotalPriceChange}
+                                                           value={totalPriceInputValue}/><span>원</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div>
+                                            <p><span>총액</span><input type="text" onChange={handleTotalPriceChange}
+                                                                     value={totalPriceInputValue}/><span>원</span></p>
+                                            <div>비율</div>
+                                        </div>
+                                        <div className="order-totalPriceAddDiv">
+                                            <button type="button" onClick={() => adjustTotalPrice(10000)}>+1만</button>
+                                            <button type="button" onClick={() => adjustTotalPrice(100000)}>+10만</button>
+                                            <button type="button" onClick={() => adjustTotalPrice(1000000)}>+100만
+                                            </button>
+                                        </div>
+                                        <p>
+                                            <span>예상수량</span>
+                                            <input readOnly="readOnly" value={totalAmount}/>
+                                            <span>{combinedData.market ? combinedData.market.split("-")[1] : ""}</span>
+                                        </p>
+                                    </>
+                                )}
+                                <div className="order-submitBtnDiv">
+                                    <button type="reset" onClick={resetHandler} className="order-resetBtn">초기화</button>
+                                    <button type="button" onClick={handleBuyRequest} className="order-sellConfirmBtn">매도
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     }
                     {formActiveTab === "거래내역" &&
                         <p>거래내역</p>
