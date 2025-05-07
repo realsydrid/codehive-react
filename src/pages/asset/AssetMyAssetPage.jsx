@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import "./AssetMyAssetPage.css";
 import PortfolioDonutChart from "./PortfolioChart.jsx";
 import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
-import {useNavigate} from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
-const USER_NO = 1;
 const API = {
     BASE: "http://localhost:8801/api/transaction",
-    BY_USER: `http://localhost:8801/api/transaction/${USER_NO}`,
+    BY_ME: "http://localhost:8801/api/transaction/me",
     COIN_PRICE: "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
     COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false"
 };
@@ -22,12 +21,26 @@ export default function AssetMyAssetPage() {
     const [errorMsg, setErrorMsg] = useState("");
     const [chartData, setChartData] = useState([]);
     const navigate = useNavigate();
+    const token = localStorage.getItem("jwt");
+
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
+
+    const headers = {
+        Authorization : `Bearer ${token}`,
+        "Content-Type": "application/json"
+    };
 
     const isAssetCleared = summary.eval === 0 && combinedData.length === 0;
 
     const { data: krwBalance, refetch: refetchKrwBalance, isPending: loadingBalance } = useQuery({
         queryKey: ["krwBalance"],
-        queryFn: () => fetch(API.BY_USER).then(res => res.json())
+        queryFn: () =>
+            fetch(API.BY_ME, { headers }).then(res => {
+                if (!res.ok) throw new Error("자산 조회 실패");
+                return res.json();
+            })
     });
 
     const { data: coinPrice, isPending: loadingPrice } = useQuery({
@@ -96,7 +109,7 @@ export default function AssetMyAssetPage() {
             .filter(item => item.market !== "KRW-KRW" && item.holdingAmount > 0)
             .map(item => ({
                 market: item.market,
-                evalValue: item.averagePrice * item.holdingAmount // 주의: 실시간 시세 아님!!
+                evalValue: item.averagePrice * item.holdingAmount
             }));
 
         setChartData(chartReady);
@@ -107,7 +120,12 @@ export default function AssetMyAssetPage() {
     }, []);
 
     const deleteAll = async () => {
-        const res = await fetch(API.BY_USER, { method: "DELETE" });
+        const res = await fetch(API.BY_ME, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         if (!res.ok) throw new Error("초기화 실패");
     };
 
@@ -129,7 +147,6 @@ export default function AssetMyAssetPage() {
         const kstISOString = new Date(date.getTime() + 9 * 60 * 60 * 1000).toISOString().replace("Z", "");
 
         const payload = {
-            userNo: 1,
             market: "KRW-KRW",
             transactionType: "BUY",
             price: formData.amount,
@@ -137,10 +154,14 @@ export default function AssetMyAssetPage() {
             transactionState: "COMPLETED",
             transactionDate: kstISOString
         };
+
         try {
             const res = await fetch(API.BASE, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    ...headers
+                },
                 body: JSON.stringify(payload)
             });
             if (!res.ok) throw new Error("자산 등록 실패");
@@ -162,7 +183,7 @@ export default function AssetMyAssetPage() {
             <AssetNavBar />
             <h1 className="asset-myasset-title">보유자산 홈</h1>
 
-            <div className="asset-summary mt-5" >
+            <div className="asset-summary mt-5">
                 <h3>보유자산</h3>
                 <h2>{formatDecimalsWithCommas(summary.eval)}</h2>
                 <p><strong>평가손익 :</strong> <span style={{ color: summary.profit >= 0 ? 'red' : 'blue' }}>{formatDecimalsWithCommas(summary.profit)} 원</span></p>
@@ -226,3 +247,4 @@ export default function AssetMyAssetPage() {
         </>
     );
 }
+
