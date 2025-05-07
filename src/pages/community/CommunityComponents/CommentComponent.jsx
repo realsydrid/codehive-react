@@ -9,11 +9,9 @@ import "./Component.css"
 import CommentForm from "../CommunityForm/CommunityCommentTextManagement.jsx";
 
 export default function CommentComponent(props){
-    // const [loginUser,]=useContext(UseLoginUserContext);
-    // const loginUserNo=loginUser.id
     const postNo = props.postNo;
-
-    const loginUserNo=1;//임시 하드코딩
+    const [loginUser,]=useContext(UseLoginUserContext)
+    const loginUserNo=loginUser?.id;
     const [openReplyForm, setOpenReplyForm] = useState(null);
     const [editingComment, setEditingComment] = useState(null);
 

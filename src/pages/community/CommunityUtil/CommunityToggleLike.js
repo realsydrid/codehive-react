@@ -1,11 +1,12 @@
 const ServerUrl='http://localhost:8801/api/community/LikeStatus'
-// const jwt=localStorage.getItem('jwt');
+const jwt=localStorage.getItem('jwt');
 
-export async function GetCommentLikeType(postNo,userNo){
-    const URL = `${ServerUrl}/posts/${postNo}/comments?userNo=${userNo}`;
+export async function GetCommentLikeType(postNo){
+    const URL = `${ServerUrl}/posts/${postNo}/comments`;
     const res = await fetch(URL, {
         method: "GET",
         headers: {
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
     });
@@ -15,32 +16,33 @@ export async function GetCommentLikeType(postNo,userNo){
     const data = await res.json();
     return data;
 }
-export async function ToggleCommentLike({userNo,commentNo,likeType}){
+export async function ToggleCommentLike({commentNo,likeType}){
     const URL = `${ServerUrl}/comments/${commentNo}`;
     const res = await fetch(URL, {
         method: "POST",
         headers: {
-            // Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({userNo,commentNo,likeType}),
+        body: JSON.stringify({commentNo,likeType}),
     });
     if(!res.ok){
         alert("입력실패!")
         throw new Error("좋아요/싫어요 상태변경 실패!");
     }
     if (res.status === 204) {
-        return {userNo:userNo,commentNo:commentNo,likeType: null };
+        return {commentNo:commentNo,likeType: null };
     }
     // 정상 JSON 응답 처리
     const data = await res.json();
     return data ?? null;
 }
-export async function GetPostLikeType(userNo, postNo){
-    const URL = `${ServerUrl}/posts/${postNo}?userNo=${userNo}`;
+export async function GetPostLikeType(postNo){
+    const URL = `${ServerUrl}/posts/${postNo}`;
     const res = await fetch(URL, {
         method: "GET",
         headers: {
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
     });
@@ -59,7 +61,7 @@ export async function TogglePostLike({ userNo, postNo, likeType }) {
     const res = await fetch(URL, {
         method: "POST",
         headers: {
-            // Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify(body),
