@@ -1,7 +1,7 @@
 const ServerUrl='http://localhost:8801/api/community/LikeStatus'
 const jwt=localStorage.getItem('jwt');
 
-export async function GetCommentLikeType(postNo,userNo){
+export async function GetCommentLikeType(postNo){
     const URL = `${ServerUrl}/posts/${postNo}/comments`;
     const res = await fetch(URL, {
         method: "GET",
@@ -33,9 +33,9 @@ export async function ToggleCommentLike({userNo,commentNo,likeType}){
     if (res.status === 204) {
         return {userNo:userNo,commentNo:commentNo,likeType: null };
     }
+    console.log(res.json());
     // 정상 JSON 응답 처리
-    const data = await res.json();
-    return data ?? null;
+    return res ?? null;
 }
 export async function GetPostLikeType(userNo, postNo){
     const URL = `${ServerUrl}/posts/${postNo}`;
@@ -66,7 +66,6 @@ export async function TogglePostLike({ userNo, postNo, likeType }) {
         },
         body: JSON.stringify(body),
     });
-    console.log("이게 요청은 들어갔나?")
     if (!res.ok) {
         console.error("API 요청 실패:", res.status);
         return null;

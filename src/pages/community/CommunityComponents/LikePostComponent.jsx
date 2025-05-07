@@ -5,7 +5,7 @@ import ErrorMsg from "../CommunityForm/ErrorMsg.jsx";
 import {useEffect, useState} from "react";
 
 
-export function PostLikeComponent({ loginUserNo, post }) {
+export function PostLikeComponent({ loginUserNo, post, disabled }) {
     const postNo = post.id;
     const category = post.category;
 
@@ -38,13 +38,14 @@ export function PostLikeComponent({ loginUserNo, post }) {
             <Button
                 variant={localLikeType === true ? "primary" : "outline-primary"}
                 onClick={() => handleClick(true)}
-                disabled={!loginUserNo}
+                disabled={disabled}
                 style={{
                     borderRadius: "300px",
                     width: "2.75rem",
                     height: "2.75rem",
                     justifyContent: "center",
                     display: "flex",
+                    marginRight: "4px",
                 }}
             >
                 <img
@@ -59,7 +60,7 @@ export function PostLikeComponent({ loginUserNo, post }) {
             <Button
                 variant={localLikeType === false ? "danger" : "outline-danger"}
                 onClick={() => handleClick(false)}
-                disabled={!loginUserNo}
+                disabled={disabled}
                 style={{
                     borderRadius: "300px",
                     width: "2.75rem",

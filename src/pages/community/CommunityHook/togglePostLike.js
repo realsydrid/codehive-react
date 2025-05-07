@@ -1,15 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetPostLikeType, TogglePostLike } from "../CommunityUtil/CommunityToggleLike.js";
+import {useContext, useEffect, useState} from "react";
+import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
 // 좋아요 상태 조회 훅
 export function useGetPostLikeStatus(userNo, postNo) {
+    const [loginUser,]=useContext(UseLoginUserContext)
+    const [isLoadingUser, setIsLoadingUser] = useState(true); // 로그인 상태 로딩 상태
+    useEffect(() => {
+        if (loginUser !== null) {
+            setIsLoadingUser(false); // 로그인 정보가 로딩되면 지연 렌더링 해제
+        }
+    }, [loginUser]);
     return useQuery({
         queryKey: ["postLikeStatus", userNo, postNo],
         queryFn: async () => {
             const res = await GetPostLikeType(userNo, postNo);
             return res ?? {userNo:userNo,postNo:postNo, likeType: null };
         },
-        enabled: !!userNo && !!postNo,
+        enabled: !!userNo && !!postNo && !isLoadingUser,
         staleTime: 0,
     });
 }

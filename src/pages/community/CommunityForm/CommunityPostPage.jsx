@@ -4,14 +4,21 @@ import {Link} from "react-router-dom";
 import "../CommunityPost.css";
 import InfinitePageNationData from "../CommunityHook/InfinitePageNationData.js";
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
-import {useContext} from "react";
+import {useContext, useEffect, useState} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
 //InfiniteScroll 만을 썼다가 InfiniteQuery+InfiniteScroll 을 사용하니 중복도 피해지고
 // 캐싱된 좋아요 싫어요 데이터도 서버에서 불러옴과 동시에 Optimistic Update 구조도 불러와짐
 export default function CommunityPostsPage({category}){
     const [loginUser,]=useContext(UseLoginUserContext);
+    const [isLoadingUser, setIsLoadingUser] = useState(true); // 로그인 상태 로딩 상태
+    useEffect(() => {
+        if (loginUser !== null) {
+            setIsLoadingUser(false); // 로그인 정보가 로딩되면 지연 렌더링 해제
+        }
+    }, [loginUser]);
     const loginUserNo=loginUser?.id
+
         const {
             data,
             fetchNextPage,
@@ -66,8 +73,8 @@ export default function CommunityPostsPage({category}){
                                 <div>
                                     <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                                         <span style={{display: "flex", alignItems: "flex-end"}}>{post.postCreatedAt}</span>
-                                        <div style={{display: "flex", alignItems: "flex-end", flexDirection: "column"}}>
-                                            <PostLikeComponent loginUserNo={loginUserNo} post={post} />
+                                        <div style={{display: "flex", alignItems: "flex-end", flexDirection: "column"}} >
+                                            <PostLikeComponent loginUserNo={loginUserNo} post={post} disabled={isLoadingUser}/>
                                             <span style={{display: "flex", alignItems: "flex-end"}}>댓글 {post.commentCount}개</span>
                                         </div>
                                     </div>
