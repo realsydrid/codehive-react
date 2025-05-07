@@ -1,13 +1,22 @@
 import {Link, useNavigate} from "react-router-dom";
 import {UseLoginUserContext} from "../../provider/LoginUserProvider.jsx";
-import {useContext, useState} from "react";
+import {useContext, useState, useEffect} from "react";
 import {useQuery} from "@tanstack/react-query";
 import "./TopNavbar.css"
+import {formatDecimalsWithCommas} from "../../utils/numberFormat.js";
+
+const API = {
+    BASE: "http://localhost:8801/api/transaction",
+    BY_ME: "http://localhost:8801/api/transaction/me",
+    COIN_PRICE: "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
+    COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false"
+};
 
 export default function TopNavbar() {
     const [loginUser, setLoginUser] = useContext(UseLoginUserContext);
     const navigate = useNavigate();
     const [sideProfileOpen, setSideProfileOpen] = useState(false);
+    const [assetSummary, setAssetSummary] = useState({ eval: 0, profit: 0, rate: 0 });
 
     // useQuery를 사용하여 사용자 요약 정보 가져오기
     const {data: userSummary, isLoading, error} = useQuery({
@@ -31,6 +40,77 @@ export default function TopNavbar() {
         enabled: !!loginUser, // 로그인한 경우에만 쿼리 실행
         refetchOnWindowFocus: false,
     });
+    
+    // 자산 정보 쿼리 - 보유 코인 내역
+    const { data: krwBalance } = useQuery({
+        queryKey: ["topNavbarBalance"],
+        queryFn: async () => {
+            if (!loginUser) return null;
+            
+            const response = await fetch(API.BY_ME, { 
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                }
+            });
+            
+            if (!response.ok) throw new Error("자산 조회 실패");
+            return response.json();
+        },
+        enabled: !!loginUser && sideProfileOpen,
+        refetchOnWindowFocus: false,
+    });
+
+    // 코인 가격 정보 쿼리
+    const { data: coinPrice } = useQuery({
+        queryKey: ["topNavbarCoinPrice"],
+        queryFn: async () => {
+            const res = await fetch(API.COIN_PRICE);
+            if (!res.ok) throw new Error("코인 가격 실패");
+            const data = await res.json();
+            return data.map(({ market, trade_price }) => ({ market, trade_price }));
+        },
+        enabled: !!loginUser && sideProfileOpen,
+        staleTime: 0,
+        refetchInterval: sideProfileOpen ? 500 : false,
+    });
+
+    // 코인 이름 정보 쿼리
+    const { data: coinInfo } = useQuery({
+        queryKey: ["topNavbarCoinInfo"],
+        queryFn: () => fetch(API.COIN_NAME).then(res => res.json()),
+        enabled: !!loginUser && sideProfileOpen,
+        staleTime: 1000 * 60 * 60, // 1시간 캐싱
+    });
+
+    // 자산 계산 로직
+    useEffect(() => {
+        if (!krwBalance || !coinPrice || !coinInfo || !sideProfileOpen) return;
+
+        const priceMap = new Map(coinPrice.map(({ market, trade_price }) => [market, trade_price]));
+
+        let totalEval = 0, totalBuy = 0, totalProfit = 0;
+
+        krwBalance.forEach(item => {
+            const { market, holdingAmount, averagePrice } = item;
+            const isKRW = market === "KRW-KRW";
+            const currentPrice = isKRW ? averagePrice : priceMap.get(market);
+            const buyValue = averagePrice * holdingAmount;
+            const evalValue = (currentPrice ?? 0) * holdingAmount;
+            const profit = isKRW ? 0 : evalValue - buyValue;
+
+            totalEval += evalValue;
+            if (!isKRW) {
+                totalBuy += buyValue;
+                totalProfit += profit;
+            }
+        });
+
+        setAssetSummary({
+            eval: totalEval,
+            profit: totalProfit,
+            rate: totalBuy !== 0 ? (totalProfit / totalBuy) * 100 : 0
+        });
+    }, [krwBalance, coinPrice, coinInfo, sideProfileOpen]);
 
     const logoutHandler = () => {
         localStorage.removeItem("jwt");  // JWT 삭제
@@ -133,14 +213,18 @@ export default function TopNavbar() {
                             {/* 자산 정보 */}
                             <div className="topNavbar-asset-info">
                                 <p style={{margin: "0", fontSize: "14px"}}>보유자산</p>
-                                <div className="topNavbar-asset-amount">740,103 원</div>
+                                <div className="topNavbar-asset-amount">{formatDecimalsWithCommas(assetSummary.eval)} 원</div>
                                 <div>
                                     <span>평가손익</span>
-                                    <span className="topNavbar-asset-profit">+148,908</span>
+                                    <span className={assetSummary.profit >= 0 ? "topNavbar-asset-profit" : "topNavbar-asset-loss"}>
+                                        {assetSummary.profit >= 0 ? '+' : ''}{formatDecimalsWithCommas(assetSummary.profit)}
+                                    </span>
                                 </div>
                                 <div>
                                     <span>수익률</span>
-                                    <span className="topNavbar-asset-profit">+20.12%</span>
+                                    <span className={assetSummary.rate >= 0 ? "topNavbar-asset-profit" : "topNavbar-asset-loss"}>
+                                        {assetSummary.rate >= 0 ? '+' : ''}{assetSummary.rate.toFixed(2)}%
+                                    </span>
                                 </div>
                                 <Link to="/asset/my_asset" style={{display: "block", textAlign: "right", marginTop: "10px", fontSize: "14px"}}>
                                     내자산 자세히보기 &gt;

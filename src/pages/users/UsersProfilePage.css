@@ -1,0 +1,223 @@
+/* 사용자 프로필 페이지 스타일 */
+.userProfilePage-container {
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.userProfilePage-profile-content {
+  margin-top: 1.25rem;
+}
+
+/* 프로필 헤더 영역 */
+.userProfilePage-profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.userProfilePage-profile-image {
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userProfilePage-profile-info {
+  flex-grow: 1;
+  margin-left: 1.25rem;
+}
+
+.userProfilePage-profile-nickname {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.875rem;
+}
+
+.userProfilePage-follow-button, .userProfilePage-following-button {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.userProfilePage-follow-button {
+  box-sizing: border-box;
+  background-color: #17a2b8;
+  color: white;
+  border: 0.125rem solid white;
+}
+
+.userProfilePage-following-button {
+  box-sizing: border-box;
+  background-color: white;
+  color: black;
+  border: 0.125rem solid black;
+}
+
+.userProfilePage-join-date {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* 통계 영역 */
+.userProfilePage-stats-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.userProfilePage-stat-box {
+  flex-grow: 1;
+  margin: 0 0.3125rem;
+  padding: 0.625rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 0.3125rem;
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
+}
+
+.userProfilePage-stat-box a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.userProfilePage-stat-count {
+  font-weight: bold;
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.userProfilePage-stat-label {
+  font-size: 0.875rem;
+}
+
+/* 자산 정보 카드 */
+.userProfilePage-asset-info-card, .userProfilePage-intro-card {
+  background-color: #fff;
+  border-radius: 0.3125rem;
+  padding: 0.9375rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
+}
+
+.userProfilePage-section-title {
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 0.625rem;
+}
+
+.userProfilePage-asset-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.3125rem 0;
+}
+
+.userProfilePage-asset-detail {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.3125rem 0;
+}
+
+.userProfilePage-profit {
+  color: #dc3545;
+}
+
+.userProfilePage-loss {
+  color: #007bff;
+}
+
+.userProfilePage-intro-content {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 모달 */
+.userProfilePage-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.userProfilePage-modal-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1100; /* 블랙스크린보다 높은 z-index */
+  pointer-events: none; /* 컨테이너 자체는 클릭 이벤트를 통과시킴 */
+}
+
+.userProfilePage-modal-content {
+  background-color: white;
+  width: 100%;
+  max-width: 31.25rem;
+  border-radius: 0.625rem 0.625rem 0 0;
+  padding: 1.25rem;
+  box-shadow: 0 -0.125rem 0.625rem rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+  pointer-events: auto; /* 모달 콘텐츠는 클릭 이벤트 받음 */
+  margin-bottom: 0;
+}
+
+.userProfilePage-modal-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.9375rem;
+}
+
+.userProfilePage-modal-profile-img {
+  width: 3.125rem;
+  height: 3.125rem;
+  border-radius: 50%;
+  margin-bottom: 0.625rem;
+}
+
+.userProfilePage-modal-confirm-text {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 0.9375rem;
+}
+
+.userProfilePage-unfollow-button {
+  width: 100%;
+  padding: 0.625rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 0.3125rem;
+  cursor: pointer;
+  margin-bottom: 0.625rem;
+}
+
+.userProfilePage-cancel-button {
+  width: 100%;
+  padding: 0.625rem;
+  background-color: #f8f9fa;
+  border: 0.0625rem solid #ddd;
+  border-radius: 0.3125rem;
+  cursor: pointer;
+}
+
+/* 애니메이션 */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+} 
