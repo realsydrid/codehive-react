@@ -4,9 +4,9 @@ import {Nav} from "react-bootstrap";
 export default function NewsNavBar(){
     return (
         <Navbar expand='md' bg={"dark"} variant={"dark"} style={{position:"fixed",top:"3rem"
-            ,left:0,marginLeft:0,minWidth:"32rem",width:"100%",maxWidth:"1000rem"}}>
+            ,left:0,marginLeft:0,minWidth:"32rem",width:"100%",maxWidth:"1000rem", zIndex: 1000}}>
             <Navbar.Toggle aria-controls="freePost"/>
-            <Navbar.Collapse id="freePost" style={{marginLeft:"1rem",marginRight:"1rem"}} >
+            <Navbar.Collapse id="freePost" style={{marginLeft:"1rem",marginRight:"1rem", backgroundColor: "#212529", zIndex: 999}} >
                 <Nav
                     style={{ height:'auto' ,maxHeight: '200px',minWidth:"32rem",width:"95%",maxWidth:"100rem"
                         ,display:"flex"

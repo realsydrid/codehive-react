@@ -4,7 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 export default function AssetNavBar(){
     return (
         <Navbar expand='md' bg={"dark"} variant={"dark"} style={{position:"fixed",top:"3rem"
-            ,left:0, zIndex: 1000,marginLeft:0,minWidth:"32rem",width:"100%",maxWidth:"1000rem"}}>
+            ,left:0, zIndex: 1000,marginLeft:0,minWidth:"32rem",width:"100%",maxWidth:"1000rem",}}>
             <Navbar.Toggle aria-controls="freePost"/>
             <Navbar.Collapse id="freePost" style={{marginLeft:"1rem",marginRight:"1rem"}} >
                 <Nav
