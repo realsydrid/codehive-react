@@ -41,6 +41,19 @@ export default function Order({combinedData, orderBook}) {
         setFormActiveTab(tab);
         handleChecked();
         setRadioTab("지정");
+        
+        // 탭 전환 시 입력값 초기화
+        setAmountInputValue(0);
+        setFormattedAmountValue("0");
+        setRawInputValue("0");
+        setTotalPriceInputValue('');
+        setTotalAmount(0);
+        setRatio('');
+        
+        // 현재 시세로 가격 초기화
+        if (combinedData?.trade_price) {
+            setPriceInputValue(combinedData.trade_price);
+        }
     };
     const [priceInputValue, setPriceInputValue] = useState(combinedData?.trade_price || "");
 
@@ -87,7 +100,7 @@ export default function Order({combinedData, orderBook}) {
     const [radioTab, setRadioTab] = useState("지정");
     const [amountInputValue, setAmountInputValue] = useState(0);
     const [formattedAmountValue, setFormattedAmountValue] = useState("0");
-    const [rawInputValue, setRawInputValue] = useState(""); // 원본 입력값 저장
+    const [rawInputValue, setRawInputValue] = useState("0"); // 원본 입력값 저장
     const [amountInputFocused, setAmountInputFocused] = useState(false);
     const [totalPriceInputValue, setTotalPriceInputValue] = useState('');
     
@@ -114,23 +127,14 @@ export default function Order({combinedData, orderBook}) {
         setTotalPriceInputValue(formatDecimalsWithCommas(totalPrice));
     };
     
-    // 수량 입력 필드에 사용할 최대값 계산 함수
-    const getMaxAmount = () => {
-        if (formActiveTab === "매도") {
-            return remainCnt;
-        } else if (formActiveTab === "매수" && priceInputValue && priceInputValue !== 0) {
-            // deposit을 정확히 사용할 수 있도록 소수점 이하 자리수 추가
-            // 여유를 더 크게 설정 (1% -> 2%)
-            return (deposit / priceInputValue) * 0.98;
-        }
-        return Number.MAX_SAFE_INTEGER; // 기본값
-    }
-    
     const handleAmountChange = (e) => {
         // 입력값에서 콤마 제거
         const value = e.target.value.replace(/,/g, '');
         // 숫자 또는 소수점만 허용
         if (value === '' || /^[0-9]*\.?[0-9]*$/.test(value)) {
+            // 사용자가 직접 수량을 수정하면 선택된 비율 초기화
+            setRatio('');
+            
             const numericValue = parseFloat(value) || 0;
             const maxAmount = getMaxAmount();
             
@@ -151,6 +155,7 @@ export default function Order({combinedData, orderBook}) {
             
             // 유효한 입력값만 상태 업데이트
             setAmountInputValue(finalValue);
+            
             // 최대값 초과시 최대값으로 설정, 그렇지 않으면 원본 입력값 유지
             setRawInputValue(useMaxValue ? finalValue.toString() : value);
             
@@ -170,28 +175,11 @@ export default function Order({combinedData, orderBook}) {
     const handleAmountBlur = () => {
         setAmountInputFocused(false);
         
-        // 포커스를 잃을 때 최대값 체크 및 조정
-        const maxAmount = getMaxAmount();
-        let adjustedAmount = amountInputValue;
-        
-        // 최대값을 초과하는 경우 최대값으로 조정
-        if (formActiveTab === "매도" && adjustedAmount > remainCnt) {
-            adjustedAmount = remainCnt;
-        } else if (formActiveTab === "매수" && adjustedAmount > maxAmount) {
-            adjustedAmount = maxAmount;
-        }
-        
-        // 조정된 값으로 업데이트
-        if (adjustedAmount !== amountInputValue) {
-            console.log('최대값 초과 감지! 최대값으로 조정:', adjustedAmount);
-            setAmountInputValue(adjustedAmount);
-            setRawInputValue(adjustedAmount.toString());
-            setFormattedAmountValue(formatDecimalsWithCommas(adjustedAmount));
-            
-            // 총액도 업데이트
-            const totalPrice = Math.round(adjustedAmount * priceInputValue);
-            setTotalPriceInputValue(formatDecimalsWithCommas(totalPrice));
-        }
+        // 포커스를 잃을 때 입력값 정리
+        const numericValue = parseFloat(rawInputValue) || 0;
+        setAmountInputValue(numericValue);
+        setRawInputValue(numericValue.toString());
+        setFormattedAmountValue(formatDecimalsWithCommas(numericValue));
     }
     
     const handlePriceChange = (e) => {
@@ -217,6 +205,8 @@ export default function Order({combinedData, orderBook}) {
         if (!inputValue) {
             setTotalPriceInputValue('');
             setAmountInputValue(0); // 수량도 0으로 설정
+            setFormattedAmountValue("0");
+            setRawInputValue("0");
             return;
         }
         
@@ -230,7 +220,13 @@ export default function Order({combinedData, orderBook}) {
                 // 수량 계산 및 업데이트 (지정가 주문일 때)
                 if (radioTab === "지정" && priceInputValue && priceInputValue !== 0) {
                     const calculatedAmount = deposit / priceInputValue;
-                    setAmountInputValue(calculatedAmount.toString());
+                    setAmountInputValue(calculatedAmount);
+                    setRawInputValue(calculatedAmount.toString());
+                    setFormattedAmountValue(formatDecimalsWithCommas(calculatedAmount));
+                } else if (radioTab === "시장" && combinedData?.trade_price) {
+                    // 시장가일 때는 totalAmount 계산
+                    const estimatedAmount = deposit / combinedData.trade_price;
+                    setTotalAmount(formatDecimalsWithCommas(estimatedAmount, true, 8));
                 }
                 return;
             }
@@ -242,7 +238,9 @@ export default function Order({combinedData, orderBook}) {
                 // 최대 remainCnt만큼만 판매 가능
                 const maxTotal = Math.round(remainCnt * priceInputValue);
                 setTotalPriceInputValue(formatDecimalsWithCommas(maxTotal, false, 0));
-                setAmountInputValue(remainCnt.toString());
+                setAmountInputValue(remainCnt);
+                setRawInputValue(remainCnt.toString());
+                setFormattedAmountValue(formatDecimalsWithCommas(remainCnt));
                 return;
             }
         }
@@ -251,10 +249,16 @@ export default function Order({combinedData, orderBook}) {
         const roundedValue = Math.round(numericValue);
         setTotalPriceInputValue(formatDecimalsWithCommas(roundedValue, false, 0));
         
-        // 수량 계산 및 업데이트 (지정가 주문일 때)
+        // 수량 계산 및 업데이트
         if (radioTab === "지정" && priceInputValue && priceInputValue !== 0) {
             const calculatedAmount = roundedValue / priceInputValue;
-            setAmountInputValue(calculatedAmount.toString());
+            setAmountInputValue(calculatedAmount);
+            setRawInputValue(calculatedAmount.toString());
+            setFormattedAmountValue(formatDecimalsWithCommas(calculatedAmount));
+        } else if (radioTab === "시장" && combinedData?.trade_price) {
+            // 시장가일 때는 totalAmount 계산
+            const estimatedAmount = roundedValue / combinedData.trade_price;
+            setTotalAmount(formatDecimalsWithCommas(estimatedAmount, true, 8));
         }
     };
     useEffect(() => {
@@ -308,10 +312,25 @@ export default function Order({combinedData, orderBook}) {
         });
     }
 
+    // 수량 입력 필드에 사용할 최대값 계산 함수
+    const getMaxAmount = () => {
+        if (formActiveTab === "매도") {
+            return remainCnt;
+        } else if (formActiveTab === "매수" && priceInputValue && priceInputValue !== 0) {
+            // deposit을 정확히 사용할 수 있도록 소수점 이하 자리수 추가
+            // 여유를 더 크게 설정 (1% -> 2%)
+            return (deposit / priceInputValue) * 0.98;
+        }
+        return Number.MAX_SAFE_INTEGER; // 기본값
+    }
+    
     const resetHandler = () => {
-        setTotalPriceInputValue(0);
+        setTotalPriceInputValue('');
         setTotalAmount(0);
         setAmountInputValue(0);
+        setFormattedAmountValue("0");
+        setRawInputValue("0");
+        setRatio('');
     }
 
     const BUY_URL = "http://localhost:8801/api/trade/me";
@@ -432,11 +451,38 @@ export default function Order({combinedData, orderBook}) {
         if (!ratio) return;
         
         const maxValue = getMaxAmount();
-        const newAmount = maxValue * ratio;
+        let newAmount = maxValue * ratio;
+        
+        // 코인 가격에 따라 적절한 소수점 자릿수로 제한
+        let decimalPlaces = 4; // 기본 자릿수
+        
+        if (priceInputValue) {
+            const price = parseFloat(priceInputValue);
+            if (price >= 10000000) decimalPlaces = 2; // 1천만원 이상
+            else if (price >= 1000000) decimalPlaces = 3; // 100만원 이상
+            else if (price >= 100000) decimalPlaces = 4; // 10만원 이상
+            else if (price >= 10000) decimalPlaces = 5; // 1만원 이상
+            else if (price >= 1000) decimalPlaces = 6; // 1천원 이상
+            else decimalPlaces = 8; // 저가 코인
+        }
+        
+        // 소수점 자릿수 제한 적용
+        newAmount = parseFloat(newAmount.toFixed(decimalPlaces));
         
         // 숫자 값과 포맷팅된 값 모두 업데이트
         updateAmountValue(newAmount);
     }
+
+    // 호가창 가격 클릭 시 처리하는 함수
+    const handleOrderBookPriceClick = (price) => {
+        setPriceInputValue(price);
+        
+        // 수량이 입력되어 있을 경우 총액도 함께 계산
+        if (amountInputValue && amountInputValue > 0) {
+            const totalPrice = Math.round(amountInputValue * price);
+            setTotalPriceInputValue(formatDecimalsWithCommas(totalPrice, false, 0));
+        }
+    };
 
     return (
         <>
@@ -447,10 +493,10 @@ export default function Order({combinedData, orderBook}) {
                 >
                     {orderUnits?.slice().reverse().map((unit, index) => (
                         <div key={index} className="order-askPriceDiv">
-                            <div>
+                            <div onClick={() => handleOrderBookPriceClick(unit.ask_price)} style={{ cursor: 'pointer' }}>
                                 <span>{formatDecimalsWithCommas(unit.ask_price, true)}</span>
                             </div>
-                            <div className="order-sizeDiv">
+                            <div onClick={() => handleOrderBookPriceClick(unit.ask_price)} className="order-sizeDiv">
                                 <div style={{width: `${(unit.ask_size / maxSize) * 100}%`}}>-</div>
                                 <span>{formatDecimalsWithCommas(unit.ask_size, true, 3)}</span>
                             </div>
@@ -458,10 +504,10 @@ export default function Order({combinedData, orderBook}) {
                     ))}
                     {orderUnits?.map((unit, index) => (
                         <div key={index} className="order-bidPriceDiv">
-                            <div>
+                            <div onClick={() => handleOrderBookPriceClick(unit.bid_price)} style={{ cursor: 'pointer' }}>
                                 <span>{formatDecimalsWithCommas(unit.bid_price, true)}</span>
                             </div>
-                            <div className="order-sizeDiv">
+                            <div onClick={() => handleOrderBookPriceClick(unit.bid_price)} className="order-sizeDiv">
                                 <div style={{width: `${(unit.bid_size / maxSize) * 100}%`}}>-</div>
                                 <span>{formatDecimalsWithCommas(unit.bid_size, true, 3)}</span>
                             </div>
@@ -512,7 +558,7 @@ export default function Order({combinedData, orderBook}) {
                                                                       onChange={handleAmountChange}
                                                                       onFocus={handleAmountFocus}
                                                                       onBlur={handleAmountBlur}
-                                                                      value={amountInputFocused ? rawInputValue : formattedAmountValue}/>
+                                                                      value={rawInputValue}/>
                                             </p>
                                             <select
                                                 value={ratio}
@@ -538,20 +584,29 @@ export default function Order({combinedData, orderBook}) {
                                             </div>
                                         </div>
                                         <div className="order-totalPriceDiv">
-                                            <div><span>총액</span>
-                                                <div>
-                                                    <input type="text" onChange={handleTotalPriceChange}
-                                                           value={totalPriceInputValue}/><span>원</span>
-                                                </div>
-                                            </div>
+                                            <p>
+                                                <span>총액</span>
+                                                <input 
+                                                    type="text" 
+                                                    onChange={handleTotalPriceChange}
+                                                    value={totalPriceInputValue}
+                                                />
+                                                <span className="order-unit">원</span>
+                                            </p>
                                         </div>
                                     </>
                                 ) : (
                                     <>
-                                        <div>
-                                            <p><span>총액</span><input type="text" onChange={handleTotalPriceChange}
-                                                                     value={totalPriceInputValue}/><span>원</span></p>
-                                            <div>비율</div>
+                                        <div className="order-totalPriceDiv">
+                                            <p>
+                                                <span>총액</span>
+                                                <input 
+                                                    type="text" 
+                                                    onChange={handleTotalPriceChange}
+                                                    value={totalPriceInputValue}
+                                                />
+                                                <span className="order-unit">원</span>
+                                            </p>
                                         </div>
                                         <div className="order-totalPriceAddDiv">
                                             <button type="button" onClick={() => adjustTotalPrice(10000)}>+1만</button>
@@ -559,11 +614,19 @@ export default function Order({combinedData, orderBook}) {
                                             <button type="button" onClick={() => adjustTotalPrice(1000000)}>+100만
                                             </button>
                                         </div>
-                                        <p>
-                                            <span>예상수량</span>
-                                            <input readOnly="readOnly" value={totalAmount}/>
-                                            <span>{combinedData.market ? combinedData.market.split("-")[1] : ""}</span>
-                                        </p>
+                                        <div className="order-amountSelectDiv">
+                                            <p>
+                                                <span>예상수량</span>
+                                                <input 
+                                                    readOnly="readOnly" 
+                                                    value={totalAmount}
+                                                    style={{ paddingRight: "4rem" }}
+                                                />
+                                                <span className="order-unit">
+                                                    {combinedData.market ? combinedData.market.split("-")[1] : ""}
+                                                </span>
+                                            </p>
+                                        </div>
                                     </>
                                 )}
                                 <div className="order-submitBtnDiv">
@@ -607,7 +670,7 @@ export default function Order({combinedData, orderBook}) {
                                                                       onChange={handleAmountChange}
                                                                       onFocus={handleAmountFocus}
                                                                       onBlur={handleAmountBlur}
-                                                                      value={amountInputFocused ? rawInputValue : formattedAmountValue}/>
+                                                                      value={rawInputValue}/>
                                             </p>
                                             <select
                                                 value={ratio}
@@ -633,20 +696,29 @@ export default function Order({combinedData, orderBook}) {
                                             </div>
                                         </div>
                                         <div className="order-totalPriceDiv">
-                                            <div><span>총액</span>
-                                                <div>
-                                                    <input type="text" onChange={handleTotalPriceChange}
-                                                           value={totalPriceInputValue}/><span>원</span>
-                                                </div>
-                                            </div>
+                                            <p>
+                                                <span>총액</span>
+                                                <input 
+                                                    type="text" 
+                                                    onChange={handleTotalPriceChange}
+                                                    value={totalPriceInputValue}
+                                                />
+                                                <span className="order-unit">원</span>
+                                            </p>
                                         </div>
                                     </>
                                 ) : (
                                     <>
-                                        <div>
-                                            <p><span>총액</span><input type="text" onChange={handleTotalPriceChange}
-                                                                     value={totalPriceInputValue}/><span>원</span></p>
-                                            <div>비율</div>
+                                        <div className="order-totalPriceDiv">
+                                            <p>
+                                                <span>총액</span>
+                                                <input 
+                                                    type="text" 
+                                                    onChange={handleTotalPriceChange}
+                                                    value={totalPriceInputValue}
+                                                />
+                                                <span className="order-unit">원</span>
+                                            </p>
                                         </div>
                                         <div className="order-totalPriceAddDiv">
                                             <button type="button" onClick={() => adjustTotalPrice(10000)}>+1만</button>
@@ -654,11 +726,19 @@ export default function Order({combinedData, orderBook}) {
                                             <button type="button" onClick={() => adjustTotalPrice(1000000)}>+100만
                                             </button>
                                         </div>
-                                        <p>
-                                            <span>예상수량</span>
-                                            <input readOnly="readOnly" value={totalAmount}/>
-                                            <span>{combinedData.market ? combinedData.market.split("-")[1] : ""}</span>
-                                        </p>
+                                        <div className="order-amountSelectDiv">
+                                            <p>
+                                                <span>예상수량</span>
+                                                <input 
+                                                    readOnly="readOnly" 
+                                                    value={totalAmount}
+                                                    style={{ paddingRight: "4rem" }}
+                                                />
+                                                <span className="order-unit">
+                                                    {combinedData.market ? combinedData.market.split("-")[1] : ""}
+                                                </span>
+                                            </p>
+                                        </div>
                                     </>
                                 )}
                                 <div className="order-submitBtnDiv">

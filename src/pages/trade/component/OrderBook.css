@@ -61,6 +61,17 @@
   font-size: 0.85rem;
 }
 
+.orderBook-infoContainer p {
+  margin: 0.5rem 0;
+}
+
+.orderBook-date-line {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0 0 0.75rem 1rem;
+  padding: 0;
+}
+
 .orderBook-orderBookContainer {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -158,4 +169,93 @@
 
 .orderBook-orderBookContainer::-webkit-scrollbar {
     display: none;  /* Chrome, Safari, Opera */
+}
+
+.orderBook-date {
+    font-size: 0.75rem;
+    color: #888;
+    margin-left: 0.5rem;
+}
+
+.orderBook-priceInfo {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.orderBook-priceInfo p {
+    margin: 0.25rem 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.orderBook-priceInfo span:first-child {
+    color: #888;
+    margin-right: 0.5rem;
+}
+
+.orderBook-highPrice {
+    color: #e12343;
+}
+
+.orderBook-lowPrice {
+    color: #1261c4;
+}
+
+/* 가격 상승/하락에 따른 색상 */
+.orderBook-centerContainer.RISE .orderBook-currentPrice,
+.orderBook-centerContainer.RISE .orderBook-changeRate {
+  color: #dd3c44; /* 상승시 빨간색 */
+}
+
+.orderBook-centerContainer.FALL .orderBook-currentPrice,
+.orderBook-centerContainer.FALL .orderBook-changeRate {
+  color: #1375ec; /* 하락시 파란색 */
+}
+
+/* 현재가 및 변동률 스타일 */
+.orderBook-currentPrice {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 0 0 0.2rem 0;
+}
+
+.orderBook-changeRate {
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.orderBook-centerContainer.RISE .orderBook-change-icon::before {
+  background: url('/images/icon-up.svg') no-repeat center;
+  background-size: 0.7em 0.55em;
+  content: "";
+  display: inline-block;
+  height: 0.55em;
+  width: 0.7em;
+  margin-right: 0.1em;
+  vertical-align: middle;
+}
+
+.orderBook-centerContainer.FALL .orderBook-change-icon::before {
+  background: url('/images/icon-down.svg') no-repeat center;
+  background-size: 0.7em 0.55em;
+  content: "";
+  display: inline-block;
+  height: 0.55em;
+  width: 0.7em;
+  margin-right: 0.1em;
+  vertical-align: middle;
+}
+
+/* 가격 비교에 따른 색상 */
+.orderBook-price-rise {
+  color: #dd3c44; /* 상승시 빨간색 */
+}
+
+.orderBook-price-fall {
+  color: #1375ec; /* 하락시 파란색 */
 }

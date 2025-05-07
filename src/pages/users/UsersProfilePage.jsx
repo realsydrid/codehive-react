@@ -246,19 +246,19 @@ export default function UsersProfilePage() {
           {/* 통계 정보 */}
           <div className="userProfilePage-stats-container">
             <div className="userProfilePage-stat-box">
-              <Link to={`/users/${userNo}/boards`}>
+              <Link to={`/users/profile/${userNo}/boards`}>
                 <p className="userProfilePage-stat-count">{userProfile.postCount || 0}</p>
                 <span className="userProfilePage-stat-label">게시물</span>
               </Link>
             </div>
             <div className="userProfilePage-stat-box">
-              <Link to={`/users/${userNo}/follow_list?tab=followers`}>
+              <Link to={`/users/profile/${userNo}/followings?tab=followers`}>
                 <p className="userProfilePage-stat-count">{userProfile.followerCount || 0}</p>
                 <span className="userProfilePage-stat-label">팔로워</span>
               </Link>
             </div>
             <div className="userProfilePage-stat-box">
-              <Link to={`/users/${userNo}/follow_list?tab=followings`}>
+              <Link to={`/users/profile/${userNo}/followings?tab=followings`}>
                 <p className="userProfilePage-stat-count">{userProfile.followingCount || 0}</p>
                 <span className="userProfilePage-stat-label">팔로잉</span>
               </Link>

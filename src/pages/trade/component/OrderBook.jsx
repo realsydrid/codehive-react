@@ -64,24 +64,57 @@ export default function OrderBook({market, orderBook, combinedData}) {
                 </div>
 
                 {/* 우측 상단 - 현재가 정보 */}
-                <div className="orderBook-centerContainer">
+                <div className={`orderBook-centerContainer ${combinedData?.change}`}>
                     <p className="orderBook-currentPrice">
-                        {Number(combinedData?.trade_price).toLocaleString()}원
+                        {formatDecimalsWithCommas(combinedData?.trade_price)}원
                     </p>
-                    <p className={`orderBook-changeRate ${combinedData?.change}`}>
-                        {combinedData?.change === 'RISE' ? '+' : ''}
-                        {(combinedData?.signed_change_rate * 100).toFixed(2)}%
+                    <p className={`orderBook-changeRate`}>
+                        <span className="orderBook-change-icon"></span>
+                        <span>
+                            {combinedData?.change === 'RISE' ? '+' : ''}
+                            {(combinedData?.signed_change_rate * 100).toFixed(2)}%
+                        </span>
                     </p>
-                    <p className="orderBook-volume">
-                        거래량 {Number(combinedData?.acc_trade_price_24h / 1e8).toFixed(2)}억
-                    </p>
+                    <div className="orderBook-priceInfo">
+                        <p>
+                            <span>고가:</span> 
+                            <span className="orderBook-highPrice">{formatDecimalsWithCommas(combinedData?.high_price)}원</span>
+                        </p>
+                        <p>
+                            <span>저가:</span> 
+                            <span className="orderBook-lowPrice">{formatDecimalsWithCommas(combinedData?.low_price)}원</span>
+                        </p>
+                        <p>
+                            <span>거래량:</span> {Number(combinedData?.acc_trade_price_24h / 1e8).toFixed(2)}억
+                        </p>
+                    </div>
                 </div>
 
-                {/* 좌측 하단 - 보조 정보 (예시) */}
+                {/* 좌측 하단 - 보조 정보 */}
                 <div className="orderBook-infoContainer">
-                    <p>52주 최고가: - 원</p>
-                    <p>52주 최저가: - 원</p>
-                    <p>전일 종가: - 원</p>
+                    <p>52주 최고가: {combinedData?.highest_52_week_price ? 
+                        <span className="orderBook-price-rise">
+                            {formatDecimalsWithCommas(combinedData.highest_52_week_price)} 원
+                        </span> : '- 원'}</p>
+                    {combinedData?.highest_52_week_date && 
+                        <p className="orderBook-date-line">
+                            ({new Date(combinedData.highest_52_week_date).toLocaleDateString()})
+                        </p>
+                    }
+                    <p>52주 최저가: {combinedData?.lowest_52_week_price ? 
+                        <span className="orderBook-price-fall">
+                            {formatDecimalsWithCommas(combinedData.lowest_52_week_price)} 원
+                        </span> : '- 원'}</p>
+                    {combinedData?.lowest_52_week_date && 
+                        <p className="orderBook-date-line">
+                            ({new Date(combinedData.lowest_52_week_date).toLocaleDateString()})
+                        </p>
+                    }
+                    <p>전일 종가: {combinedData?.prev_closing_price ? 
+                        <span className={combinedData?.trade_price > combinedData?.prev_closing_price ? 'orderBook-price-rise' : 
+                                         combinedData?.trade_price < combinedData?.prev_closing_price ? 'orderBook-price-fall' : ''}>
+                            {formatDecimalsWithCommas(combinedData.prev_closing_price)} 원
+                        </span> : '- 원'}</p>
                 </div>
 
                 {/* 우측 하단 - 매수호가 */}

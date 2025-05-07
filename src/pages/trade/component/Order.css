@@ -119,13 +119,18 @@
     background-color: white;
 }
 
+.order-priceSelectDiv,
+.order-totalPriceDiv,
+.order-totalPriceAddDiv {
+    margin-bottom: 0.75rem;
+}
+
 .order-priceSelectDiv {
     border: 1px solid #e5e5e5;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     box-sizing: border-box;
-    margin-bottom: 0.5rem;
 }
 .order-priceSelectDiv>p{
     margin: 0;
@@ -156,8 +161,16 @@
     border-right: 1px solid white;
 }
 
+.order-totalPriceAddDiv {
+    margin-bottom: 0.5rem;
+}
 .order-totalPriceAddDiv button {
-    background-color: #888888;
+    background-color: #f2f3f4;
+    height: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    border: 1px solid white;
+    border-radius: 5px;
 }
 
 .order-submitBtnDiv{
@@ -204,8 +217,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
-
+    margin-bottom: 0.75rem;
 }
 
 .order-amountSelectDiv>p{
@@ -305,11 +317,15 @@
     padding: 0.25rem;
 }
 
+.order-sellForm {
+    padding: 0.25rem;
+}
+
 .order-depositDiv {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .order-depositDiv > div > span:nth-child(2) {
@@ -319,18 +335,34 @@
 
 .order-totalPriceDiv {
    border: 1px solid #e5e5e5;
+   margin-bottom: 0.5rem;
 }
-.order-totalPriceDiv>div {
-    display: flex;
-    justify-content: space-between;
+
+.order-totalPriceDiv > p {
+    position: relative;
     margin: 0;
     width: 100%;
 }
-.order-totalPriceDiv>div>span {
-    padding : 0 0.2rem
+
+.order-totalPriceDiv > p > span:first-child {
+    position: absolute;
+    top: 0;
+    left: 0.5rem;
 }
-.order-totalPriceDiv input{
+
+.order-totalPriceDiv input {
     border: none;
     text-align: right;
+    width: 100%;
+    padding-right: 2rem; /* 단위 표시를 위한 여백 */
+}
+
+/* 단위(원, 코인명) 표시를 위한 스타일 */
+.order-unit {
+    position: absolute !important;
+    right: 0.5rem !important;
+    top: 0 !important;
+    left: auto !important;
+    color: #666;
 }
 
