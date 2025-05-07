@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import AssetNavBar from "./AssetNavBar.jsx";
 import "./AssetPendingOrderPage.css";
 import Toast from "./Toast.jsx";
+import Swal from "sweetalert2";
 
 const API = {
     BASE: "http://localhost:8801/api/transaction/openOrder",
@@ -66,9 +67,23 @@ export default function AssetPendingOrdersPage() {
     };
 
     const handleCancelAll = async () => {
-        if (!window.confirm("전체 주문을 취소하시겠습니까?")) return;
+        const result = await Swal.fire({
+            title: "전체 주문을 취소할까요?",
+            text: "모든 미체결 주문이 취소됩니다.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니요",
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#aaa",
+        });
+
+        if (!result.isConfirmed) return;
+
         try {
-            await deleteOrder("http://localhost:8801/api/transaction/openOrder/user", { method: "DELETE" });
+            await deleteOrder("http://localhost:8801/api/transaction/openOrder/user", {
+                method: "DELETE",
+            });
             setCombinedData([]);
             setToastMsg("✅ 주문이 취소되었습니다.");
         } catch (e) {
