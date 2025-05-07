@@ -20,9 +20,9 @@ export default function LoadAssetHistory() {
     const [page, setPage] = useState(0);
     const [savedScrollY, setSavedScrollY] = useState(0);
 
+    const token = localStorage.getItem("jwt");
     const buildUrl = () => {
         const params = new URLSearchParams({
-            userNo: "1",
             transactionState: "COMPLETED",
             page: page,
             size: 20
@@ -35,7 +35,11 @@ export default function LoadAssetHistory() {
 
     const { data: coinTransaction, isLoading: loadingTx, isError: errorTx } = useQuery({
         queryKey: ["coinTransaction", filter, page],
-        queryFn: () => fetch(buildUrl()).then(res => res.json()),
+        queryFn: () => fetch(buildUrl(), {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => res.json()),
         keepPreviousData: true
     });
 

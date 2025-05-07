@@ -4,7 +4,15 @@
 
 .pending-orders-title {
     margin-bottom: 1rem;
-    display: none;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.no-orders-msg {
+    text-align: center;
+    color: #777;
+    font-size: 1.1rem;
+    margin-top: 2rem;
 }
 
 .order-card {
@@ -35,6 +43,8 @@
     padding: 0.5rem 1rem;
     cursor: pointer;
     font-weight: bold;
+    display: block;
+    margin: 0 auto 2rem;
 }
 
 .cancel-all-button:hover {
@@ -120,4 +130,49 @@
 .highlight-red {
     color: red;
     font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+    .pending-orders-container {
+        padding: 1rem;
+    }
+
+    .pending-orders-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .cancel-all-button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+
+    .order-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .order-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .cancel-button {
+        width: 100%;
+        padding: 0.6rem;
+        font-size: 1rem;
+    }
+
+    .order-market {
+        font-size: 1.1rem;
+    }
+
+    .no-orders-msg {
+        font-size: 1rem;
+        text-align: center;
+        margin-top: 2rem;
+    }
 }
