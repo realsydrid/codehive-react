@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import NewsNavBar from "./NewsNavBar.jsx";
 import "./NewsFearGreedIndexPage.css";
+import Loading from "../community/CommunityForm/Loading.jsx";
 
 export default function NewsFearGreedIndexPage() {
     const [fngData, setFngData] = useState([]);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchFng = async () => {
@@ -16,6 +18,8 @@ export default function NewsFearGreedIndexPage() {
                 setFngData(json.data.reverse()); // 최근 데이터가 오른쪽에 오게
             } catch (err) {
                 setError(err.message);
+            }finally {
+                setIsLoading(false);
             }
         };
         fetchFng();
@@ -25,6 +29,8 @@ export default function NewsFearGreedIndexPage() {
         const date = new Date(parseInt(timestamp) * 1000);
         return `${date.getMonth() + 1}/${date.getDate()}`; // MM/DD 포맷
     };
+
+    if (isLoading) return <Loading />;
 
     return (
         <>
