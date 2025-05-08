@@ -219,7 +219,7 @@ export default function UsersProfilePage() {
             <div className="userProfilePage-profile-info">
               <p className="userProfilePage-profile-nickname">{userProfile.nickname}</p>
               
-              {userNo !== localStorage.getItem('userNo') && (
+              {userNo !== localStorage.getItem('userName') && (
                 <>
                   {!isFollowing ? (
                     <button 

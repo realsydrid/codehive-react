@@ -6,6 +6,7 @@ import "../CommunityTextArea.css";
 import "../CommunityPost.css";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 import Loading from "../CommunityForm/Loading.jsx";
+import {useQueryClient} from "@tanstack/react-query";
 
 export default function CommunityCreatePostForm(category){
     const [loginUser,]=useContext(UseLoginUserContext)
@@ -14,6 +15,7 @@ export default function CommunityCreatePostForm(category){
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedCategory=category.category;
+    const queryClient = useQueryClient();
     const handleSubmit = async (e) => {
         setIsSubmitting(true);
         try {
@@ -28,8 +30,9 @@ export default function CommunityCreatePostForm(category){
              }
             else{
                 await CreatePost(selectedCategory,postCont);
-            alert("게시글이 성공적으로 등록되었습니다.");
-            setPostCont("");}
+                queryClient.invalidateQueries({queryKey: ['posts', selectedCategory]});
+                alert("게시글이 성공적으로 등록되었습니다.");
+                setPostCont("");}
         } catch (error) {
             alert("게시글 등록 중 오류가 발생했습니다."+error.message);
             setIsSubmitting(false);
