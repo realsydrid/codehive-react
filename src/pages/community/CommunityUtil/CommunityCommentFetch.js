@@ -1,5 +1,5 @@
 const ServerUrl='http://localhost:8801/api/community'
-// const token=localStorage.getItem('jwt');
+const jwt=localStorage.getItem('jwt');
 export async function GetComments(postNo){
     const URL=`${ServerUrl}/comments?postNo=${postNo}`
     const res = await fetch(URL, {
@@ -17,7 +17,7 @@ export async function CreateComments(postNo,commentCont,parentNo){
     const res = await fetch(URL, {
         method: "POST",
         headers: {
-            // Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"},
         body: JSON.stringify({commentCont:commentCont,postNo:postNo,parentNo:parentNo})
     });
@@ -29,7 +29,9 @@ export async function DeleteComment(commentNo){
     const URL=`${ServerUrl}/comments?commentNo=${commentNo}`;
     const res = await fetch(URL, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json"},
+        headers: {
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json"},
     })
     if(!res.ok) throw new Error(res.status+"");
     alert("댓글이 삭제되었습니다.")
@@ -40,7 +42,7 @@ export async function ModifyComment({commentNo,commentCont}){
     const res = await fetch(URL, {
         method: "PUT",
         headers: {
-            // Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"},
         body: JSON.stringify({id:commentNo,commentCont:commentCont})
     })

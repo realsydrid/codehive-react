@@ -8,13 +8,12 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 import Loading from "../CommunityForm/Loading.jsx";
 
 export default function CommunityCreatePostForm(category){
-    // const [loginUser,]=useContext(UseLoginUserContext)
-    // const loginUserNo=loginUser.id;
+    const [loginUser,]=useContext(UseLoginUserContext)
+    const loginUserNo=loginUser?.id;
     const navigate = useNavigate();
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedCategory=category.category;
-    const loginUserNo=1;
     const handleSubmit = async (e) => {
         setIsSubmitting(true);
         try {

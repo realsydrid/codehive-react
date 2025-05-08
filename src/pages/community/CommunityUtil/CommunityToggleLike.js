@@ -1,11 +1,12 @@
 const ServerUrl='http://localhost:8801/api/community/LikeStatus'
-// const jwt=localStorage.getItem('jwt');
+const jwt=localStorage.getItem('jwt');
 
-export async function GetCommentLikeType(postNo,userNo){
-    const URL = `${ServerUrl}/posts/${postNo}/comments?userNo=${userNo}`;
+export async function GetCommentLikeType(postNo){
+    const URL = `${ServerUrl}/posts/${postNo}/comments`;
     const res = await fetch(URL, {
         method: "GET",
         headers: {
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
     });
@@ -20,7 +21,7 @@ export async function ToggleCommentLike({userNo,commentNo,likeType}){
     const res = await fetch(URL, {
         method: "POST",
         headers: {
-            // Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({userNo,commentNo,likeType}),
@@ -32,15 +33,16 @@ export async function ToggleCommentLike({userNo,commentNo,likeType}){
     if (res.status === 204) {
         return {userNo:userNo,commentNo:commentNo,likeType: null };
     }
+    console.log(res.json());
     // 정상 JSON 응답 처리
-    const data = await res.json();
-    return data ?? null;
+    return res ?? null;
 }
 export async function GetPostLikeType(userNo, postNo){
-    const URL = `${ServerUrl}/posts/${postNo}?userNo=${userNo}`;
+    const URL = `${ServerUrl}/posts/${postNo}`;
     const res = await fetch(URL, {
         method: "GET",
         headers: {
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
     });
@@ -59,12 +61,11 @@ export async function TogglePostLike({ userNo, postNo, likeType }) {
     const res = await fetch(URL, {
         method: "POST",
         headers: {
-            // Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify(body),
     });
-
     if (!res.ok) {
         console.error("API 요청 실패:", res.status);
         return null;

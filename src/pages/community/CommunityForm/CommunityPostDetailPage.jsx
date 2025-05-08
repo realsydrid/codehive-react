@@ -11,15 +11,20 @@ import "../CommunityComponents/Component.css"
 import {Button} from "react-bootstrap";
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import CommentComponent from "../CommunityComponents/CommentComponent.jsx";
-
-
+import {useContext, useEffect, useState} from "react";
+import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
 export default function CommunityPostDetailPage() {
     const {postNo} = useParams();
     const navigate = useNavigate();
-    // const [loginUser,]=useContext(UseLoginUserContext)
-    // const loginUserNo=loginUser.id;
-    const loginUserNo = 1; //임시 하드코딩
+    const [loginUser,]=useContext(UseLoginUserContext)
+    const [isLoadingUser, setIsLoadingUser] = useState(true); // 로그인 상태 로딩 상태
+    useEffect(() => {
+        if (loginUser !== null) {
+            setIsLoadingUser(false); // 로그인 정보가 로딩되면 지연 렌더링 해제
+        }
+    }, [loginUser]);
+    const loginUserNo=loginUser?.id;
     const {data: post, isLoading, error} = useQuery({
         queryKey: ["post", postNo],
         queryFn: async () => GetPost(postNo),
@@ -30,7 +35,7 @@ export default function CommunityPostDetailPage() {
 
         function DeletePostBtn({postNo, category}) {
             let DeletePostHandler = async () => {
-                if (!loginUserNo) {
+                if (!isLoadingUser) {
                     alert("로그인 해주세요!")
                     return navigate("/login")
                 }
