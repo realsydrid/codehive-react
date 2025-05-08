@@ -523,9 +523,9 @@ export default function Order({combinedData, orderBook}) {
                         <li onClick={() => handleFormTabClick("매도")}
                             className={formActiveTab === "매도" ? "active" : ""}>매도
                         </li>
-                        <li onClick={() => handleFormTabClick("거래내역")}
-                            className={formActiveTab === "거래내역" ? "active" : ""}>거래내역
-                        </li>
+                        {/*<li onClick={() => handleFormTabClick("거래내역")}*/}
+                        {/*    className={formActiveTab === "거래내역" ? "active" : ""}>거래내역*/}
+                        {/*</li>*/}
                     </ul>
                     {formActiveTab === "매수" &&
                         <div>
