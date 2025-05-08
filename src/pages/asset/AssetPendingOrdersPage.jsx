@@ -5,8 +5,11 @@ import "./AssetPendingOrderPage.css";
 import Toast from "./Toast.jsx";
 import Swal from "sweetalert2";
 
+// const SERVER_URL = "http://localhost:8801"
+const SERVER_URL = "";
+
 const API = {
-    BASE: "http://localhost:8801/api/transaction/openOrder",
+    BASE: `${SERVER_URL}/api/transaction/openOrder`,
     COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false",
 };
 

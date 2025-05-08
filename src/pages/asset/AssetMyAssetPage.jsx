@@ -8,9 +8,12 @@ import { useNavigate, Navigate } from "react-router-dom";
 import Toast from "./Toast.jsx";
 import Swal from "sweetalert2";
 
+// const SERVER_URL = "http://localhost:8801"
+const SERVER_URL = "";
+
 const API = {
-    BASE: "http://localhost:8801/api/transaction",
-    BY_ME: "http://localhost:8801/api/transaction/me",
+    BASE: `${SERVER_URL}/api/transaction`,
+    BY_ME: `${SERVER_URL}/api/transaction/me`,
     COIN_PRICE: "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
     COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false"
 };

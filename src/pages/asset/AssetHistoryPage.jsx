@@ -8,8 +8,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
 
+// const SERVER_URL = "http://localhost:8801"
+const SERVER_URL = "";
+
 const API = {
-    TRANSACTION: "http://localhost:8801/api/transaction",
+    TRANSACTION: `${SERVER_URL}/api/transaction`,
     COIN_INFO: "https://api.upbit.com/v1/market/all?is_details=false",
 };
 

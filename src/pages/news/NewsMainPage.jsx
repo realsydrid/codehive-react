@@ -6,6 +6,9 @@ import NewsNavBar from "./NewsNavBar.jsx";
 import "./NewsMainPage.css";
 import Swal from "sweetalert2";
 
+// const SERVER_URL = "http://localhost:8801"
+const SERVER_URL = "";
+
 export default function NewsMainPage() {
     const [activeTab, setActiveTab] = useState("main");
     const [news, setNews] = useState([]);
@@ -13,7 +16,7 @@ export default function NewsMainPage() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const res = await fetch("http://localhost:8801/api/news/yesterday");
+                const res = await fetch(`${SERVER_URL}/api/news/yesterday`);
                 const json = await res.json();
                 setNews(json);
             } catch (err) {
