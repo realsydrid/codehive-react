@@ -29,7 +29,7 @@ export default function AssetPendingOrdersPage() {
     const { data: pendingOrders, isPending: loadingOrders } = useQuery({
         queryKey: ["pendingOrders"],
         queryFn: async () => {
-            const res = await fetch("http://localhost:8801/api/transaction?transactionState=PENDING", { headers });
+            const res = await fetch(`${SERVER_URL}/api/transaction?transactionState=PENDING`, { headers });
             if (!res.ok) throw new Error("미체결 주문 불러오기 실패");
             return res.json();
         },
@@ -84,7 +84,7 @@ export default function AssetPendingOrdersPage() {
         if (!result.isConfirmed) return;
 
         try {
-            await deleteOrder("http://localhost:8801/api/transaction/openOrder/user", {
+            await deleteOrder(`${SERVER_URL}/api/transaction/openOrder/user`, {
                 method: "DELETE",
             });
             setCombinedData([]);

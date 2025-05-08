@@ -1,4 +1,8 @@
-const BASE_URL = 'http://localhost:8801/api/users';
+
+// const ServerUrl="http://localhost:8801";
+const ServerUrl="";
+
+const BASE_URL = `${ServerUrl}/api/users`;
 
 export async function fetchMyInfo() {
     const jwt = localStorage.getItem("jwt");
