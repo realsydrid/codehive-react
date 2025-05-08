@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./CategoryNews.css";
+import Swal from "sweetalert2";
 
 export default function NewsList({ title, fetchUrl }) {
     const [newsList, setNewsList] = useState([]);
@@ -21,9 +22,22 @@ export default function NewsList({ title, fetchUrl }) {
         fetchNews();
     }, [fetchUrl]);
 
-    const handleNewsClick = (e) => {
-        const confirmed = window.confirm("클릭 시 기사 본문으로 이동합니다. \n 계속 진행하시겠습니까?");
-        if (!confirmed) e.preventDefault();
+    const handleNewsClick = async (e, url) => {
+        e.preventDefault();
+        const result = await Swal.fire({
+            title: "클릭 시 기사 본문으로 이동합니다.",
+            text: "계속 진행하시겠습니까?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#aaa",
+            confirmButtonText: "이동",
+            cancelButtonText: "취소"
+        });
+
+        if (result.isConfirmed) {
+            window.open(url, "_blank", "noopener noreferrer");
+        }
     };
 
     return (

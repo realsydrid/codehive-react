@@ -5,6 +5,8 @@ import "./AssetMyAssetPage.css";
 import PortfolioDonutChart from "./PortfolioChart.jsx";
 import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
 import { useNavigate, Navigate } from "react-router-dom";
+import Toast from "./Toast.jsx";
+import Swal from "sweetalert2";
 
 const API = {
     BASE: "http://localhost:8801/api/transaction",
@@ -20,6 +22,7 @@ export default function AssetMyAssetPage() {
     const [showForm, setShowForm] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [chartData, setChartData] = useState([]);
+    const [toastMsg, setToastMsg] = useState("");
     const navigate = useNavigate();
     const token = localStorage.getItem("jwt");
 
@@ -130,27 +133,43 @@ export default function AssetMyAssetPage() {
     };
 
     const handleReset = async () => {
-        if (!window.confirm("보유 자산을 초기화 하시겠습니까?")) return;
-        try {
+        const result = await Swal.fire({
+            title: "정말 초기화할까요?",
+            text: "이 작업은 되돌릴 수 없습니다!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "초기화",
+            cancelButtonText: "취소"
+        });
+
+        if (result.isConfirmed) {
             await deleteAll();
             await refetchKrwBalance();
-            setCombinedData([]);
-            setSummary({ eval: 0, profit: 0, rate: 0 });
-            setChartData([]);
-        } catch (e) {
-            setErrorMsg(e.message);
+            setToastMsg("보유자산이 초기화되었습니다.");
         }
     };
 
     const handleRegister = async () => {
+        const min = 1_000_000;
+        const max = 100_000_000;
+        const amount = formData.amount;
+
+        // 🔒 클라이언트 유효성 검사
+        if (amount < min || amount > max) {
+            setToastMsg("❗️보유자산은 최소 100만원, 최대 1억원까지만 입력 가능합니다.");
+            return;
+        }
+
         const date = new Date();
         const kstISOString = new Date(date.getTime() + 9 * 60 * 60 * 1000).toISOString().replace("Z", "");
 
         const payload = {
             market: "KRW-KRW",
             transactionType: "BUY",
-            price: formData.amount,
-            transactionCnt: 1.0,
+            price: 1.0,
+            transactionCnt: amount,
             transactionState: "COMPLETED",
             transactionDate: kstISOString
         };
@@ -164,12 +183,16 @@ export default function AssetMyAssetPage() {
                 },
                 body: JSON.stringify(payload)
             });
-            if (!res.ok) throw new Error("자산 등록 실패");
-            alert("보유자산이 등록되었습니다.");
+
+            if (!res.ok) {
+                const errMsg = await res.text();
+                throw new Error(`자산 등록 실패: ${errMsg}`);
+            }
+
+            setToastMsg("보유자산이 등록되었습니다.");
             setShowForm(false);
             await refetchKrwBalance();
         } catch (e) {
-            console.error(e);
             setErrorMsg(e.message);
         }
     };
@@ -204,8 +227,12 @@ export default function AssetMyAssetPage() {
                 <div className="asset-form-overlay">
                     <div className="asset-form">
                         <h2>모의투자 자산 추가하기</h2>
-                        <p>모의투자 자산을 설정하세요</p>
+                        <p>모의투자 자산을 설정하세요!</p>
                         <p className="highlight-red">최소 100만원부터 최대 1억원까지</p>
+                        <p>원하는 금액을 설정하여 자산을 추가할 수 있습니다.</p>
+                        <p className="highlight-red">자산 초기화 시 보유 코인 및 자산은 전부<br/>
+                        0원이 되며,</p>
+                        <p>다시 자산을 추가해야 합니다.</p>
                         <label>
                             보유자산 금액 (원):
                             <input
@@ -244,6 +271,7 @@ export default function AssetMyAssetPage() {
                     </div>
                 ))}
             </div>
+            {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
         </>
     );
 }

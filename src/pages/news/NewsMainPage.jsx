@@ -4,6 +4,7 @@ import GlobalNews from "./GlobalNews.jsx";
 import ExchangeRate from "./ExchangeRate.jsx";
 import NewsNavBar from "./NewsNavBar.jsx";
 import "./NewsMainPage.css";
+import Swal from "sweetalert2";
 
 export default function NewsMainPage() {
     const [activeTab, setActiveTab] = useState("main");
@@ -23,12 +24,23 @@ export default function NewsMainPage() {
         fetchNews();
     }, []);
 
-    const handleNewsClick = (url) => {
-        const confirmMove = window.confirm("클릭 시 기사 본문으로 이동합니다.\n계속 진행하시겠습니까?");
-        if (confirmMove) {
+    const handleNewsClick = async (url) => {
+        const result = await Swal.fire({
+            title: "클릭 시 기사 본문으로 이동합니다.",
+            text: "계속 진행하시겠습니까?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#aaa",
+            confirmButtonText: "이동",
+            cancelButtonText: "취소"
+        });
+
+        if (result.isConfirmed) {
             window.open(url, "_blank");
         }
     };
+
 
     return (
         <>
