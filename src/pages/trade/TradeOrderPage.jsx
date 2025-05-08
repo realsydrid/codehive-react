@@ -13,6 +13,8 @@ import CoinTitle from "./component/CoinTitle.jsx";
 export default function TradeOrderPage() {
     const params = useParams();
     const market = params.market;
+    // const ServerUrl="http://localhost:8801";
+    const ServerUrl="";
 
     const {data: currencyPrice, isLoading: isCurrencyPriceLoading, error: currencyPriceError} = useQuery({
         queryKey: ["currencyPrice", market],

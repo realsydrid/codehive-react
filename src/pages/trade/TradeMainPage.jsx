@@ -14,6 +14,8 @@ export default function TradeMainPage() {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
+    // const ServerUrl="http://localhost:8801";
+    const ServerUrl="";
 
     const [activeTab, setActiveTab] = useState("원화");
 
@@ -52,7 +54,7 @@ export default function TradeMainPage() {
         staleTime: 0,
         retry: 3,
         queryFn: async () => {
-            const res = await fetch("http://localhost:8801/api/asset/me", {
+            const res = await fetch(`${ServerUrl}/api/asset/me`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
                 }
@@ -67,7 +69,7 @@ export default function TradeMainPage() {
         enabled: activeTab === "관심",
         staleTime: 1000 * 60 * 5,
         queryFn: async () => {
-            const res = await fetch("http://localhost:8801/api/favorites/me", {
+            const res = await fetch(`${ServerUrl}/api/favorites/me`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
                 }

@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import './UsersProfileFollowings.css';
-
+// const ServerUrl="http://localhost:8801";
+const ServerUrl="";
 const API = {
-  USERS: "http://localhost:8801/api/users"
+  USERS: `${ServerUrl}/api/users`
 };
 
 export default function UsersProfileFollowingsPage() {
@@ -41,7 +42,7 @@ export default function UsersProfileFollowingsPage() {
         const token = localStorage.getItem('jwt');
         if (!token) return;
         
-        const response = await fetch("http://localhost:8801/api/users/me", {
+        const response = await fetch(`${ServerUrl}/api/users/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

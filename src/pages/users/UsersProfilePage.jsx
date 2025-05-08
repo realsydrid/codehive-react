@@ -5,12 +5,14 @@ import "./UsersProfilePage.css";
 import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
 
 // API 상수
+// const ServerUrl="http://localhost:8801";
+const ServerUrl="";
 const API = {
-  BASE: "http://localhost:8801/api",
-  TRANSACTION: "http://localhost:8801/api/transaction/me",
+  BASE: `${ServerUrl}/api`,
+  TRANSACTION: `${ServerUrl}/api/transaction/me`,
   COIN_PRICE: "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
   COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false",
-  USERS: "http://localhost:8801/api/users"
+  USERS: `${ServerUrl}/api/users`
 };
 
 export default function UsersProfilePage() {

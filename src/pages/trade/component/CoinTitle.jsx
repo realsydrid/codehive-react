@@ -3,6 +3,9 @@ import './CointTitle.css'
 import {useState, useEffect} from "react";
 
 export default function coinTitle({combinedData}) {
+
+    // const ServerUrl="http://localhost:8801";
+    const ServerUrl="";
     const [btnActive, setBtnActive] = useState(true);
     
     // 초기 로딩 시 즐겨찾기 상태 확인
@@ -15,7 +18,7 @@ export default function coinTitle({combinedData}) {
     // 해당 코인이 즐겨찾기에 있는지 확인
     const checkFavoriteStatus = async () => {
         try {
-            const response = await fetch("http://localhost:8801/api/favorites/me", {
+            const response = await fetch(`${ServerUrl}/api/favorites/me`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
                 }
@@ -47,7 +50,7 @@ export default function coinTitle({combinedData}) {
             // btnActive가 true면 관심 추가(POST), false면 관심 제거(DELETE)
             const method = btnActive ? "POST" : "DELETE";
             
-            const response = await fetch("http://localhost:8801/api/favorites/me", {
+            const response = await fetch(`${ServerUrl}/api/favorites/me`, {
                 method: method,
                 headers: {
                     "Content-Type": "application/json",

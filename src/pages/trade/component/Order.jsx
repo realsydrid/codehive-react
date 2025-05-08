@@ -332,8 +332,9 @@ export default function Order({combinedData, orderBook}) {
         setRawInputValue("0");
         setRatio('');
     }
-
-    const BUY_URL = "http://localhost:8801/api/trade/me";
+// const ServerUrl="http://localhost:8801";
+    const ServerUrl="";
+    const BUY_URL = `${ServerUrl}/api/trade/me`;
     const handleBuyRequest = async () => {
         if (
             (radioTab === "지정" && (!priceInputValue || !amountInputValue)) ||
@@ -392,7 +393,7 @@ export default function Order({combinedData, orderBook}) {
     // 잔액(deposit) 정보 가져오기 함수
     const fetchDeposit = async () => {
         try {
-            const response = await fetch("http://localhost:8801/api/trade/me/deposit", {
+            const response = await fetch(`${ServerUrl}/api/trade/me/deposit`, {
                 method: "GET",
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
@@ -415,7 +416,7 @@ export default function Order({combinedData, orderBook}) {
         if (!combinedData?.market) return;
         
         try {
-            const response = await fetch(`http://localhost:8801/api/trade/me/remainCnt?market=${combinedData.market}`, {
+            const response = await fetch(`${ServerUrl}/api/trade/me/remainCnt?market=${combinedData.market}`, {
                 method: "GET",
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwt')}`

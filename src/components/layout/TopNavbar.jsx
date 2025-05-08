@@ -4,7 +4,7 @@ import {useContext, useState, useEffect} from "react";
 import {useQuery} from "@tanstack/react-query";
 import "./TopNavbar.css"
 import {formatDecimalsWithCommas} from "../../utils/numberFormat.js";
-// const ServerUrl="http://localhost:8801/";
+// const ServerUrl="http://localhost:8801";
 const ServerUrl="";
 const API = {
     BASE: `${ServerUrl}/api/transaction`,
@@ -26,7 +26,7 @@ export default function TopNavbar() {
             // 로그인 상태인 경우에만 API 호출
             if (!loginUser) return null;
             
-            const response = await fetch('http://localhost:8801/api/users/me/summary', {
+            const response = await fetch(`${ServerUrl}/api/users/me/summary`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
                 }

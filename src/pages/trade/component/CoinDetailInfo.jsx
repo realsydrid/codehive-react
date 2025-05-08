@@ -5,6 +5,8 @@ import "./CoinDetailInfo.css"
 import {Link} from "react-router-dom";
 
 export default function CoinDetailInfo({combinedData, market}) {
+    // const ServerUrl="http://localhost:8801";
+    const ServerUrl="";
 
     const [englishName, setEnglishName] = useState("");
 
@@ -15,7 +17,7 @@ export default function CoinDetailInfo({combinedData, market}) {
         gcTime: 1000 * 60 * 60,
         retry: 1,
         queryFn: async () => {
-            const URL = `http://localhost:8801/api/proxy/coingecko/coins/list`
+            const URL = `${ServerUrl}/api/proxy/coingecko/coins/list`
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);

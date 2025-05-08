@@ -5,11 +5,13 @@ const OrderNotificationContext = createContext();
 export const useOrderNotification = () => useContext(OrderNotificationContext);
 
 export const OrderNotificationProvider = ({ children }) => {
+  // const ServerUrl="http://localhost:8801";
+  const ServerUrl="";
   const [notifications, setNotifications] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentNotification, setCurrentNotification] = useState(null);
   const [lastOrderState, setLastOrderState] = useState({});
-  
+
   // 로컬 스토리지에서 마지막 주문 상태 불러오기
   useEffect(() => {
     const savedState = localStorage.getItem('lastOrderState');
@@ -26,7 +28,7 @@ export const OrderNotificationProvider = ({ children }) => {
       if (!token) return;
       
       // 주문 목록 가져오기 - transactionState=PENDING 파라미터로 미체결 주문만 조회
-      const response = await fetch('http://localhost:8801/api/transaction?transactionState=PENDING', {
+      const response = await fetch(`${ServerUrl}/api/transaction?transactionState=PENDING`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -50,7 +52,7 @@ export const OrderNotificationProvider = ({ children }) => {
         const newNotifications = [];
         
         // 모든 주문 목록 가져오기 (체결 상태 포함)
-        const allOrdersResponse = await fetch('http://localhost:8801/api/transaction', {
+        const allOrdersResponse = await fetch(`${ServerUrl}/api/transaction`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
