@@ -7,8 +7,9 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
-import {SERVER_URL} from "../news/Api.js.jsx";
 
+// const SERVER_URL = "http://localhost:8801"
+const SERVER_URL = "";
 
 const API = {
     TRANSACTION: `${SERVER_URL}/api/transaction`,

@@ -4,8 +4,9 @@ import AssetNavBar from "./AssetNavBar.jsx";
 import "./AssetPendingOrderPage.css";
 import Toast from "./Toast.jsx";
 import Swal from "sweetalert2";
-import {SERVER_URL} from "../news/Api.js.jsx";
 
+// const SERVER_URL = "http://localhost:8801"
+const SERVER_URL = "";
 
 const API = {
     BASE: `${SERVER_URL}/api/transaction/openOrder`,
