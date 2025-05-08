@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import './SettingsNotificationsPage.css';
-
+const serverURL="http://localhost:8801"
+// const serverURL="";
 export default function SettingsNotificationsPage() {
     const [settings, setSettings] = useState({
         volatilityYn: false,
@@ -15,7 +16,7 @@ export default function SettingsNotificationsPage() {
     });
 
     useEffect(() => {
-        fetch('http://localhost:8801/api/notifications/me')
+        fetch(`${serverURL}/api/notifications/me`)
             .then(res => res.json())
             .then(data => setSettings(data))
             .catch(err => console.error('불러오기 실패:', err));
@@ -25,7 +26,7 @@ export default function SettingsNotificationsPage() {
         const updatedValue = !settings[field];
         setSettings(prev => ({ ...prev, [field]: updatedValue }));
 
-        fetch('http://localhost:8801/api/notifications/me', {
+        fetch(`${serverURL}/api/notifications/me`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ field, value: updatedValue })
@@ -39,7 +40,7 @@ export default function SettingsNotificationsPage() {
         Object.keys(settings).forEach(key => updatedSettings[key] = newValue);
         setSettings(updatedSettings);
 
-        fetch('http://localhost:8801/api/notifications/me', {
+        fetch(`${serverURL}/api/notifications/me`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ field: "allNotifications", value: newValue })
