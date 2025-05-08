@@ -4,6 +4,8 @@ import './PriceInfo.css'
 import {formatDecimalsWithCommas, formatPercentWithDecimals} from "../../../utils/numberFormat.js";
 
 export default function PriceInfo({market,change}) {
+    // const ServerUrl="http://localhost:8801";
+    const ServerUrl="";
     const [timeTab, setTimeTab] = useState("seconds")
 
 
@@ -20,7 +22,7 @@ export default function PriceInfo({market,change}) {
         refetchInterval: timeTab === "seconds" ? 500 : 500,
         refetchIntervalInBackground: false,
         queryFn: async () => {
-            const URL = `https://api.upbit.com/v1/candles/${timeTab}?market=${market}&count=200`;
+            const URL = `${ServerUrl}/api/proxy/upbit/candles/${timeTab}?market=${market}&count=200`;
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);
@@ -39,7 +41,7 @@ export default function PriceInfo({market,change}) {
         retry: 1,
         refetchInterval : 500,
         queryFn: async () => {
-            const URL= `https://api.upbit.com/v1/trades/ticks?market=${market}&count=200`
+            const URL= `${ServerUrl}/api/proxy/upbit/trades/ticks?market=${market}&count=200`
             try{
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);

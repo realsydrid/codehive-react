@@ -13,7 +13,7 @@ const SERVER_URL = "";
 
 const API = {
     TRANSACTION: `${SERVER_URL}/api/transaction`,
-    COIN_INFO: "https://api.upbit.com/v1/market/all?is_details=false",
+    COIN_INFO: `${SERVER_URL}/api/proxy/upbit/market/all?is_details=false`,
 };
 
 export default function LoadAssetHistory() {

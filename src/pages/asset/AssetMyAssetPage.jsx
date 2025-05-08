@@ -14,8 +14,8 @@ const SERVER_URL = "";
 const API = {
     BASE: `${SERVER_URL}/api/transaction`,
     BY_ME: `${SERVER_URL}/api/transaction/me`,
-    COIN_PRICE: "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
-    COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false"
+    COIN_PRICE: `${SERVER_URL}/api/proxy/upbit/ticker/all?quote_currencies=KRW,BTC`,
+    COIN_NAME: `${SERVER_URL}/api/proxy/upbit/market/all?is_details=false`
 };
 
 export default function AssetMyAssetPage() {

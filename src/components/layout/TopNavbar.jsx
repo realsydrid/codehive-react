@@ -9,8 +9,8 @@ const ServerUrl="";
 const API = {
     BASE: `${ServerUrl}/api/transaction`,
     BY_ME: `${ServerUrl}/api/transaction/me`,
-    COIN_PRICE: "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
-    COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false"
+    COIN_PRICE: `${ServerUrl}/ticker/all?quote_currencies=KRW,BTC`,
+    COIN_NAME: `${ServerUrl}/market/all?is_details=false`
 };
 
 export default function TopNavbar() {

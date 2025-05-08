@@ -10,7 +10,7 @@ const SERVER_URL = "";
 
 const API = {
     BASE: `${SERVER_URL}/api/transaction/openOrder`,
-    COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false",
+    COIN_NAME: `${SERVER_URL}/api/proxy/upbit/market/all?is_details=false`,
 };
 
 export default function AssetPendingOrdersPage() {

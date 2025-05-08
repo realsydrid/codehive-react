@@ -10,8 +10,8 @@ const ServerUrl="";
 const API = {
   BASE: `${ServerUrl}/api`,
   TRANSACTION: `${ServerUrl}/api/transaction/me`,
-  COIN_PRICE: "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW,BTC",
-  COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false",
+  COIN_PRICE: `${ServerUrl}/api/proxy/upbit/ticker/all?quote_currencies=KRW,BTC`,
+  COIN_NAME: `${ServerUrl}/api/proxy/upbit/market/all?is_details=false`,
   USERS: `${ServerUrl}/api/users`
 };
 

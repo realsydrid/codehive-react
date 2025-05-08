@@ -26,7 +26,7 @@ export default function TradeMainPage() {
         retry: 1,
         refetchInterval: 500,
         queryFn: async () => {
-            const URL = "https://api.upbit.com/v1/ticker/all?quote_currencies=KRW";
+            const URL = `${ServerUrl}/api/proxy/upbit/ticker/all?quote_currencies=KRW`;
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);
@@ -42,7 +42,7 @@ export default function TradeMainPage() {
         queryKey: ["coinInfo"],
         staleTime: 1000 * 60 * 60,
         queryFn: async () => {
-            const res = await fetch("https://api.upbit.com/v1/market/all?isDetails=false");
+            const res = await fetch(`${ServerUrl}/api/proxy/upbit/market/all?isDetails=false`);
             if (!res.ok) throw new Error(res.status + "");
             return res.json();
         }

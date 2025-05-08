@@ -24,7 +24,7 @@ export default function TradeOrderPage() {
         refetchInterval: 500,
         enabled: !!market,
         queryFn: async () => {
-            const URL = "https://api.upbit.com/v1/ticker?markets=" + market;
+            const URL = `${ServerUrl}/api/proxy/upbit/ticker?markets=` + market;
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);
@@ -44,7 +44,7 @@ export default function TradeOrderPage() {
         refetchInterval: 500,
         enabled: !!market,
         queryFn: async () => {
-            const URL = "https://api.upbit.com/v1/orderbook?markets=" + market;
+            const URL = `/api/proxy/upbit/orderbook?markets=` + market;
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);
@@ -62,7 +62,7 @@ export default function TradeOrderPage() {
         cacheTime: 1000 * 60 * 10,
         retry: 1,
         queryFn: async () => {
-            const URL = "https://api.upbit.com/v1/market/all?is_details=false"
+            const URL = `${ServerUrl}/api/proxy/upbit/market/all?is_details=false`
             try {
                 await new Promise(resolve => setTimeout(resolve, 0));
                 const res = await fetch(URL);

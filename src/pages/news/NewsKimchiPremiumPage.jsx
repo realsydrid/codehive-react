@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import NewsNavBar from "./NewsNavBar.jsx";
 import "./NewsKimchiPremiumPage.css";
 
-const UPBIT_API = "https://api.upbit.com/v1/ticker?markets=";
-const BINANCE_API = "https://api.binance.com/api/v3/ticker/price";
-const COIN_NAME_API = "https://api.upbit.com/v1/market/all?isDetails=false";
+// const ServerUrl="http://localhost:8801";
+const ServerUrl="";
+const UPBIT_API = `${ServerUrl}/api/proxy/upbit/ticker?markets=`;
+const BINANCE_API = `${ServerUrl}/api/proxy/binance/v3/ticker/price`;
+const COIN_NAME_API = `${ServerUrl}/api/proxy/upbit/market/all?isDetails=false`;
 const EXCHANGE_API = import.meta.env.VITE_EXCHANGE_API_URL;
 
 const formatPrice = (price) => {

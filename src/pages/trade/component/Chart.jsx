@@ -27,6 +27,8 @@ export default function Chart({ market, combinedData }) {
     const candleSeriesRef = useRef(null);
     const isInitializedRef = useRef(false);
     const [averagePrice, setAveragePrice] = useState(combinedData.trade_price);
+    // const ServerUrl="http://localhost:8801";
+    const ServerUrl="";
 
     // 가격에 따라 적절한 소수점 자릿수 결정
     const getPricePrecision = (price) => {
@@ -59,7 +61,7 @@ export default function Chart({ market, combinedData }) {
     // 선택된 시간 프레임에 따라 API URL 구성
     const getApiUrl = () => {
         const tf = TIME_FRAMES[timeFrame];
-        return `https://api.upbit.com/v1/candles/${tf.value}?market=${market}&count=${tf.count}`;
+        return `${ServerUrl}/api/proxy/upbit/candles/${tf.value}?market=${market}&count=${tf.count}`;
     };
 
     // 캔들 데이터 가져오기
