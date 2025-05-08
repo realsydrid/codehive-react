@@ -1,0 +1,19 @@
+.LoginPage-customGoogleBtn{
+    background-color: white;
+    width: 100%;
+    border: 1px solid rgba(136, 136, 136, 0.5);
+    border-radius: 5px;
+}
+.google-img {
+    width: 1.5rem;
+position: absolute;
+    top: 0.7rem;
+    left: 1rem;
+}
+.LoginPage-customP{
+    position: relative;
+}
+
+.googleLoginDisplayNone{
+    display: none;
+}

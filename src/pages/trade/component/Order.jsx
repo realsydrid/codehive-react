@@ -370,7 +370,7 @@ export default function Order({combinedData, orderBook}) {
             });
 
             if (response.ok) {
-                alert("거래성공!@!@");
+                alert("거래성공");
                 resetHandler();
                 console.log(transaction);
                 

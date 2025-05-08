@@ -1,5 +1,6 @@
 import Navbar from "react-bootstrap/Navbar";
 import {Nav} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 export default function NewsNavBar(){
     return (
@@ -16,10 +17,10 @@ export default function NewsNavBar(){
                     navbarScroll
                 >
 
-                    <Nav.Link href="/news" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>뉴스 홈</Nav.Link>
-                    <Nav.Link href="/news/fear-greed-index" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>공포탐욕 인덱스</Nav.Link>
-                    <Nav.Link href="/news/kimchi-premium" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>가격 프리미엄</Nav.Link>
-                    <Nav.Link href="/news/market-cap-ranking" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>시가총액</Nav.Link>
+                    <Nav.Link as={Link} to="/news" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>뉴스 홈</Nav.Link>
+                    <Nav.Link as={Link} to="/news/fear-greed-index" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>공포탐욕 인덱스</Nav.Link>
+                    <Nav.Link as={Link} to="/news/kimchi-premium" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>가격 프리미엄</Nav.Link>
+                    <Nav.Link as={Link} to="/news/market-cap-ranking" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>시가총액</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
