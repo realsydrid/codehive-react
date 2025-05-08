@@ -15,11 +15,13 @@ export default function LoginPage() {
         const {name, value} = e.target;
         setUser(prev => ({...prev, [name]: value}));
     };
+    const ServerUrl = "";
+    // const ServerUrl = "http://localhost:8801"
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:8801/user/jwt/login.do", {
+            const response = await fetch(`${ServerUrl}/user/jwt/login.do`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(user)
@@ -81,7 +83,7 @@ export default function LoginPage() {
                                 oauth: "GOOGLE"
                             };
 
-                            const response = await fetch("http://localhost:8801/user/oauth/login.do", {
+                            const response = await fetch(`${ServerUrl}/user/oauth/login.do`, {
                                 method: "POST",
                                 headers: {"Content-Type": "application/json"},
                                 body: JSON.stringify(socialUser)
