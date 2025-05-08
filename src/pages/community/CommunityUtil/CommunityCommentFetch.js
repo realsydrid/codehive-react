@@ -1,4 +1,5 @@
-const ServerUrl='http://localhost:8801/api/community'
+// const ServerUrl='http://localhost:8801/api/community'
+const ServerUrl='/api/community'
 const jwt=localStorage.getItem('jwt');
 export async function GetComments(postNo){
     const URL=`${ServerUrl}/comments?postNo=${postNo}`

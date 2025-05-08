@@ -1,4 +1,5 @@
-const ServerUrl='http://localhost:8801/api/community/LikeStatus'
+// const ServerUrl='http://localhost:8801/api/community/LikeStatus'
+const ServerUrl='/api/community/LikeStatus'
 const jwt=localStorage.getItem('jwt');
 
 export async function GetCommentLikeType(postNo){
