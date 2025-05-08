@@ -201,7 +201,7 @@ export default function UsersProfilePage() {
   if (isLoading) return <div className="container text-center my-5">로딩 중...</div>;
   if (error) return <div className="container text-center my-5 text-danger">오류: {error.message}</div>;
   
-  return (
+    return (
     <div className="userProfilePage-container">
       <h1>유저정보</h1>
       

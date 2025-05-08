@@ -161,7 +161,7 @@ export default function BottomNavbar() {
                         {/* 설정 */}
                         <li className="bottomNavbar-menu-section">
                             <div className="bottomNavbar-menu-title">
-                                <Link to="/settings" onClick={closeMenu}>
+                                <Link className="bottomNavbar-menu-setting" to="/settings" onClick={closeMenu}>
                                     <span>설정</span>
                                 </Link>
                             </div>

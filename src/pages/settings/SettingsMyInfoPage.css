@@ -1,0 +1,284 @@
+.SettingsMyInfoPage-container span {
+    margin: 0;
+    padding: 0;
+}
+
+.SettingsMyInfoPage-container {
+    max-width: 50rem;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    color: #333;
+    line-height: 1.5;
+    background-color: #fff;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+    border-radius: 0.5rem;
+}
+
+.SettingsMyInfoPage-title {
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    border-bottom: 0.0625rem solid #ecf0f1;
+    padding-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.SettingsMyInfoPage-row {
+    display: flex;
+    align-items: center;
+    margin:0 0 1.2rem 0;
+    padding: 0.8rem 0;
+    border-bottom: 0.0625rem solid #f5f5f5;
+    transition: background-color 0.2s ease;
+
+
+}
+
+.SettingsMyInfoPage-row:hover {
+    background-color: #f9f9f9;
+}
+
+.SettingsMyInfoPage-label {
+        font-weight: bold;
+    font-size: 1.2rem;
+    min-width: 6.25rem;
+    color: #7f8c8d;
+    margin-right: 1rem;
+    text-align: left;
+
+}
+
+/* 버튼 공통 스타일 */
+.SettingsMyInfoPage-button {
+    background-color: #f5f5f5;
+    border: 0.0625rem solid #ddd;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.SettingsMyInfoPage-button:hover {
+    background-color: #e8e8e8;
+    transform: translateY(-0.0625rem);
+}
+
+.SettingsMyInfoPage-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 저장 버튼 스타일 */
+.SettingsMyInfoPage-saveButton {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+.SettingsMyInfoPage-saveButton:hover {
+    background-color: #2980b9;
+}
+
+/* 취소 버튼 스타일 */
+.SettingsMyInfoPage-cancelButton {
+    background-color: #f8f8f8;
+    color: #7f8c8d;
+    border-color: #dfe6e9;
+}
+
+.SettingsMyInfoPage-cancelButton:hover {
+    background-color: #dfe6e9;
+    color: #2c3e50;
+}
+
+/* 편집 모드 전환 버튼 스타일 */
+.SettingsMyInfoPage-editButton {
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: #34495e;
+    cursor: pointer;
+    width: auto;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.SettingsMyInfoPage-editButton:hover {
+    color: #3498db;
+    text-decoration: underline;
+    background: transparent;
+    transform: translateX(0.125rem);
+}
+
+.SettingsMyInfoPage-editButton:disabled {
+    cursor: default;
+    opacity: 0.7;
+    transform: none;
+}
+
+/* 입력 필드 스타일 */
+.SettingsMyInfoPage-input {
+    padding: 0.5rem;
+    border: 0.0625rem solid #ddd;
+    border-radius: 0.25rem;
+    margin-right: 0.5rem;
+    min-width: 15.625rem;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.SettingsMyInfoPage-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.125rem rgba(52, 152, 219, 0.25);
+}
+
+/* 링크 스타일 */
+.SettingsMyInfoPage-link {
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.SettingsMyInfoPage-link:hover {
+    text-decoration: underline;
+}
+
+/* 프로필 이미지 스타일 */
+.SettingsMyInfoPage-profileImg {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 0.0625rem solid #eee;
+    margin-left: 1.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.SettingsMyInfoPage-profileImg:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+/* 회원 탈퇴 링크 컨테이너 */
+.SettingsMyInfoPage-withdrawalContainer {
+    margin-top: 2rem;
+    border-top: 0.0625rem solid #ecf0f1;
+    padding-top: 1.5rem;
+    border-bottom: none;
+    text-align: center;
+}
+
+/* 회원 탈퇴 링크 */
+.SettingsMyInfoPage-withdrawalLink {
+    color: #e74c3c;
+    font-weight: 500;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.SettingsMyInfoPage-withdrawalLink:hover {
+    color: #c0392b;
+    text-decoration: none;
+    background-color: #fff0f0;
+}
+
+/* 자기소개 입력 필드 */
+.SettingsMyInfoPage-introInput {
+    width: 21.875rem;
+    min-height: 3.75rem;
+}
+
+/* 로딩 및 오류 상태 스타일 */
+.SettingsMyInfoPage-loading {
+    text-align: center;
+    padding: 2rem;
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.SettingsMyInfoPage-error {
+    padding: 1rem;
+    background-color: #fee;
+    border-left: 0.25rem solid #e74c3c;
+    color: #e74c3c;
+    margin-bottom: 1.5rem;
+    border-radius: 0.25rem;
+}
+
+.SettingsMyInfoPage-refreshButton {
+    display: block;
+    margin: 1.5rem auto;
+    padding: 0.5rem 1.5rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.SettingsMyInfoPage-refreshButton:hover {
+    background-color: #2980b9;
+}
+
+/* 읽기 전용 값 스타일 */
+.SettingsMyInfoPage-value {
+    color: #2c3e50;
+    font-weight: 400;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 48rem) {
+    .SettingsMyInfoPage-container {
+        padding: 1rem;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .SettingsMyInfoPage-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .SettingsMyInfoPage-label {
+        margin-bottom: 0.5rem;
+        color: #34495e;
+    }
+
+    .SettingsMyInfoPage-input {
+        width: 100%;
+        min-width: unset;
+        margin-bottom: 0.5rem;
+    }
+
+    .SettingsMyInfoPage-profileImg {
+        margin-left: 0;
+        margin-top: 0.625rem;
+    }
+
+    .SettingsMyInfoPage-button {
+        margin-top: 0.5rem;
+    }
+
+    .SettingsMyInfoPage-title {
+        font-size: 1.5rem;
+    }
+
+    .SettingsMyInfoPage-introInput {
+        width: 100%;
+    }
+}
+

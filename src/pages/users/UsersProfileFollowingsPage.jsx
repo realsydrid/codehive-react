@@ -294,7 +294,7 @@ export default function UsersProfileFollowingsPage() {
     }
   }, [activeTab]);
 
-  return (
+    return (
     <div className="userProfileFollowings-container">
       <div className="userProfileFollowings-header">
         <h2>{userName}님의 팔로우 목록</h2>

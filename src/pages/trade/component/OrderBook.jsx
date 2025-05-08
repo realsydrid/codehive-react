@@ -71,8 +71,8 @@ export default function OrderBook({market, orderBook, combinedData}) {
                     <p className={`orderBook-changeRate`}>
                         <span className="orderBook-change-icon"></span>
                         <span>
-                            {combinedData?.change === 'RISE' ? '+' : ''}
-                            {(combinedData?.signed_change_rate * 100).toFixed(2)}%
+                        {combinedData?.change === 'RISE' ? '+' : ''}
+                        {(combinedData?.signed_change_rate * 100).toFixed(2)}%
                         </span>
                     </p>
                     <div className="orderBook-priceInfo">
@@ -86,7 +86,7 @@ export default function OrderBook({market, orderBook, combinedData}) {
                         </p>
                         <p>
                             <span>거래량:</span> {Number(combinedData?.acc_trade_price_24h / 1e8).toFixed(2)}억
-                        </p>
+                    </p>
                     </div>
                 </div>
 

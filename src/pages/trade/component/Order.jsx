@@ -323,7 +323,7 @@ export default function Order({combinedData, orderBook}) {
         }
         return Number.MAX_SAFE_INTEGER; // 기본값
     }
-    
+
     const resetHandler = () => {
         setTotalPriceInputValue('');
         setTotalAmount(0);
@@ -615,8 +615,8 @@ export default function Order({combinedData, orderBook}) {
                                             </button>
                                         </div>
                                         <div className="order-amountSelectDiv">
-                                            <p>
-                                                <span>예상수량</span>
+                                        <p>
+                                            <span>예상수량</span>
                                                 <input 
                                                     readOnly="readOnly" 
                                                     value={totalAmount}
@@ -625,7 +625,7 @@ export default function Order({combinedData, orderBook}) {
                                                 <span className="order-unit">
                                                     {combinedData.market ? combinedData.market.split("-")[1] : ""}
                                                 </span>
-                                            </p>
+                                        </p>
                                         </div>
                                     </>
                                 )}
@@ -727,8 +727,8 @@ export default function Order({combinedData, orderBook}) {
                                             </button>
                                         </div>
                                         <div className="order-amountSelectDiv">
-                                            <p>
-                                                <span>예상수량</span>
+                                        <p>
+                                            <span>예상수량</span>
                                                 <input 
                                                     readOnly="readOnly" 
                                                     value={totalAmount}
@@ -737,7 +737,7 @@ export default function Order({combinedData, orderBook}) {
                                                 <span className="order-unit">
                                                     {combinedData.market ? combinedData.market.split("-")[1] : ""}
                                                 </span>
-                                            </p>
+                                        </p>
                                         </div>
                                     </>
                                 )}
