@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
+const serverURL="http://localhost:8801"
+// const serverURL="";
 export default function SettingsNotificationsTargetPricePage() {
     const [alerts, setAlerts] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8801/api/target_price_alerts/me')
+        fetch(`${serverURL}/api/target_price_alerts/me`)
             .then(res => res.json())
             .then(data => setAlerts(data.targetPriceAlerts))
             .catch(err => console.error('알림 로드 실패:', err));
@@ -20,7 +21,7 @@ export default function SettingsNotificationsTargetPricePage() {
         const currentlyEnabled = isEnabled(market);
         const updatedMarket = toggleMarketName(market, !currentlyEnabled);
 
-        fetch('http://localhost:8801/api/target_price_alerts/me', {
+        fetch(`${serverURL}/api/target_price_alerts/me`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id, enabled: !currentlyEnabled }),
