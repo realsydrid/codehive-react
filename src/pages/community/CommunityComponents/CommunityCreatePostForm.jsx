@@ -42,7 +42,7 @@ export default function CommunityCreatePostForm(category){
 
     return (
         <div>
-            <Form onSubmit={handleSubmit}>
+            <Form>
                 <Form.Group controlId="postCont" className={"CreatePostForm"}>
                     <Form.Label column={"lg"} style={{display:"none",width:"95%",maxWidth:"100rem",minWidth:"20rem"}}>게시글 내용</Form.Label>
                     <Form.Control
@@ -59,7 +59,7 @@ export default function CommunityCreatePostForm(category){
                     <span>
                     </span>
                     <span>
-                    <Button variant="primary" type="submit" disabled={isSubmitting}>
+                    <Button variant="primary" type="button" disabled={isSubmitting} onClick={handleSubmit}>
                         {isSubmitting ? "게시 중..." : "게시하기"}
                     </Button>
                         </span>
