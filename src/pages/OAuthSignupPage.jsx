@@ -4,6 +4,8 @@ import { UseLoginUserContext } from "../provider/LoginUserProvider.jsx";
 import SettingsPrivacyPolicyPage from "./settings/SettingsPrivacyPolicyPage.jsx";
 
 export default function OAuthSignupPage() {
+    const ServerUrl = "";
+    // const ServerUrl = "http://localhost:8801"
     const navigate = useNavigate();
     const [, setLoginUser] = useContext(UseLoginUserContext);
     const location = useLocation();
@@ -66,8 +68,8 @@ export default function OAuthSignupPage() {
         if (!value) return;
 
         let url;
-        if (field === "nickname") url = `http://localhost:8801/user/check-nickname?nickname=${value}`;
-        else if (field === "email") url = `http://localhost:8801/user/check-email?email=${value}`;
+        if (field === "nickname") url = `${ServerUrl}/user/check-nickname?nickname=${value}`;
+        else if (field === "email") url = `${ServerUrl}/user/check-email?email=${value}`;
 
         try {
             const res = await fetch(url);
@@ -104,7 +106,7 @@ export default function OAuthSignupPage() {
         }
 
         try {
-            const response = await fetch("http://localhost:8801/user/oauth/signup.do", {
+            const response = await fetch(`${ServerUrl}/user/oauth/signup.do`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),

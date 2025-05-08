@@ -4,6 +4,8 @@ import { UseLoginUserContext } from "../provider/LoginUserProvider.jsx";
 import SettingsPrivacyPolicyPage from "./settings/SettingsPrivacyPolicyPage.jsx";
 
 export default function SignupPage() {
+    const ServerUrl = "";
+    // const ServerUrl = "http://localhost:8801"
     const navigate = useNavigate();
     const [, setLoginUser] = useContext(UseLoginUserContext);
     const [showPrivacyTerms, setShowPrivacyTerms] = useState(false);
@@ -61,9 +63,9 @@ export default function SignupPage() {
         if (field === "password" && (value.length < 4 || value.length > 12)) return;
 
         let url;
-        if (field === "userId") url = `http://localhost:8801/user/check-userid?userId=${value}`;
-        else if (field === "nickname") url = `http://localhost:8801/user/check-nickname?nickname=${value}`;
-        else if (field === "email") url = `http://localhost:8801/user/check-email?email=${value}`;
+        if (field === "userId") url = `${ServerUrl}/user/check-userid?userId=${value}`;
+        else if (field === "nickname") url = `${ServerUrl}/user/check-nickname?nickname=${value}`;
+        else if (field === "email") url = `${ServerUrl}/user/check-email?email=${value}`;
 
         try {
             const response = await fetch(url);
@@ -104,7 +106,7 @@ export default function SignupPage() {
         }
 
         try {
-            const response = await fetch("http://localhost:8801/user/jwt/signup.do", {
+            const response = await fetch(`${ServerUrl}/user/jwt/signup.do`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form)
