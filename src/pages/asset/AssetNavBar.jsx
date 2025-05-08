@@ -1,5 +1,6 @@
 import {Nav} from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
+import {Link} from "react-router-dom";
 
 export default function AssetNavBar(){
     return (
@@ -15,9 +16,9 @@ export default function AssetNavBar(){
                         whiteSpace: "nowrap"}}
                     navbarScroll
                 >
-                    <Nav.Link href="/asset/my-asset" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>보유자산</Nav.Link>
-                    <Nav.Link href="/asset/history" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>거래내역</Nav.Link>
-                    <Nav.Link href="/asset/pending-orders" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>미체결</Nav.Link>
+                    <Nav.Link as={Link} to="/asset/my-asset" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>보유자산</Nav.Link>
+                    <Nav.Link as={Link} to="/asset/history" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>거래내역</Nav.Link>
+                    <Nav.Link as={Link} to="/asset/pending-orders" style={{color:"white",margin:"0.5rem 2rem 0.2rem 2rem"}}>미체결</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
