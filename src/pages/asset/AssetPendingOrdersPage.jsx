@@ -4,9 +4,11 @@ import AssetNavBar from "./AssetNavBar.jsx";
 import "./AssetPendingOrderPage.css";
 import Toast from "./Toast.jsx";
 import Swal from "sweetalert2";
+import {SERVER_URL} from "../news/Api.js.jsx";
+
 
 const API = {
-    BASE: "http://localhost:8801/api/transaction/openOrder",
+    BASE: `${SERVER_URL}/api/transaction/openOrder`,
     COIN_NAME: "https://api.upbit.com/v1/market/all?is_details=false",
 };
 

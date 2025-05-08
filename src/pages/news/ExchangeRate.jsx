@@ -1,13 +1,15 @@
 import NewsNavBar from "./NewsNavBar.jsx";
 import "./CategoryNews.css";
 import NewsList from "./NewsList.jsx";
+import {SERVER_URL} from "./Api.js.jsx";
+
 
 export default function ExchangeRate() {
     return (
         <>
             <NewsNavBar />
             <NewsList title="금리/환율"
-                      fetchUrl="http://localhost:8801/api/news?category=finance"
+                      fetchUrl={`${SERVER_URL}/api/news?category=finance`}
                       />
         </>
     );

@@ -7,9 +7,11 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { formatDecimalsWithCommas } from "../../utils/numberFormat.js";
+import {SERVER_URL} from "../news/Api.js.jsx";
+
 
 const API = {
-    TRANSACTION: "http://localhost:8801/api/transaction",
+    TRANSACTION: `${SERVER_URL}/api/transaction`,
     COIN_INFO: "https://api.upbit.com/v1/market/all?is_details=false",
 };
 
