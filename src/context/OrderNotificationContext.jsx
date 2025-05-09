@@ -113,10 +113,20 @@ export const OrderNotificationProvider = ({ children }) => {
   // 주기적으로 주문 상태 확인 (1초마다)
   useEffect(() => {
     const intervalId = setInterval(checkOrderCompletion, 1000);
-    
-    // 컴포넌트 언마운트 시 인터벌 정리
     return () => clearInterval(intervalId);
-  }, [lastOrderState]);
+  }, []);
+  
+  // 모달 자동 닫힘 타이머 추가
+  useEffect(() => {
+    if (showModal && currentNotification) {
+      const timer = setTimeout(() => {
+        setShowModal(false);
+        setCurrentNotification(null);
+      }, 5000); // 5초 후 자동 닫힘
+      
+      return () => clearTimeout(timer);
+    }
+  }, [showModal, currentNotification]);
   
   // 알림 모달 닫기
   const closeNotification = () => {
