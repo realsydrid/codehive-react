@@ -30,7 +30,8 @@ export default function CommentForm
     const [commentCont, setCommentCont] = useState(initialContent);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault()
         if (!loginUserNo) {
             alert("로그인이 필요합니다.");
             return;
