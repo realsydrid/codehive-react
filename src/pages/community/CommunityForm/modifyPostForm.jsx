@@ -9,6 +9,7 @@ export default function CommunityModifyPostForm({post,onSubmit}){
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
     const handleSubmit = (e) => {
+        e.preventDefault();
         const formData = new FormData(e.target);
         const postCont = formData.get("postCont");
         onSubmit(postCont);
