@@ -33,33 +33,26 @@ export default function CommunityPostDetailPage() {
         retry: 1,
     })
 
-        function DeletePostBtn({postNo, category}) {
-            let DeletePostHandler = async () => {
-                if (!isLoadingUser) {
-                    alert("로그인 해주세요!")
-                    return navigate("/login")
-                }
-                // else if(userNo!==loginUserNo){
-                //     alert("삭제할 권한이 없습니다!");
-                //     return;
-                // }
-                if (!confirm('정말 게시글을 삭제하시겠습니까?')) {
-                    alert('게시글 삭제를 취소합니다.');
-                    return;
-                }
-                try {
-                    await DeletePost(postNo);
-                    alert('게시글이 삭제되었습니다.');
-                    navigate(`/community/${category}`);
-                } catch (error) {
-                    alert(error + ' 오류로 인해 게시글 삭제에 실패했습니다.');
-                }
+    async function DeletePostHandler({postNo, category}) {
+            if (!loginUser) {
+                alert("로그인 해주세요!")
+                return navigate("/login")
             }
-            return (
-                <Button variant="danger" onClick={DeletePostHandler}>
-                    삭제하기
-                </Button>
-            )
+            // else if(userNo!==loginUserNo){
+            //     alert("삭제할 권한이 없습니다!");
+            //     return;
+            // }
+            if (!confirm('정말 게시글을 삭제하시겠습니까?')) {
+                alert('게시글 삭제를 취소합니다.');
+                return;
+            }
+            try {
+                await DeletePost(postNo);
+                alert('게시글이 삭제되었습니다.');
+                navigate(`/community/${category}`);
+            } catch (error) {
+                alert(error + ' 오류로 인해 게시글 삭제에 실패했습니다.');
+            }
         }
     const categoryText={
         "free": "자유",
@@ -96,8 +89,10 @@ export default function CommunityPostDetailPage() {
                                     paddingTop: "2rem",
                                     display: Number(loginUserNo) === Number(post.userNo) ? "flex" : "none"
                                 }}>
-                                        <DeletePostBtn postNo={post.id} userNo={loginUserNo}
-                                                       category={post.category}/>&nbsp;
+                                <Button variant="danger" onClick={()=>DeletePostHandler({postNo: post.id,category:post.category})}>
+                                    삭제하기
+                                </Button>
+
                                     <Link to={`/community/posts/${post.id}/modify`}><Button variant="primary"
                                                                                             type={"button"}>수정하기</Button></Link>
                                     </span>
