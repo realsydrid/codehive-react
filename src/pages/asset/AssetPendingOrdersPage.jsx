@@ -33,8 +33,9 @@ export default function AssetPendingOrdersPage() {
             if (!res.ok) throw new Error("미체결 주문 불러오기 실패");
             return res.json();
         },
-        staleTime: 300000,
-        cacheTime: 600000,
+        staleTime: 5000,
+        refetchInterval: 3000,
+        refetchIntervalInBackground: true,
         retry: 1
     });
 
