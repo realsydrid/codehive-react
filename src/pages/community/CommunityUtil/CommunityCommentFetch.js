@@ -23,7 +23,6 @@ export async function CreateComments(postNo,commentCont,parentNo){
         body: JSON.stringify({commentCont:commentCont,postNo:postNo,parentNo:parentNo})
     });
     if(!res.ok) throw new Error(res.status+"");
-    await GetComments(postNo)
     const data= await res.json();
     return data
 }

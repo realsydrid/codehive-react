@@ -9,8 +9,8 @@ export default function CommunityTitle({category}) {
     }
     return (
         <div style={{marginTop:"3rem"}}>
-        <Link to="/community/search" className={"Community-SearchLink"}>
-            <img src="/images/searchIcon.png" alt="" width={"15rem"} height={"15rem"} style={{marginTop:"0.25rem"}}/>게시글 검색</Link>
+        {/*<Link to="/community/search" className={"Community-SearchLink"}>*/}
+        {/*    <img src="/images/searchIcon.png" alt="" width={"15rem"} height={"15rem"} style={{marginTop:"0.25rem"}}/>게시글 검색</Link>*/}
         <h1>{categoryMsg[category]}</h1>
         </div>
     )

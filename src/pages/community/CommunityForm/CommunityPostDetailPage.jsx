@@ -13,12 +13,14 @@ import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import CommentComponent from "../CommunityComponents/CommentComponent.jsx";
 import {useContext, useEffect, useState} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
+import {useQueryClient} from "@tanstack/react-query";
 
 export default function CommunityPostDetailPage() {
     const {postNo} = useParams();
     const navigate = useNavigate();
     const [loginUser,]=useContext(UseLoginUserContext)
     const [isLoadingUser, setIsLoadingUser] = useState(true); // 로그인 상태 로딩 상태
+    const queryClient = useQueryClient();
     useEffect(() => {
         if (loginUser !== null) {
             setIsLoadingUser(false); // 로그인 정보가 로딩되면 지연 렌더링 해제
@@ -114,7 +116,9 @@ export default function CommunityPostDetailPage() {
                                     </div>
                                 </div>
                             </div>
-                            <CommunityCommentForm postNo={postNo} userNo={loginUserNo} category={"Create"}/>
+                            <CommunityCommentForm postNo={postNo} userNo={loginUserNo} category={"Create"} onSuccess={() => {
+                                queryClient.invalidateQueries(["commentDto", postNo]);
+                            }}/>
                             <br/>
                             <CommentComponent postNo={postNo}/>
                         </div>
