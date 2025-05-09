@@ -114,15 +114,14 @@ export const OrderNotificationProvider = ({ children }) => {
   useEffect(() => {
     const intervalId = setInterval(checkOrderCompletion, 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [lastOrderState]);
   
-  // 모달 자동 닫힘 타이머 추가
+  // 별도의 useEffect로 모달 자동 닫힘만 추가
   useEffect(() => {
     if (showModal && currentNotification) {
       const timer = setTimeout(() => {
         setShowModal(false);
-        setCurrentNotification(null);
-      }, 5000); // 5초 후 자동 닫힘
+      }, 5000); // 5초 후 자동으로 모달 닫힘
       
       return () => clearTimeout(timer);
     }
