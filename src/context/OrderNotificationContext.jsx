@@ -11,6 +11,7 @@ export const OrderNotificationProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentNotification, setCurrentNotification] = useState(null);
   const [lastOrderState, setLastOrderState] = useState({});
+  const [processedAlerts, setProcessedAlerts] = useState([]);
 
   // 로컬 스토리지에서 마지막 주문 상태 불러오기
   useEffect(() => {
@@ -45,7 +46,9 @@ export const OrderNotificationProvider = ({ children }) => {
         .map(([id, _]) => parseInt(id));
       
       // 이전에 미체결이었는데 현재 목록에 없는 주문 (= 체결된 주문)
-      const completedIds = prevPendingIds.filter(id => !pendingIds.includes(id));
+      const completedIds = prevPendingIds.filter(id => 
+        !pendingIds.includes(id) && !processedAlerts.includes(id)
+      );
       
       if (completedIds.length > 0) {
         // 체결된 주문에 대한 상세 정보 가져오기
@@ -86,6 +89,12 @@ export const OrderNotificationProvider = ({ children }) => {
           setCurrentNotification(newNotifications[0]);
           setShowModal(true);
           
+          // 처리된 알림 ID 저장
+          setProcessedAlerts(prev => [
+            ...prev, 
+            ...newNotifications.map(notif => notif.id)
+          ]);
+          
           // 브라우저 알림 (허용된 경우)
           if (Notification.permission === 'granted') {
             new Notification('주문 체결 알림', {
@@ -118,14 +127,13 @@ export const OrderNotificationProvider = ({ children }) => {
   
   // 별도의 useEffect로 모달 자동 닫힘만 추가
   useEffect(() => {
-    if (showModal && currentNotification) {
+    if (showModal) {
       const timer = setTimeout(() => {
         setShowModal(false);
-      }, 5000); // 5초 후 자동으로 모달 닫힘
-      
+      }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [showModal, currentNotification]);
+  }, [showModal]);
   
   // 알림 모달 닫기
   const closeNotification = () => {
