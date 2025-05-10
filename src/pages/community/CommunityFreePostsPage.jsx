@@ -1,8 +1,8 @@
 import CommunityNavbar from "./CommunityComponents/CommunityNavbar.jsx";
-import CommunityCreatePostForm from "./CommunityComponents/CommunityCreatePostForm.jsx";
+import CommunityCreatePostForm from "./CommunityForm/CommunityCreatePostForm.jsx";
 import "./CommunityPost.css";
 import "./CommunityTextArea.css";
-import CommunityTitle from "./CommunityForm/CommunityTitle.jsx";
+import CommunityTitle from "./CommunityComponents/CommunityTitle.jsx";
 import CommunityPostsPage from "./CommunityForm/CommunityPostPage.jsx";
 
 

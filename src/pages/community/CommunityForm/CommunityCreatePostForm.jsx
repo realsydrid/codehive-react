@@ -1,23 +1,31 @@
 import {CreatePost} from "../CommunityUtil/CommunityPostFetch.js";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
 import "../CommunityTextArea.css";
 import "../CommunityPost.css";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
-import Loading from "../CommunityForm/Loading.jsx";
 import {useQueryClient} from "@tanstack/react-query";
 
-export default function CommunityCreatePostForm(category){
+export default function CommunityCreatePostForm({category}){
     const [loginUser,]=useContext(UseLoginUserContext)
+    const [isLogin,setIsLogin]=useState(true);
     const loginUserNo=loginUser?.id;
+    useEffect(() => {
+        setIsLogin(false);
+    },[loginUser])
     const navigate = useNavigate();
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const selectedCategory=category.category;
     const queryClient = useQueryClient();
     const handleSubmit = async (e) => {
+        e.preventDefault();
         setIsSubmitting(true);
+        if(!loginUser){
+            alert("로그인 해주세요!")
+            setIsSubmitting(false);
+            return;
+        }
         try {
              if(postCont === ""){
                 setIsSubmitting(false);
@@ -29,27 +37,27 @@ export default function CommunityCreatePostForm(category){
                  return navigate("/login")
              }
             else{
-                await CreatePost(selectedCategory,postCont);
-                queryClient.invalidateQueries({queryKey: ['posts', selectedCategory]});
-                alert("게시글이 성공적으로 등록되었습니다.");
-                setPostCont("");}
+                setPostCont("");
+                await CreatePost(category,postCont);
+                alert("게시글이 성공적으로 등록되었습니다.");}
         } catch (error) {
+            e.preventDefault();
             alert("게시글 등록 중 오류가 발생했습니다."+error.message);
             setIsSubmitting(false);
-            e.preventDefault()
         } finally {
+            e.preventDefault();
             setIsSubmitting(false);
+            setIsLogin(false);
+            queryClient.invalidateQueries({queryKey: ['posts', category]});
         }
     };
-
-
     return (
         <div>
             <Form>
                 <Form.Group controlId="postCont" className={"CreatePostForm"}>
                     <Form.Label column={"lg"} style={{display:"none",width:"95%",maxWidth:"100rem",minWidth:"20rem"}}>게시글 내용</Form.Label>
                     <Form.Control
-                        style={{width:"95%",minWidth:"20rem",maxWidth:"100rem",resize:"none", minHeight: "20rem",marginBottom:"2px"}}
+                        className="Community-EditPostContTextArea"
                         as="textarea"
                         name="postCont"
                         placeholder="안녕하세요! 자유롭게 이용하시되 이용정첵에 위배되는 글을 게시할 경우에는 제재가 될 수 있습니다."
@@ -62,8 +70,8 @@ export default function CommunityCreatePostForm(category){
                     <span>
                     </span>
                     <span>
-                    <Button variant="primary" type="button" disabled={isSubmitting} onClick={handleSubmit}>
-                        {isSubmitting ? "게시 중..." : "게시하기"}
+                    <Button variant="primary" type="button" disabled={isSubmitting || isLogin} onClick={handleSubmit}>
+                        {/*{isSubmitting= }*/}1111
                     </Button>
                         </span>
                 </div>

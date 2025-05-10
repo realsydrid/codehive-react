@@ -1,11 +1,3 @@
-.CreatePostForm{
-    width:100%;
-    min-width: 20rem;
-    max-width: 100rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 .CreatePost,.CreateComment{
     width: 100%;
     min-width: 20rem;

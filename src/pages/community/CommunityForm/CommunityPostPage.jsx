@@ -11,12 +11,6 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 // 캐싱된 좋아요 싫어요 데이터도 서버에서 불러옴과 동시에 Optimistic Update 구조도 불러와짐
 export default function CommunityPostsPage({category}){
     const [loginUser,]=useContext(UseLoginUserContext);
-    const [isLoadingUser, setIsLoadingUser] = useState(true); // 로그인 상태 로딩 상태
-    useEffect(() => {
-        if (loginUser !== null) {
-            setIsLoadingUser(false); // 로그인 정보가 로딩되면 지연 렌더링 해제
-        }
-    }, [loginUser]);
     const loginUserNo=loginUser?.id
 
         const {
@@ -30,7 +24,7 @@ export default function CommunityPostsPage({category}){
 
         const posts = data?.pages.flatMap(page => page.content) ?? [];
 
-        if (isError) return <div>에러가 발생했습니다.</div>;
+        if (isError) return <div>오류가 발생했습니다.</div>;
         if (isLoading && posts.length === 0) return <Loading />;
 
         return (
@@ -46,7 +40,7 @@ export default function CommunityPostsPage({category}){
                     display: "flex",
                     alignItems: "center"
                 }}
-                className="infiniteScrolls"
+                className="Community-infiniteScrolls"
                 endMessage={
                     <p style={{ textAlign: "center" }}>
                         <b>더 이상 게시글이 없습니다.</b>
@@ -54,7 +48,7 @@ export default function CommunityPostsPage({category}){
                 }
             >
                 {posts.map((post) => (
-                    <div key={post.id} className={"infiniteScrolls"}>
+                    <div key={post.id} className={"Community-infiniteScrolls"}>
                         <div className={"Community-UserInfo"}>
                             <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
                                 <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
@@ -74,7 +68,7 @@ export default function CommunityPostsPage({category}){
                                     <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                                         <span style={{display: "flex", alignItems: "flex-end"}}>{post.postCreatedAt}</span>
                                         <div style={{display: "flex", alignItems: "flex-end", flexDirection: "column"}} >
-                                            <PostLikeComponent loginUserNo={loginUserNo} post={post} disabled={isLoadingUser}/>
+                                            <PostLikeComponent loginUserNo={loginUserNo} post={post} disabled={!loginUser}/>
                                             <span style={{display: "flex", alignItems: "flex-end"}}>댓글 {post.commentCount}개</span>
                                         </div>
                                     </div>

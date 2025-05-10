@@ -1,24 +1,16 @@
 import {Link, useNavigate} from "react-router-dom";
 import {Button} from "react-bootstrap";
-import {CommentLikeComponent} from "./LikeCommentComponent.jsx";
+import {CommentLikeComponent} from "../CommunityComponents/LikeCommentComponent.jsx";
 import {useContext, useEffect, useMemo, useState} from "react";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {DeleteComment, GetComments} from "../CommunityUtil/CommunityCommentFetch.js";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
-import "./Component.css"
-import CommentForm from "../CommunityForm/CommunityCommentTextManagement.jsx";
+import "../CommunityComponents/Component.css"
+import CommentForm from "./CommunityCommentTextManagement.jsx";
 
-export default function CommentComponent(props) {
+export default function CommentListForm(props) {
     const [loginUser, ] = useContext(UseLoginUserContext);
-    const [isLoadingUser, setIsLoadingUser] = useState(true);
     const queryClient = useQueryClient();
-
-    useEffect(() => {
-        if (loginUser !== null) {
-            setIsLoadingUser(false);
-        }
-    }, [loginUser]);
-
     const loginUserNo = loginUser?.id;
     const postNo = props.postNo;
     const [openReplyForm, setOpenReplyForm] = useState(null);
@@ -67,7 +59,7 @@ export default function CommentComponent(props) {
     const {data: commentDto} = useQuery({
         queryKey: ["commentDto", postNo],
         queryFn: async () => await GetComments(postNo),
-        staleTime: 0,
+        staleTime: 18000,
         cacheTime: 1000 * 60 * 10,
         retry: 1,
     });
@@ -108,7 +100,7 @@ export default function CommentComponent(props) {
                                     }}>
                                         <DeleteCommentBtn commentNo={Number(c.id)} postNo={c.postNo}/>
                                         &nbsp;<Button variant="primary" onClick={() => handleEditClick(c.id)}
-                                                      disabled={isLoadingUser}>
+                                                      disabled={!loginUser}>
                                         {editingComment === c.id ? "수정 취소" : "수정하기"}
                                     </Button>
                                     </div>
@@ -131,7 +123,7 @@ export default function CommentComponent(props) {
                                 style={{display: "flex", justifyContent: "space-between", flexDirection: "row"}}>
                                 <span className="Community-ButtonFlex">
                                     <Button variant="secondary" onClick={() => handleReplyClick(c.id)}
-                                            disabled={isLoadingUser}>
+                                            disabled={!loginUser}>
                                         {openReplyForm === c.id ? "대댓글 작성 취소" : "대댓글 달기"}
                                     </Button>
 
@@ -193,7 +185,7 @@ export default function CommentComponent(props) {
                                         </div>
                                         <h3>{reply.commentCont}</h3>
                                         <CommentLikeComponent comment={reply} loginUserNo={loginUserNo}
-                                                              disabled={isLoadingUser}/>
+                                                              disabled={!loginUser}/>
                                     </div>
                                 ))}
                         </div>

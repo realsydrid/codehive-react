@@ -1,21 +1,21 @@
-.AllPosts,.InfiniteScrolls{
+.Community-AllPosts,.Community-InfiniteScrolls{
     flex-direction: column;
     min-width: 20rem;
     max-width: 100rem;
     width: 98%;
     align-items: center;
 }
-.InfiniteScrolls{
+.Community-InfiniteScrolls{
     min-width: 20rem;
     max-width: 100rem;
     width: 98%;
     align-items: center;
 }
-.AllPosts{
+.Community-AllPosts{
     justify-content: center;
     align-items: center;
 }
-.infiniteScrolls{
+.Community-infiniteScrolls{
     width:95%;
     display: flex!important;
     flex-direction: column!important;

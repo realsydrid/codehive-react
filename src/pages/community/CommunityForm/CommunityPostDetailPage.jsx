@@ -1,6 +1,5 @@
-import {DeletePost, GetPost} from "../CommunityUtil/CommunityPostFetch.js";
-import {DeleteComment, GetComments} from "../CommunityUtil/CommunityCommentFetch.js";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import { GetPost} from "../CommunityUtil/CommunityPostFetch.js";
+import {Link, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import Loading from "./Loading.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
@@ -8,62 +7,31 @@ import CommunityNavbar from "../CommunityComponents/CommunityNavbar.jsx";
 import CommunityCommentForm from "./CommunityCommentTextManagement.jsx";
 import "../CommunityPost.css";
 import "../CommunityComponents/Component.css"
-import {Button} from "react-bootstrap";
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
-import CommentComponent from "../CommunityComponents/CommentComponent.jsx";
-import {useContext, useEffect, useState} from "react";
+import CommentListForm from "./CommentListForm.jsx";
+import {useContext} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
-import {useQueryClient} from "@tanstack/react-query";
+import {DeletePostBtn} from "../CommunityComponents/ButtonComponent.jsx";
 
 export default function CommunityPostDetailPage() {
     const {postNo} = useParams();
-    const navigate = useNavigate();
     const [loginUser,]=useContext(UseLoginUserContext)
-    const [isLoadingUser, setIsLoadingUser] = useState(true); // 로그인 상태 로딩 상태
-    const queryClient = useQueryClient();
-    useEffect(() => {
-        if (loginUser !== null) {
-            setIsLoadingUser(false); // 로그인 정보가 로딩되면 지연 렌더링 해제
-        }
-    }, [loginUser]);
     const loginUserNo=loginUser?.id;
     const {data: post, isLoading, error} = useQuery({
         queryKey: ["post", postNo],
         queryFn: async () => GetPost(postNo),
-        staleTime: 0,
+        staleTime: 36000,
         cacheTime: 1000 * 60 * 10,
         retry: 1,
     })
-
-    async function DeletePostHandler({postNo, category}) {
-            if (!loginUser) {
-                alert("로그인 해주세요!")
-                return navigate("/login")
-            }
-            // else if(userNo!==loginUserNo){
-            //     alert("삭제할 권한이 없습니다!");
-            //     return;
-            // }
-            if (!confirm('정말 게시글을 삭제하시겠습니까?')) {
-                alert('게시글 삭제를 취소합니다.');
-                return;
-            }
-            try {
-                await DeletePost(postNo);
-                alert('게시글이 삭제되었습니다.');
-                navigate(`/community/${category}`);
-            } catch (error) {
-                alert(error + ' 오류로 인해 게시글 삭제에 실패했습니다.');
-            }
-        }
     const categoryText={
         "free": "자유",
         "chart": "차트분석",
         "pnl": "손익인증",
         "expert": "전문가"
     }
-        return (
-            <div className={"AllPosts"}>
+       if(postNo!=null) return (
+            <div className={"Community-AllPosts"}>
                 {isLoading && <h1><Loading/></h1>}
                 {error && <h1><ErrorMsg error={error}/></h1>}
                 <div className="CommunityPostDetail">
@@ -87,42 +55,41 @@ export default function CommunityPostDetailPage() {
                                         </div>
                                     </Link>
                                 </div>
-                                <span style={{
-                                    paddingTop: "2rem",
-                                    display: Number(loginUserNo) === Number(post.userNo) ? "flex" : "none"
-                                }}>
-                                <Button variant="danger" onClick={()=>DeletePostHandler({postNo: post.id,category:post.category})}>
-                                    삭제하기
-                                </Button>
-
-                                    <Link to={`/community/posts/${post.id}/modify`}><Button variant="primary"
-                                                                                            type={"button"}>수정하기</Button></Link>
-                                    </span>
+                                    <DeletePostBtn postNo={post.id} userNo={post.userNo}/>
                             </div>
                             <div className={"Community-PostCont"}>
-                                <h1>{post.postCont}</h1>
+                                <h1 className={"Community-PostContent"}>{post.postCont}</h1>
                                 <div style={{
                                     display: "flex",
                                     flexDirection: "row",
                                     justifyContent: "space-between",
-                                    alignItems: "flex-start"
+                                    alignItems: "flex-end"
                                 }}>
                                     <span>{post.postCreatedAt}</span>
                                     <div>
                                     <span>
-                                    <PostLikeComponent loginUserNo={loginUserNo} post={post}/>&nbsp;
+                                    <PostLikeComponent loginUserNo={loginUserNo} post={post} disabled={!loginUser}/>&nbsp;
                                         댓글 {post.commentCount} 개
                                             </span>
                                     </div>
                                 </div>
                             </div>
-                            <CommunityCommentForm postNo={postNo} userNo={loginUserNo} category={"Create"} onSuccess={() => {
-                                queryClient.invalidateQueries(["commentDto", postNo]);
-                            }}/>
+                            <CommunityCommentForm postNo={postNo} userNo={loginUserNo} category={"Create"}/>
                             <br/>
-                            <CommentComponent postNo={postNo}/>
+                            <CommentListForm postNo={postNo}/>
                         </div>
                     ))}
                 </div>
             </div>)
+    if(postNo==null){
+        return (
+            <div className={"Community-Return"}>
+                <h1 className={"Community-Return-Title"}>삭제됬거나 존재하지 않는 게시물입니다!</h1>
+                <Link to={`community/${post.category}`}>
+                    <button className={"Community-Return-Button"}>게시판으로 돌아가기</button>
+                </Link>
+            </div>
+
+        )
+    }
 }

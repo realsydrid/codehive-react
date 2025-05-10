@@ -1,11 +1,8 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {GetCommentLikeType, ToggleCommentLike} from "../CommunityUtil/CommunityToggleLike.js";
-import context from "react-bootstrap/NavbarContext";
 import {useContext, useEffect, useState} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
-// ✅ 댓글 전체 + 유저 상태 받아서, 특정 댓글 상태만 추출
-// 좋아요/싫어요 상태 가져오기
 export function useGetCommentLikeStatus(userNo, commentNo, postNo) {
     const [loginUser,]=useContext(UseLoginUserContext)
     const [isLoadingUser, setIsLoadingUser] = useState(true); // 로그인 상태 로딩 상태

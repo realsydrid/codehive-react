@@ -33,19 +33,19 @@
     flex-direction: column;
 }
 .Community-PostContent,.Community-CommentContent{
-    display: flex;
+    display: block;
     flex-wrap: wrap;
-    overflow: scroll;
+    overflow: hidden;
     text-overflow:ellipsis;
     min-width: 17rem;
-    max-width: 85rem;
+    max-width: 98rem;
     font-size: 30px;
 }
 .Community-PostContent{
-    width: 80%;
+    width: 90%;
 }
 .Community-CommentContent{
-    width: 70%;
+    width: 80%;
 }
 .Community-BackLink,.Community-SearchLink{
     color:black;
@@ -58,9 +58,41 @@
 .Community-commentCont{
     justify-content: space-between;
     display: block;
-    overflow: scroll;
+    overflow: hidden;
     text-overflow:ellipsis;
     flex-direction: row;
     white-space: pre-wrap;
     margin: 0.2em 0 0.2em 0.2em;
+}
+.Community-Return{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15.5rem 0;
+}
+.Community-Return-Title{
+    font-weight: bold;
+    font-size: 2.1rem;
+}
+.Community-Return-Button{
+    background:lightskyblue;
+    width: 50%;
+    min-width: 20rem;
+    min-height:  4rem;
+    font-size: 1.6rem;
+    margin-top: 1.25rem;
+    border-radius: 0.4rem;
+    color:black;
+}
+.Community-EditPostContTextArea{
+    min-height: 21rem!important;
+}
+.CreatePostForm{
+    width:100%;
+    min-width: 20rem;
+    max-width: 100rem;
+    min-height: 21.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
