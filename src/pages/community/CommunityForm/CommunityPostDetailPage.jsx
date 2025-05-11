@@ -5,7 +5,7 @@ import Loading from "./Loading.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
 import CommunityNavbar from "../CommunityComponents/CommunityNavbar.jsx";
 import CommunityCommentForm from "./CommunityCommentTextManagement.jsx";
-import "../CommunityPost.css";
+import "./CommunityPost.css";
 import "../CommunityComponents/Component.css"
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import CommentListForm from "./CommentListForm.jsx";
@@ -81,7 +81,7 @@ export default function CommunityPostDetailPage() {
                     ))}
                 </div>
             </div>)
-    if(postNo==null){
+    if(postNo==null || postNo===undefined){
         return (
             <div className={"Community-Return"}>
                 <h1 className={"Community-Return-Title"}>삭제됬거나 존재하지 않는 게시물입니다!</h1>
@@ -89,7 +89,6 @@ export default function CommunityPostDetailPage() {
                     <button className={"Community-Return-Button"}>게시판으로 돌아가기</button>
                 </Link>
             </div>
-
         )
     }
 }

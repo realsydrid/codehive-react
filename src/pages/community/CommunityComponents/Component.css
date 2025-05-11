@@ -71,21 +71,25 @@
     margin: 15.5rem 0;
 }
 .Community-Return-Title{
+    display: block;
+    white-space: pre-line;
     font-weight: bold;
-    font-size: 2.1rem;
+    font-size: 1.7rem;
 }
 .Community-Return-Button{
+    text-align:center;
     background:lightskyblue;
     width: 50%;
     min-width: 20rem;
     min-height:  4rem;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     margin-top: 1.25rem;
     border-radius: 0.4rem;
     color:black;
 }
 .Community-EditPostContTextArea{
     min-height: 21rem!important;
+    resize: none;
 }
 .CreatePostForm{
     width:100%;

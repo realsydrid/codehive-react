@@ -2,7 +2,7 @@ import {CreateComments, ModifyComment} from "../CommunityUtil/CommunityCommentFe
 import {useContext, useState} from "react";
 import {Link, redirect, useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
-import "../CommunityTextArea.css";
+import "./CommunityTextArea.css";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 import CommunityTitle from "../CommunityComponents/CommunityTitle.jsx";
 import * as PropTypes from "prop-types";
@@ -30,14 +30,27 @@ export default function CommentForm
     const [loginUser,]=useContext(UseLoginUserContext)
     const [commentCont, setCommentCont] = useState(initialContent);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (!loginUser) {
-            alert("로그인이 필요합니다.");
+            queryClient.invalidateQueries(["commentDto", postNo])
+            queryClient.invalidateQueries(["post", postNo])
+            if(confirm("로그인이 필요합니다! 로그인 하시겠습니까?")){
+                return navigate("/login")
+            }
             return;
         }
         if (commentCont.trim() === "") {
+            queryClient.invalidateQueries(["commentDto", postNo])
+            queryClient.invalidateQueries(["post", postNo])
             alert("내용을 입력해주세요!");
+            return;
+        }
+        if (commentCont.trim() === initialContent) {
+            queryClient.invalidateQueries(["commentDto", postNo])
+            queryClient.invalidateQueries(["post", postNo])
+            alert("수정된 내용이 없습니다!");
             return;
         }
         setIsSubmitting(true);
@@ -58,11 +71,13 @@ export default function CommentForm
             }
         } catch (error) {
             console.error("댓글 처리 실패:", error);
+            queryClient.invalidateQueries(["commentDto", postNo])
+            queryClient.invalidateQueries(["post", postNo])
             alert("오류가 발생했습니다.");
         } finally {
+            queryClient.invalidateQueries(["post", postNo])
+            queryClient.invalidateQueries(["commentDto", postNo])
             setIsSubmitting(false);
-            await queryClient.invalidateQueries(["post", postNo])
-            await queryClient.getQueryData(["post", postNo])
         }
     };
   if(loginUser!==null)  return (
@@ -89,7 +104,7 @@ export default function CommentForm
   if(loginUser==null)
       return (
           <div style={{margin:"2rem 0 1rem 0"}}>
-            <h1 className={"Community-Return-Title"}>댓글을 작성하기 위해선 로그인 해야 합니다.</h1>
+            <h1 className={"Community-Return-Title"}>댓글을 작성하기 위해선<br/> 로그인 해야 합니다.</h1>
               <Link to={"/login"}>
                   <button className={"Community-Return-Button"}>로그인 화면으로 이동하기</button>
               </Link>

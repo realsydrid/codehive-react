@@ -1,7 +1,7 @@
 import Loading from "./Loading.jsx";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {Link} from "react-router-dom";
-import "../CommunityPost.css";
+import "./CommunityPost.css";
 import InfinitePageNationData from "../CommunityHook/InfinitePageNationData.js";
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import {useContext, useEffect, useState} from "react";

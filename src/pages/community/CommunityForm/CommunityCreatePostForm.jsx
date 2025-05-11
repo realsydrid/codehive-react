@@ -2,18 +2,14 @@ import {CreatePost} from "../CommunityUtil/CommunityPostFetch.js";
 import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
-import "../CommunityTextArea.css";
-import "../CommunityPost.css";
+import "./CommunityTextArea.css";
+import "./CommunityPost.css";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 import {useQueryClient} from "@tanstack/react-query";
 
 export default function CommunityCreatePostForm({category}){
     const [loginUser,]=useContext(UseLoginUserContext)
-    const [isLogin,setIsLogin]=useState(true);
     const loginUserNo=loginUser?.id;
-    useEffect(() => {
-        setIsLogin(false);
-    },[loginUser])
     const navigate = useNavigate();
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,25 +25,22 @@ export default function CommunityCreatePostForm({category}){
         try {
              if(postCont === ""){
                 setIsSubmitting(false);
+                queryClient.invalidateQueries({queryKey: ['posts', category]});
                 alert("게시글을 입력해주세요!")
-                e.preventDefault()
-            }else if(loginUserNo===null){
-                 alert("로그인 후 이용해주세요!")
-                 e.preventDefault()
-                 return navigate("/login")
-             }
+            }
             else{
                 setPostCont("");
                 await CreatePost(category,postCont);
+                queryClient.invalidateQueries({queryKey: ['posts', category]});
                 alert("게시글이 성공적으로 등록되었습니다.");}
         } catch (error) {
             e.preventDefault();
+            queryClient.invalidateQueries({queryKey: ['posts', category]});
             alert("게시글 등록 중 오류가 발생했습니다."+error.message);
             setIsSubmitting(false);
         } finally {
             e.preventDefault();
             setIsSubmitting(false);
-            setIsLogin(false);
             queryClient.invalidateQueries({queryKey: ['posts', category]});
         }
     };
@@ -70,8 +63,8 @@ export default function CommunityCreatePostForm({category}){
                     <span>
                     </span>
                     <span>
-                    <Button variant="primary" type="button" disabled={isSubmitting || isLogin} onClick={handleSubmit}>
-                        {/*{isSubmitting= }*/}1111
+                    <Button variant="primary" type="button" disabled={isSubmitting} onClick={handleSubmit}>
+                        {isSubmitting ? "게시중..." : "게시하기"}
                     </Button>
                         </span>
                 </div>
