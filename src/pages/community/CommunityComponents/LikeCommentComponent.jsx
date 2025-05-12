@@ -1,12 +1,14 @@
 import { useGetCommentLikeStatus, useToggleCommentLike } from "../CommunityHook/toggleCommentLike.js";
 import { Button } from "react-bootstrap";
 import { useQueryClient } from "@tanstack/react-query";
+import {useContext} from "react";
+import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
-export function CommentLikeComponent({ loginUserNo, comment, disabled }) {
+export function CommentLikeComponent({ loginUserNo, comment}) {
     const userNo = Number(loginUserNo);
     const commentNo = Number(comment.id);
     const postNo = Number(comment.postNo);
-
+    const [loginUser,]=useContext(UseLoginUserContext)
     const queryClient = useQueryClient();
     const { mutate: toggleLike } = useToggleCommentLike();
     const { data: likeStatus } = useGetCommentLikeStatus(userNo, commentNo, postNo);
@@ -23,6 +25,7 @@ export function CommentLikeComponent({ loginUserNo, comment, disabled }) {
         null;
 
     const handleClick = (type) => {
+        if(!loginUser){return type=null}
         const newType = currentLikeType === type ? null : type;
         toggleLike({
             commentNo: commentNo,
@@ -44,7 +47,7 @@ export function CommentLikeComponent({ loginUserNo, comment, disabled }) {
                     display: "flex",
                     marginRight: "4px",
                 }}
-                disabled={disabled}
+                disabled={!loginUser}
             >
                 <img src="/images/like.png" alt="" width="20rem" height="20rem" />{likeCount}
             </Button>
@@ -60,7 +63,7 @@ export function CommentLikeComponent({ loginUserNo, comment, disabled }) {
                     height: "2.75rem",
                     display: "flex",
                 }}
-                disabled={disabled}
+                disabled={!loginUser}
             >
                 <img src="/images/dislike.png" alt="" width="20rem" height="20rem" />{dislikeCount}
             </Button>

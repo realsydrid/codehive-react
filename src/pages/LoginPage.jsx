@@ -16,8 +16,8 @@ export default function LoginPage() {
         const {name, value} = e.target;
         setUser(prev => ({...prev, [name]: value}));
     };
-    const ServerUrl = "";
-    // const ServerUrl = "http://localhost:8801"
+    // const ServerUrl = "";
+    const ServerUrl = "http://localhost:8801"
 
     const handleSubmit = async (e) => {
         e.preventDefault();

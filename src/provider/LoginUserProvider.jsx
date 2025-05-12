@@ -3,8 +3,8 @@ import {createContext, useEffect, useState} from "react";
 export const UseLoginUserContext = createContext(null);
 // 프로바이더
 export function LoginUserProvider({ children }) {
-    const ServerUrl = "";
-    // const ServerUrl = "http://localhost:8801"
+    // const ServerUrl = "";
+    const ServerUrl = "http://localhost:8801"
     const [loginUser, setLoginUser] = useState(null);
 
     useEffect(() => {

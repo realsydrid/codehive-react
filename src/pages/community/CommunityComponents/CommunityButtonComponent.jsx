@@ -25,7 +25,7 @@ export function DeletePostBtn({userNo,postNo}) {
             paddingTop: "2rem",
             display: "flex"
         }}>
-            <Button variant="danger" onClick={()=>DeletePostHandler({postNo:postNo})}>
+            <Button variant="danger" onClick={()=>DeletePostHandler({postNo:Number(postNo)})}>
                 삭제하기
             </Button>
 

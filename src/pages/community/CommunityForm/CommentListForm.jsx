@@ -10,17 +10,17 @@ import CommentForm from "./CommunityCommentTextManagement.jsx";
 
 export default function CommentListForm(props) {
     const [loginUser, ] = useContext(UseLoginUserContext);
-    const queryClient = useQueryClient();
-    const loginUserNo = loginUser?.id;
     const postNo = props.postNo;
     const [openReplyForm, setOpenReplyForm] = useState(null);
     const [editingComment, setEditingComment] = useState(null);
 
     const handleReplyClick = (commentNo) => {
+        if(!loginUser){return null}
         setOpenReplyForm(prev => prev === commentNo ? null : commentNo);
     };
 
     const handleEditClick = (commentNo) => {
+        if(!loginUser){return null}
         setEditingComment(prev => prev === commentNo ? null : commentNo);
     };
 
@@ -33,7 +33,7 @@ export default function CommentListForm(props) {
         const navigate = useNavigate();
 
         let DeletePostHandler = async () => {
-            if (!loginUserNo) {
+            if (!loginUser) {
                 alert("적절한 권한이 없습니다. 로그인을 해주세요!");
                 return navigate("/login");
             }
@@ -64,20 +64,9 @@ export default function CommentListForm(props) {
         retry: 1,
     });
 
-    const mergedComments = useMemo(() => {
-        if (!commentDto) return [];
-        return commentDto.map((comment) => {
-            const cachedStatus = queryClient.getQueryData(["commentLikeStatus", loginUserNo, comment.id]);
-            return {
-                ...comment,
-                userLikeType: comment.userLikeType ?? cachedStatus?.likeType ?? null,
-            };
-        });
-    }, [commentDto, loginUserNo, queryClient]);
-
     return (
         <>
-            {mergedComments && mergedComments.map((c) => {
+            {commentDto && commentDto.map((c) => {
                 if (!c.parentNo) {
                     return (
                         <div key={c.id} className="Community-comment">
@@ -94,7 +83,7 @@ export default function CommentListForm(props) {
                                 <div style={{marginBottom: "3%"}}>
                                     <span>{c.commentCreatedAt}</span>
                                     <div style={{
-                                        display: loginUserNo === c.userNo ? "flex" : "none",
+                                        display: loginUser.id === c.userNo ? "flex" : "none",
                                         alignItems: "flex-end"
                                     }}>
                                         <DeleteCommentBtn commentNo={Number(c.id)} postNo={c.postNo}/>
@@ -108,7 +97,7 @@ export default function CommentListForm(props) {
                             {editingComment === c.id && (
                                 <CommentForm
                                     postNo={c.postNo}
-                                    userNo={loginUserNo}
+                                    userNo={loginUser.id}
                                     commentNo={c.id}
                                     initialContent={c.commentCont}
                                     onSuccess={() => {
@@ -135,14 +124,14 @@ export default function CommentListForm(props) {
                                     </Button>
                                 </span>
                                 <div style={{alignItems: "flex-end", display: "flex", margin: "0 0.2rem 0.2rem 0"}}>
-                                    <CommentLikeComponent comment={c} loginUserNo={loginUserNo}/>
+                                    <CommentLikeComponent comment={c} loginUserNo={loginUser.id}/>
                                 </div>
                             </div>
                             {openReplyForm === c.id && (
                                 <CommentForm
                                     postNo={c.postNo}
                                     parentNo={c.id}
-                                    userNo={loginUserNo}
+                                    userNo={loginUser.id}
                                     onSuccess={() => {
                                         setOpenReplyForm(null);
                                     }}
@@ -151,7 +140,7 @@ export default function CommentListForm(props) {
                             )}
 
                             {/* 대댓글 영역 */}
-                            {openReply === c.id && mergedComments
+                            {openReply === c.id && commentDto
                                 .filter(reply => reply.parentNo === c.id)
                                 .map(reply => (
                                     <div
@@ -173,7 +162,7 @@ export default function CommentListForm(props) {
                                             <div style={{marginBottom: "3%"}}>
                                                 <span>{reply.commentCreatedAt}</span>
                                                 <div style={{
-                                                    display: loginUserNo === reply.userNo ? "flex" : "none",
+                                                    display: loginUser.id === reply.userNo ? "flex" : "none",
                                                     alignItems: "flex-end"
                                                 }}>
                                                     <DeleteCommentBtn commentNo={Number(reply.id)}
@@ -183,8 +172,7 @@ export default function CommentListForm(props) {
                                             </div>
                                         </div>
                                         <h3>{reply.commentCont}</h3>
-                                        <CommentLikeComponent comment={reply} loginUserNo={loginUserNo}
-                                                              disabled={!loginUser}/>
+                                        <CommentLikeComponent comment={reply} loginUserNo={loginUser.id}/>
                                     </div>
                                 ))}
                         </div>
