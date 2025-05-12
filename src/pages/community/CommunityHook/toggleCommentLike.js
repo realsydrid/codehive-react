@@ -1,18 +1,9 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {GetCommentLikeType, ToggleCommentLike} from "../CommunityUtil/CommunityToggleLike.js";
-import {useContext, useEffect, useState} from "react";
-import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
-export function useGetCommentLikeStatus(userNo, commentNo, postNo) {
-    const [loginUser,]=useContext(UseLoginUserContext)
-    const [isLoadingUser, setIsLoadingUser] = useState(true); // 로그인 상태 로딩 상태
-    useEffect(() => {
-        if (loginUser !== null) {
-            setIsLoadingUser(false); // 로그인 정보가 로딩되면 지연 렌더링 해제
-        }
-    }, [loginUser]);
+export function useGetCommentLikeStatus(commentNo, postNo) {
     return useQuery({
-        queryKey: ["commentLikeStatus", Number(userNo), Number(commentNo)],
+        queryKey: ["commentLikeStatus", Number(commentNo)],
         queryFn: async () => {
             const data = await GetCommentLikeType(Number(postNo));
             const target = data.find(comment => comment.dto.id === Number(commentNo));
@@ -21,7 +12,7 @@ export function useGetCommentLikeStatus(userNo, commentNo, postNo) {
             };
         },
         staleTime:0,
-        enabled: !!userNo && !!commentNo && !!postNo && !isLoadingUser,
+        enabled: !!commentNo && !!postNo
     });
 }
 
