@@ -1,7 +1,7 @@
 import Loading from "./Loading.jsx";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {Link} from "react-router-dom";
-import "./CommunityPost.css";
+import "./CommunityPostList.css";
 import InfinitePageNationData from "../CommunityHook/InfinitePageNationData.js";
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import {useContext, useEffect, useState} from "react";
@@ -59,7 +59,7 @@ export default function CommunityPostsPage({category}){
                                 </div>
                             </Link>
                         </div>
-                        <div className={"Community-list-group"}>
+                        <div className={"Community-Post-List-Group"}>
                             <div className={"Community-PostInside"}>
                                 <Link to={`/community/posts/${post.id}`} className={"Community-PostLink"}>
                                     <h2 className={"Community-postForm"}>{post.postCont}</h2>

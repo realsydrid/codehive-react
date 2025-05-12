@@ -17,7 +17,7 @@ export async function GetCommentLikeType(postNo){
     const data = await res.json();
     return data;
 }
-export async function ToggleCommentLike({userNo,commentNo,likeType}){
+export async function ToggleCommentLike({commentNo,likeType}){
     const URL = `${ServerUrl}/comments/${commentNo}`;
     const res = await fetch(URL, {
         method: "POST",
@@ -25,14 +25,14 @@ export async function ToggleCommentLike({userNo,commentNo,likeType}){
             Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({userNo,commentNo,likeType}),
+        body: JSON.stringify({commentNo,likeType}),
     });
     if(!res.ok){
         alert("입력실패!")
         throw new Error("좋아요/싫어요 상태변경 실패!");
     }
     if (res.status === 204) {
-        return {userNo:userNo,commentNo:commentNo,likeType: null };
+        return {commentNo:commentNo,likeType: null };
     }
     console.log(res.json());
     // 정상 JSON 응답 처리

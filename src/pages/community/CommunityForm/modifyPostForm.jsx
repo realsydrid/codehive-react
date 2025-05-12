@@ -16,8 +16,8 @@ export default function CommunityModifyPostForm({post,onSubmit}){
         const postCont = formData.get("postCont");
         onSubmit(postCont);
         setIsSubmitting(true);
+        queryClient.invalidateQueries(["post", Number(post.id)])
         alert("성공적으로 수정했습니다!")
-        queryClient.invalidateQueries(["post", post.id])
         return navigate(`/community/posts/${post.id}`)
         }
    return (

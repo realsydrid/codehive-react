@@ -5,13 +5,13 @@ import Loading from "./Loading.jsx";
 import ErrorMsg from "./ErrorMsg.jsx";
 import CommunityNavbar from "../CommunityComponents/CommunityNavbar.jsx";
 import CommunityCommentForm from "./CommunityCommentTextManagement.jsx";
-import "./CommunityPost.css";
+import "./CommunityPostList.css";
 import "../CommunityComponents/Component.css"
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import CommentListForm from "./CommentListForm.jsx";
 import {useContext} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
-import {DeletePostBtn} from "../CommunityComponents/ButtonComponent.jsx";
+import {DeletePostBtn} from "../CommunityComponents/CommunityButtonComponent.jsx";
 
 export default function CommunityPostDetailPage() {
     const {postNo} = useParams();
@@ -20,7 +20,7 @@ export default function CommunityPostDetailPage() {
     const {data: post, isLoading, error} = useQuery({
         queryKey: ["post", postNo],
         queryFn: async () => GetPost(postNo),
-        staleTime: 36000,
+        staleTime: 30000,
         cacheTime: 1000 * 60 * 10,
         retry: 1,
     })
@@ -30,11 +30,11 @@ export default function CommunityPostDetailPage() {
         "pnl": "손익인증",
         "expert": "전문가"
     }
-       if(postNo!=null) return (
+    return (
             <div className={"Community-AllPosts"}>
                 {isLoading && <h1><Loading/></h1>}
                 {error && <h1><ErrorMsg error={error}/></h1>}
-                <div className="CommunityPostDetail">
+                <div className="Community-PostDetail">
                     <CommunityNavbar/>
                     {post && post.map(post => (
                         <div key={post.id} style={{maxWidth: "100rem", minWidth: "20rem", width: "95%",marginTop: "0.5rem"}}>
@@ -81,14 +81,4 @@ export default function CommunityPostDetailPage() {
                     ))}
                 </div>
             </div>)
-    if(postNo==null || postNo===undefined){
-        return (
-            <div className={"Community-Return"}>
-                <h1 className={"Community-Return-Title"}>삭제됬거나 존재하지 않는 게시물입니다!</h1>
-                <Link to={`community/${post.category}`}>
-                    <button className={"Community-Return-Button"}>게시판으로 돌아가기</button>
-                </Link>
-            </div>
-        )
-    }
 }

@@ -64,7 +64,6 @@ export default function CommentListForm(props) {
         retry: 1,
     });
 
-    // ✅ 댓글 + 유저 상태 병합
     const mergedComments = useMemo(() => {
         if (!commentDto) return [];
         return commentDto.map((comment) => {
