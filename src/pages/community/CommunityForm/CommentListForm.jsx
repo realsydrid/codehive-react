@@ -68,6 +68,7 @@ export default function CommentListForm(props) {
         <>
             {commentDto && commentDto.map((c) => {
                 if (!c.parentNo) {
+                    const isAuthor = loginUser?.id === c.userNo;
                     return (
                         <div key={c.id} className="Community-comment">
                             <div style={{display: "flex", justifyContent: "space-between"}}>
@@ -82,99 +83,93 @@ export default function CommentListForm(props) {
                                 </div>
                                 <div style={{marginBottom: "3%"}}>
                                     <span>{c.commentCreatedAt}</span>
-                                    <div style={{
-                                        display: loginUser.id === c.userNo ? "flex" : "none",
-                                        alignItems: "flex-end"
-                                    }}>
-                                        <DeleteCommentBtn commentNo={Number(c.id)} postNo={c.postNo}/>
-                                        &nbsp;<Button variant="primary" onClick={() => handleEditClick(c.id)}
-                                                      disabled={!loginUser}>
-                                        {editingComment === c.id ? "수정 취소" : "수정하기"}
-                                    </Button>
-                                    </div>
+                                    {isAuthor && (
+                                        <div style={{display: "flex", alignItems: "flex-end"}}>
+                                            <DeleteCommentBtn commentNo={Number(c.id)} postNo={c.postNo}/>
+                                            &nbsp;
+                                            <Button variant="primary" onClick={() => handleEditClick(c.id)}>
+                                                {editingComment === c.id ? "수정 취소" : "수정하기"}
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
+
                             {editingComment === c.id && (
                                 <CommentForm
                                     postNo={c.postNo}
-                                    userNo={loginUser.id}
                                     commentNo={c.id}
                                     initialContent={c.commentCont}
-                                    onSuccess={() => {
-                                        setEditingComment(null);
-                                    }}
+                                    onSuccess={() => setEditingComment(null)}
                                     category={"Modify"}
                                 />
                             )}
+
                             <h2 className={"Community-commentCont"}>{c.commentCont}</h2>
-                            <div
-                                style={{display: "flex", justifyContent: "space-between", flexDirection: "row"}}>
+
+                            <div style={{display: "flex", justifyContent: "space-between", flexDirection: "row"}}>
                                 <span className="Community-ButtonFlex">
-                                    <Button variant="secondary" onClick={() => handleReplyClick(c.id)}
-                                            disabled={!loginUser}>
+                                    <Button variant="secondary" onClick={() => handleReplyClick(c.id)} disabled={!loginUser}>
                                         {openReplyForm === c.id ? "대댓글 작성 취소" : "대댓글 달기"}
                                     </Button>
 
-                                    <Button
-                                        variant="primary"
-                                        style={{display: c.replyCount === 0 ? "none" : "block"}}
-                                        onClick={() => handleToggleReplies(c.id)}
-                                    >
-                                        {openReply === c.id ? "대댓글 숨기기" : `대댓글 ${c.replyCount}개 보기`}
-                                    </Button>
+                                    {c.replyCount > 0 && (
+                                        <Button
+                                            variant="primary"
+                                            onClick={() => handleToggleReplies(c.id)}
+                                        >
+                                            {openReply === c.id ? "대댓글 숨기기" : `대댓글 ${c.replyCount}개 보기`}
+                                        </Button>
+                                    )}
                                 </span>
+
                                 <div style={{alignItems: "flex-end", display: "flex", margin: "0 0.2rem 0.2rem 0"}}>
-                                    <CommentLikeComponent comment={c} loginUserNo={loginUser.id}/>
+                                    <CommentLikeComponent comment={c} postNo={postNo}/>
                                 </div>
                             </div>
+
                             {openReplyForm === c.id && (
                                 <CommentForm
                                     postNo={c.postNo}
                                     parentNo={c.id}
-                                    userNo={loginUser.id}
-                                    onSuccess={() => {
-                                        setOpenReplyForm(null);
-                                    }}
+                                    onSuccess={() => setOpenReplyForm(null)}
                                     category={"Child"}
                                 />
                             )}
-
                             {/* 대댓글 영역 */}
                             {openReply === c.id && commentDto
                                 .filter(reply => reply.parentNo === c.id)
-                                .map(reply => (
-                                    <div
-                                        key={reply.id}
-                                        className="Community-ChildComment"
-                                    >
-                                        <div style={{display: "flex", justifyContent: "space-between"}}>
-                                            <div className="Community-UserInfo">
-                                                <Link to={`/users/profile/${reply.userNo}`}
-                                                      className="Community-PostLink">
-                                                    <img src={"/images/user_icon_default.png"} alt=""
-                                                         className="Community-ProfileImg"/>
-                                                    <div>
-                                                        <span>{reply.userNickname}</span>
-                                                        <span>Lv.{reply.userNo}</span>
-                                                    </div>
-                                                </Link>
-                                            </div>
-                                            <div style={{marginBottom: "3%"}}>
-                                                <span>{reply.commentCreatedAt}</span>
-                                                <div style={{
-                                                    display: loginUser.id === reply.userNo ? "flex" : "none",
-                                                    alignItems: "flex-end"
-                                                }}>
-                                                    <DeleteCommentBtn commentNo={Number(reply.id)}
-                                                                      postNo={reply.postNo}/>
-                                                    &nbsp;<Button variant="primary">수정하기</Button>
+                                .map(reply => {
+                                    const isAuthor = loginUser?.id === reply.userNo;
+
+                                    return (
+                                        <div key={reply.id} className="Community-ChildComment">
+                                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                <div className="Community-UserInfo">
+                                                    <Link to={`/users/profile/${reply.userNo}`} className="Community-PostLink">
+                                                        <img src={"/images/user_icon_default.png"} alt="" className="Community-ProfileImg"/>
+                                                        <div>
+                                                            <span>{reply.userNickname}</span>
+                                                            <span>Lv.{reply.userNo}</span>
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                                <div style={{marginBottom: "3%"}}>
+                                                    <span>{reply.commentCreatedAt}</span>
+                                                    {isAuthor && (
+                                                        <div style={{display: "flex", alignItems: "flex-end"}}>
+                                                            <DeleteCommentBtn commentNo={Number(reply.id)} postNo={reply.postNo}/>
+                                                            &nbsp;
+                                                            <Button variant="primary">수정하기</Button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
+                                            <h3>{reply.commentCont}</h3>
+                                            <CommentLikeComponent comment={reply} postNo={reply.postNo}/>
                                         </div>
-                                        <h3>{reply.commentCont}</h3>
-                                        <CommentLikeComponent comment={reply} loginUserNo={loginUser.id}/>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                         </div>
                     );
                 } else {

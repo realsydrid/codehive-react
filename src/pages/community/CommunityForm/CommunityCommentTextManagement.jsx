@@ -34,24 +34,19 @@ export default function CommentForm
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (!loginUser) {
-            queryClient.invalidateQueries(["commentDto", postNo])
-            queryClient.invalidateQueries(["post", postNo])
             if(confirm("로그인이 필요합니다! 로그인 하시겠습니까?")){
+                queryClient.invalidateQueries(["commentDto", postNo])
+                queryClient.invalidateQueries(["post", postNo])
                 return navigate("/login")
             }
-            return;
         }
         if (commentCont.trim() === "") {
-            queryClient.invalidateQueries(["commentDto", postNo])
-            queryClient.invalidateQueries(["post", postNo])
+            e.preventDefault();
             alert("내용을 입력해주세요!");
-            return;
         }
         if (commentCont.trim() === initialContent) {
-            queryClient.invalidateQueries(["commentDto", postNo])
-            queryClient.invalidateQueries(["post", postNo])
+            e.preventDefault();
             alert("수정된 내용이 없습니다!");
-            return;
         }
         setIsSubmitting(true);
         try {
@@ -71,8 +66,6 @@ export default function CommentForm
             }
         } catch (error) {
             console.error("댓글 처리 실패:", error);
-            queryClient.invalidateQueries(["commentDto", postNo])
-            queryClient.invalidateQueries(["post", postNo])
             alert("오류가 발생했습니다.");
         } finally {
             queryClient.invalidateQueries(["post", postNo])

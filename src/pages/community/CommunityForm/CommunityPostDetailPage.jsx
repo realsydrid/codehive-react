@@ -74,7 +74,7 @@ export default function CommunityPostDetailPage() {
                                     </div>
                                 </div>
                             </div>
-                            <CommunityCommentForm postNo={postNo} userNo={loginUserNo} category={"Create"}/>
+                            <CommunityCommentForm postNo={postNo} category={"Create"}/>
                             <br/>
                             <CommentListForm postNo={postNo}/>
                         </div>

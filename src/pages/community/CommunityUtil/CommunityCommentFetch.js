@@ -5,12 +5,15 @@ export async function GetComments(postNo){
     const URL=`${ServerUrl}/comments?postNo=${postNo}`
     const res = await fetch(URL, {
         method: "GET",
-        headers: { "Content-Type": "application/json" }
-    });
+        headers:{
+                "Content-Type": "application/json",
+                ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
+            }})
     if(!res.ok){
         throw new Error(res.status+"");
     }
     const data=await res.json();
+    console.log(data);
     return data;
 }
 export async function CreateComments(postNo,commentCont,parentNo){

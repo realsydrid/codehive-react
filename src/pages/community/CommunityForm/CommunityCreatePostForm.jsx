@@ -8,19 +8,12 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 import {useQueryClient} from "@tanstack/react-query";
 
 export default function CommunityCreatePostForm({category}){
-    const [loginUser,]=useContext(UseLoginUserContext)
-    const navigate = useNavigate();
     const [postCont, setPostCont] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const queryClient = useQueryClient();
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        if(!loginUser){
-            alert("로그인 해주세요!")
-            setIsSubmitting(false);
-            return navigate("/login");
-        }
         try {
              if(postCont === ""){
                 setIsSubmitting(false);
