@@ -1,7 +1,5 @@
 // const ServerUrl='http://localhost:8801/api/community'
 const ServerUrl='/api/community'
-const jwt=localStorage.getItem('jwt');
-
 export async function GetPost(postNo){
     const URL=`${ServerUrl}/posts/detail?postNo=${postNo}`
     const res = await fetch(URL, {
@@ -27,6 +25,7 @@ export async function GetPosts(category,page,size){
 }
 export async function CreatePost(category, postCont){
     const URL=`${ServerUrl}/posts?category=${category}`;
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "POST",
         headers: {
@@ -44,6 +43,7 @@ export async function CreatePost(category, postCont){
 }
 export async function DeletePost(postNo){
     const URL=`${ServerUrl}/posts?postNo=${postNo}`;
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "DELETE",
         headers: {
@@ -57,6 +57,7 @@ export async function DeletePost(postNo){
 }
 export async function ModifyPost(postNo,postCont){
     const URL=`${ServerUrl}/posts?postNo=${postNo}`;
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "PUT",
         headers: { "Content-Type": "application/json",

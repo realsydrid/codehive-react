@@ -7,14 +7,15 @@ export function useToggleCommentLike(commentNo, postNo) {
     return useMutation({
         mutationFn: (userLikeType) => ToggleCommentLike(commentNo, userLikeType),
         onMutate: async (newLikeType) => {
-            // 이전 데이터 백업
             await queryClient.cancelQueries(["commentDto", postNo]);
             const previousComments = queryClient.getQueryData(["commentDto", postNo]);
 
-            // Optimistic Update
             queryClient.setQueryData(["commentDto", postNo], (old) =>
                 old?.map((comment) => {
-                    if (comment.id !== commentNo) return comment;
+                    if (comment.id !== commentNo) {
+                        // ❗ 이것도 얕은 비교 회피하려면 새 객체로 리턴
+                        return { ...comment };
+                    }
 
                     let newLikeCount = comment.likeCount;
                     let newDislikeCount = comment.dislikeCount;

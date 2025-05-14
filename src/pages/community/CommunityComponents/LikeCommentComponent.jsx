@@ -1,30 +1,28 @@
 import { useToggleCommentLike } from "../CommunityHook/toggleCommentLike.js";
 import { Button } from "react-bootstrap";
-import {useContext, useEffect, useState} from "react";
+import {useContext} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 
 
 export function CommentLikeComponent({ comment, postNo }) {
     const [loginUser] = useContext(UseLoginUserContext);
     const { mutate } = useToggleCommentLike(Number(comment.id), postNo);
-    //  likeType 상태를 로컬로 유지
-    const [localLikeType, setLocalLikeType] = useState(comment.userLikeType);
-
-    // comment가 바뀌면 로컬 상태 동기화
-    useEffect(() => {
-        setLocalLikeType(comment.userLikeType);
-    }, [comment.userLikeType]);
 
     const handleClick = (type) => () => {
-        const nextLikeType = localLikeType === type ? null : type;
-        setLocalLikeType(nextLikeType); // 선반영 UI 상태 변경
-        mutate(nextLikeType);
+        // 로그인하지 않았으면 클릭 불가
+        if (!loginUser) return;
+
+        if (comment.userLikeType === type) {
+            mutate(null); // 같은 타입이면 취소
+        } else {
+            mutate(type); // 다른 타입이면 변경
+        }
     };
 
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Button
-                variant={localLikeType === true ? "primary" : "outline-primary"}
+                variant={comment.userLikeType === true ? "primary" : "outline-primary"}
                 onClick={handleClick(true)}
                 style={{
                     borderRadius: "300px",
@@ -42,7 +40,7 @@ export function CommentLikeComponent({ comment, postNo }) {
             &nbsp;
 
             <Button
-                variant={localLikeType === false ? "danger" : "outline-danger"}
+                variant={comment.userLikeType === false ? "danger" : "outline-danger"}
                 onClick={handleClick(false)}
                 style={{
                     borderRadius: "300px",

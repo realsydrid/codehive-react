@@ -1,9 +1,8 @@
 // const ServerUrl='http://localhost:8801/api/community/LikeStatus'
 const ServerUrl='/api/community/LikeStatus'
-const jwt=localStorage.getItem('jwt');
-
 export async function ToggleCommentLike(commentNo,userLikeType){
     const URL = `${ServerUrl}/comments/${commentNo}`;
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "POST",
         headers: {
@@ -22,6 +21,7 @@ export async function ToggleCommentLike(commentNo,userLikeType){
 }
 export async function GetPostLikeType(userNo, postNo){
     const URL = `${ServerUrl}/posts/${postNo}`;
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "GET",
         headers: {
@@ -38,7 +38,7 @@ export async function GetPostLikeType(userNo, postNo){
 }
 export async function TogglePostLike({ userNo, postNo, likeType }) {
     const URL = `${ServerUrl}/posts/${postNo}`;
-
+    const jwt=localStorage.getItem('jwt');
     const body = { userNo, postNo, likeType:likeType };
 
     const res = await fetch(URL, {

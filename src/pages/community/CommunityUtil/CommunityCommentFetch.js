@@ -1,8 +1,8 @@
 // const ServerUrl='http://localhost:8801/api/community'
 const ServerUrl='/api/community'
-const jwt=localStorage.getItem('jwt');
 export async function GetComments(postNo){
     const URL=`${ServerUrl}/comments?postNo=${postNo}`
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "GET",
         headers:{
@@ -18,6 +18,7 @@ export async function GetComments(postNo){
 }
 export async function CreateComments(postNo,commentCont,parentNo){
     const URL=`${ServerUrl}/comments?postNo=${postNo}`;
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "POST",
         headers: {
@@ -31,6 +32,7 @@ export async function CreateComments(postNo,commentCont,parentNo){
 }
 export async function DeleteComment(commentNo){
     const URL=`${ServerUrl}/comments?commentNo=${commentNo}`;
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "DELETE",
         headers: {
@@ -43,6 +45,7 @@ export async function DeleteComment(commentNo){
 }
 export async function ModifyComment({commentNo,commentCont}){
     const URL=`${ServerUrl}/comments`;
+    const jwt=localStorage.getItem('jwt');
     const res = await fetch(URL, {
         method: "PUT",
         headers: {
