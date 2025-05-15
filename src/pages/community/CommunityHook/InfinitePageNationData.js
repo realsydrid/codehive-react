@@ -1,4 +1,3 @@
-import {useEffect, useState} from "react";
 import {GetPosts} from "../CommunityUtil/CommunityPostFetch.js";
 import {useInfiniteQuery} from "@tanstack/react-query";
 

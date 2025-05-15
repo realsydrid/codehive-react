@@ -28,12 +28,12 @@ export function CommentLikeComponent({ comment, postNo }) {
                     borderRadius: "300px",
                     width: "2.75rem",
                     height: "2.75rem",
+                    justifyContent: "center",
                     display: "flex",
-                    marginRight: "4px",
-                }}
+                marginRight:"0.1rem"}}
                 disabled={!loginUser}
             >
-                <img src="/images/like.png" alt="like" width="20rem" height="20rem" />
+                <img src="/images/like.png" alt="" width="20rem" height="20rem" style={{marginTop:"0.18rem"}}/>
                 {comment.likeCount}
             </Button>
 
@@ -46,11 +46,11 @@ export function CommentLikeComponent({ comment, postNo }) {
                     borderRadius: "300px",
                     width: "2.75rem",
                     height: "2.75rem",
-                    display: "flex",
-                }}
+                    justifyContent: "center",
+                    display: "flex"}}
                 disabled={!loginUser}
             >
-                <img src="/images/dislike.png" alt="dislike" width="20rem" height="20rem" />
+                <img src="/images/dislike.png" alt="" width="20rem" height="20rem" style={{marginTop:"0.18rem"}}/>
                 {comment.dislikeCount}
             </Button>
         </div>

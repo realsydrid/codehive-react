@@ -68,7 +68,7 @@ export default function CommunityPostDetailPage() {
                                     <span>{post.postCreatedAt}</span>
                                     <div>
                                     <span>
-                                    <PostLikeComponent loginUserNo={loginUserNo} post={post} disabled={!loginUser}/>&nbsp;
+                                    <PostLikeComponent postNo={post.id} category={post.category}/>&nbsp;
                                         댓글 {post.commentCount} 개
                                             </span>
                                     </div>

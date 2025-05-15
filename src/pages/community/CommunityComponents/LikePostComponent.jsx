@@ -1,85 +1,64 @@
-import { useQueryClient} from "@tanstack/react-query";
 import { Button } from "react-bootstrap";
 import {useGetPostLikeStatus, useTogglePostLike} from "../CommunityHook/togglePostLike.js";
-import ErrorMsg from "../CommunityForm/ErrorMsg.jsx";
-import {useEffect, useState} from "react";
+import {memo, useContext} from "react";
+import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
+import {useQueryClient} from "@tanstack/react-query";
+import SmallLoading from "../CommunityForm/SmallLoading.jsx";
 
-
-export function PostLikeComponent({ loginUserNo, post, disabled }) {
-    const postNo = post.id;
-    const category = post.category;
-
-    const { data: likeStatus } = useGetPostLikeStatus(loginUserNo, postNo,{
-        enabled:!!loginUserNo && !!postNo,
-    });
-    const { mutate: toggleLike, error } = useTogglePostLike(category);
-
-    // ⭐ 로컬 상태로 likeType 관리 → 캐시 변경 시 UI 즉시 반영
-    const [localLikeType, setLocalLikeType] = useState(null);
-
-    useEffect(() => {
-        if (loginUserNo) {
-            setLocalLikeType(likeStatus?.likeType ?? null);
-        }
-    }, [likeStatus, loginUserNo]);
-
+export const PostLikeComponent=memo (function PostLikeComponent({ postNo, category }) {
+    const [loginUser] = useContext(UseLoginUserContext);
+    const { data, isFetching, isLoading } = useGetPostLikeStatus(postNo);
+    const togglePostLike = useTogglePostLike(postNo);
+    const queryClient=useQueryClient();
+    if (isLoading || isFetching || !data || typeof data.likeCount !== "number") {
+        return <SmallLoading/>; //로딩창 호출
+    }
+    const currentUserLike = data.userLikeType;
     const handleClick = (type) => {
-        const newType = localLikeType === type ? null : type;
-        setLocalLikeType(newType); // 선반영 상태로 UI 반영
-        toggleLike({
-            userNo: loginUserNo,
-            postNo: postNo,
-            likeType: newType,
-        });
+        togglePostLike.mutate(type);
+        queryClient.invalidateQueries(["posts",category])
     };
 
     return (
         <div style={{display: "flex"}}>
             <Button
-                variant={localLikeType === true ? "primary" : "outline-primary"}
+                variant={currentUserLike === true ? "primary" : "outline-primary"}
                 onClick={() => handleClick(true)}
-                disabled={disabled}
+                disabled={!loginUser}
                 style={{
                     borderRadius: "300px",
                     width: "2.75rem",
                     height: "2.75rem",
                     justifyContent: "center",
                     display: "flex",
-                    marginRight: "4px",
-                }}
+                    marginRight:"0.1rem"}}
             >
                 <img
                     src="/images/like.png"
                     alt=""
-                    width="20rem"
-                    height="20rem"
-                    style={{ marginBottom: "0.2rem" }}
+                    width="20rem" height="20rem" style={{marginTop:"0.18rem"}}
                 />
-                {post.likeCount}
+                {data.likeCount}
             </Button>
             <Button
-                variant={localLikeType === false ? "danger" : "outline-danger"}
+                variant={currentUserLike === false ? "danger" : "outline-danger"}
                 onClick={() => handleClick(false)}
-                disabled={disabled}
+                disabled={!loginUser}
                 style={{
                     borderRadius: "300px",
                     width: "2.75rem",
                     height: "2.75rem",
-                    display: "flex",
-                }}
+                    justifyContent: "center",
+                    display: "flex"}}
             >
                 <img
                     src="/images/dislike.png"
                     alt=""
-                    width="20rem"
-                    height="20rem"
-                    style={{ marginBottom: "0.2rem" }}
+                    width="20rem" height="20rem" style={{marginTop:"0.18rem"}}
                 />
-                {post.dislikeCount}
+                {data.dislikeCount}
             </Button>
-
-            {error && <ErrorMsg error={error} />}
         </div>
     );
-}
+})
 

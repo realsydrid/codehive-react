@@ -13,7 +13,6 @@ export async function GetComments(postNo){
         throw new Error(res.status+"");
     }
     const data=await res.json();
-    console.log(data);
     return data;
 }
 export async function CreateComments(postNo,commentCont,parentNo){

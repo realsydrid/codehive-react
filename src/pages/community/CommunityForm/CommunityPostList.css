@@ -16,19 +16,19 @@
     align-items: center;
 }
 .Community-infiniteScrolls{
-    width:95%;
+    width:100%;
     display: flex!important;
     flex-direction: column!important;
     min-width: 20rem;
     max-width: 100rem;
 }
 .Community-Post-List-Group,.Community-comment,.Community-PostCont{
-    border: 1px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.38);
     height: fit-content;
     min-height: 120px;
     display: flex;
     flex-direction: column;
-    color:black;
+    color: rgba(0, 0, 0, 0.81);
     text-decoration: none;
     padding-bottom: 5px;
     margin: 10px;
@@ -40,7 +40,6 @@
 }
 .Community-PostPage,.Community-Post-List-Group,.Community-comment,
 .Community-PostCont,.Community-PostDetail,.Community-PostModify,.Community-Link,.Community-commentCont{
-    width: 99%;
     min-width: 20rem;
     max-width: 100rem;
     white-space: nowrap;

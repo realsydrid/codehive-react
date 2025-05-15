@@ -10,9 +10,6 @@ import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 //InfiniteScroll 만을 썼다가 InfiniteQuery+InfiniteScroll 을 사용하니 중복도 피해지고
 // 캐싱된 좋아요 싫어요 데이터도 서버에서 불러옴과 동시에 Optimistic Update 구조도 불러와짐
 export default function CommunityPostsPage({category}){
-    const [loginUser,]=useContext(UseLoginUserContext);
-    const loginUserNo=loginUser?.id
-
         const {
             data,
             fetchNextPage,
@@ -33,13 +30,6 @@ export default function CommunityPostsPage({category}){
                 next={fetchNextPage}
                 hasMore={hasNextPage}
                 loader={isFetchingNextPage && <Loading/>}
-                style={{
-                    width: "100%",
-                    minWidth: "20rem",
-                    maxWidth: "100rem",
-                    display: "flex",
-                    alignItems: "center"
-                }}
                 className="Community-infiniteScrolls"
                 endMessage={
                     <p style={{ textAlign: "center" }}>
@@ -48,7 +38,7 @@ export default function CommunityPostsPage({category}){
                 }
             >
                 {posts.map((post) => (
-                    <div key={post.id} className={"Community-infiniteScrolls"}>
+                    <div key={post.id}>
                         <div className={"Community-UserInfo"}>
                             <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
                                 <img src={post.userProfileImgUrl ? post.userProfileImgUrl : "/images/user_icon_default.png"} alt=""
@@ -68,7 +58,7 @@ export default function CommunityPostsPage({category}){
                                     <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                                         <span style={{display: "flex", alignItems: "flex-end"}}>{post.postCreatedAt}</span>
                                         <div style={{display: "flex", alignItems: "flex-end", flexDirection: "column"}} >
-                                            <PostLikeComponent loginUserNo={loginUserNo} post={post} disabled={!loginUser}/>
+                                            <PostLikeComponent postNo={post.id} category={post.category}/>
                                             <span style={{display: "flex", alignItems: "flex-end"}}>댓글 {post.commentCount}개</span>
                                         </div>
                                     </div>
