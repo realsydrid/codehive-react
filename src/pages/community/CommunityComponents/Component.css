@@ -100,3 +100,14 @@
     flex-direction: column;
     align-items: center;
 }
+.Community-ConfirmBtn{
+    text-align:center;
+    background:lightskyblue;
+    width: 20%;
+    min-width: 8rem;
+    min-height:  2rem;
+    font-size: 1rem;
+    margin-top: 0.75rem;
+    border-radius: 0.2rem;
+    color:black;
+}

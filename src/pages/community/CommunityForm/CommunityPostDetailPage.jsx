@@ -15,8 +15,6 @@ import {DeletePostBtn} from "../CommunityComponents/CommunityButtonComponent.jsx
 
 export default function CommunityPostDetailPage() {
     const {postNo} = useParams();
-    const [loginUser,]=useContext(UseLoginUserContext)
-    const loginUserNo=loginUser?.id;
     const {data: post, isLoading, error} = useQuery({
         queryKey: ["post", postNo],
         queryFn: async () => GetPost(postNo),
@@ -55,7 +53,7 @@ export default function CommunityPostDetailPage() {
                                         </div>
                                     </Link>
                                 </div>
-                                    <DeletePostBtn postNo={post.id} userNo={post.userNo}/>
+                                    <DeletePostBtn postNo={post.id} userNo={post.userNo} category={post.category}/>
                             </div>
                             <div className={"Community-PostCont"}>
                                 <h1 className={"Community-PostContent"}>{post.postCont}</h1>
