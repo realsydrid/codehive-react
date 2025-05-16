@@ -111,3 +111,14 @@
     border-radius: 0.2rem;
     color:black;
 }
+.Community-CloseBtn{
+    text-align:center;
+    background: rgba(255, 9, 0, 0.68);
+    width: 20%;
+    min-width: 8rem;
+    min-height:  2rem;
+    font-size: 1rem;
+    margin-top: 0.75rem;
+    border-radius: 0.2rem;
+    color:white;
+}

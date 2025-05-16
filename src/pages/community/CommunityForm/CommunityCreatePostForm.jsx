@@ -52,7 +52,7 @@ export default function CommunityCreatePostForm({category}){
                 title={modalTitle}
                 message={modalMessage}
                 onClose={() => setViewModal(false)} // 모달 닫기 핸들러도 필요하다면
-                footer={<button className={"Community-ConfirmBtn"} onClick={()=>{setViewModal(false)}}>닫기</button>}
+                footer={<button className={"Community-CloseBtn"} onClick={()=>{setViewModal(false)}}>닫기</button>}
             />
             <Form>
                 <Form.Group controlId="postCont" className={"CreatePostForm"}>

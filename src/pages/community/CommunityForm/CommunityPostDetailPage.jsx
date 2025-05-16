@@ -6,12 +6,13 @@ import ErrorMsg from "./ErrorMsg.jsx";
 import CommunityNavbar from "../CommunityComponents/CommunityNavbar.jsx";
 import CommunityCommentForm from "./CommunityCommentTextManagement.jsx";
 import "./CommunityPostList.css";
-import "../CommunityComponents/Component.css"
+import "../CommunityComponents/Community-Component.css"
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import CommentListForm from "./CommentListForm.jsx";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
 import {DeletePostBtn} from "../CommunityComponents/CommunityButtonComponent.jsx";
+import {CommunityModal} from "../CommunityComponents/CommunityModal.jsx";
 
 export default function CommunityPostDetailPage() {
     const {postNo} = useParams();
@@ -53,7 +54,8 @@ export default function CommunityPostDetailPage() {
                                         </div>
                                     </Link>
                                 </div>
-                                    <DeletePostBtn postNo={post.id} userNo={post.userNo} category={post.category}/>
+                                    <DeletePostBtn postNo={post.id} userNo={post.userNo}
+                                                   category={post.category}/>
                             </div>
                             <div className={"Community-PostCont"}>
                                 <h1 className={"Community-PostContent"}>{post.postCont}</h1>

@@ -5,8 +5,9 @@ import {useContext, useEffect, useMemo, useState} from "react";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {DeleteComment, GetComments} from "../CommunityUtil/CommunityCommentFetch.js";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
-import "../CommunityComponents/Component.css"
+import "../CommunityComponents/Community-Component.css"
 import CommentForm from "./CommunityCommentTextManagement.jsx";
+import {CommunityModal} from "../CommunityComponents/CommunityModal.jsx";
 
 export default function CommentListForm(props) {
     const [loginUser, ] = useContext(UseLoginUserContext);
@@ -23,18 +24,35 @@ export default function CommentListForm(props) {
         if(!loginUser){return null}
         setEditingComment(prev => prev === commentNo ? null : commentNo);
     };
-
+    const navigate=useNavigate();
     const [openReply, setOpenReply] = useState(null);
     const handleToggleReplies = (commentNo) => {
         setOpenReply(prev => prev === commentNo ? null : commentNo);
     };
-
+    const [viewModal,setViewModal]=useState(false)
+    const [modalMessage,setModalMessage]=useState("")
+    const [modalTitle,setModalTitle]=useState("게시글 작성 오류!")
+    const [deletePost,setDeletePost]=useState(false)
+    const [modalFooter,setModalFooter]=useState(
+        <button className={"Community-CloseBtn"} onClick={()=>{
+        setViewModal(false)
+    }}>닫기</button>)
     function DeleteCommentBtn({commentNo, postNo}) {
         const navigate = useNavigate();
 
         let DeletePostHandler = async () => {
             if (!loginUser) {
-                alert("적절한 권한이 없습니다. 로그인을 해주세요!");
+                setModalTitle("로그인 확인")
+                setModalMessage("로그인 유저인지 확인되지 않았습니다. \n 다시 로그인을 해주세요.")
+                setModalFooter( <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
+                    <button className={"Community-CloseBtn"} onClick={()=>{
+                        setViewModal(false)}}>닫기</button>
+                    <button className={"Community-ConfirmBtn"} onClick={()=> {
+                        setViewModal(false)
+                        navigate("/login")
+                    }}>로그인 하기</button>
+                </div>)
+                setViewModal(true)
                 return navigate("/login");
             }
             if (!confirm('정말 댓글을 삭제하시겠습니까?')) {
@@ -66,6 +84,15 @@ export default function CommentListForm(props) {
 
     return (
         <>
+            <CommunityModal
+            isOpen={viewModal}
+            title={modalTitle}
+            message={modalMessage}
+            onClose={() => {
+                setViewModal(false)
+            }} // 모달 닫기가 자동으로 되도록
+            footer={modalFooter}
+        />
             {commentDto && commentDto.map((c) => {
                 if (!c.parentNo) {
                     const isAuthor = loginUser?.id === c.userNo;
@@ -100,7 +127,13 @@ export default function CommentListForm(props) {
                                     postNo={c.postNo}
                                     commentNo={c.id}
                                     initialContent={c.commentCont}
-                                    onSuccess={() => setEditingComment(null)}
+                                    onSuccess={() => {
+                                        setModalTitle("게시글 수정 성공!")
+                                        setModalMessage("수정이 완료되었습니다!")
+                                        setViewModal(true)
+                                        setEditingComment(null)
+                                        setOpenReplyForm(null)
+                                    }}
                                     category={"Modify"}
                                 />
                             )}
@@ -132,7 +165,12 @@ export default function CommentListForm(props) {
                                 <CommentForm
                                     postNo={c.postNo}
                                     parentNo={c.id}
-                                    onSuccess={() => setOpenReplyForm(null)}
+                                    onSuccess={() => {
+                                        setModalTitle("댓글 작성 성공!")
+                                        setModalMessage("대댓글 작성이 완료되었습니다!")
+                                        setViewModal(true)
+                                        setOpenReplyForm(null)
+                                    }}
                                     category={"Child"}
                                 />
                             )}
@@ -165,8 +203,8 @@ export default function CommentListForm(props) {
                                                     )}
                                                 </div>
                                             </div>
-                                            <h3>{reply.commentCont}</h3>
-                                            <CommentLikeComponent comment={reply} postNo={reply.postNo}/>
+                                            <h3 style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>{reply.commentCont}
+                                                <CommentLikeComponent comment={reply} postNo={reply.postNo}/></h3>
                                         </div>
                                     );
                                 })}

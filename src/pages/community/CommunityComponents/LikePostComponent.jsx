@@ -2,21 +2,18 @@ import { Button } from "react-bootstrap";
 import {useGetPostLikeStatus, useTogglePostLike} from "../CommunityHook/togglePostLike.js";
 import {memo, useContext} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
-import {useQueryClient} from "@tanstack/react-query";
 import SmallLoading from "../CommunityForm/SmallLoading.jsx";
 
 export const PostLikeComponent=memo (function PostLikeComponent({ postNo, category }) {
     const [loginUser] = useContext(UseLoginUserContext);
     const { data, isFetching, isLoading } = useGetPostLikeStatus(postNo);
-    const togglePostLike = useTogglePostLike(postNo);
-    const queryClient=useQueryClient();
+    const { mutate } = useTogglePostLike(postNo);
     if (isLoading || isFetching || !data || typeof data.likeCount !== "number") {
         return <SmallLoading/>; //로딩창 호출
     }
     const currentUserLike = data.userLikeType;
     const handleClick = (type) => {
-        togglePostLike.mutate(type);
-        queryClient.invalidateQueries(["posts",category])
+        mutate( type );
     };
 
     return (

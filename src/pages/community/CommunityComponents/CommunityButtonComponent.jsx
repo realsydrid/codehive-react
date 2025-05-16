@@ -29,7 +29,6 @@ export function DeletePostBtn({userNo,postNo,category}) {
             <Button variant="danger" onClick={()=>DeletePostHandler({postNo:Number(postNo)})}>
                 삭제하기
             </Button>
-
             <Link to={`/community/posts/${postNo}/modify`}><Button variant="primary"
                                                                     type={"button"}>수정하기</Button></Link>
         </div>

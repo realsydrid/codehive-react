@@ -6,6 +6,7 @@ import InfinitePageNationData from "../CommunityHook/InfinitePageNationData.js";
 import {PostLikeComponent} from "../CommunityComponents/LikePostComponent.jsx";
 import {useContext, useEffect, useState} from "react";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
+import {useQueryClient} from "@tanstack/react-query";
 
 //InfiniteScroll 만을 썼다가 InfiniteQuery+InfiniteScroll 을 사용하니 중복도 피해지고
 // 캐싱된 좋아요 싫어요 데이터도 서버에서 불러옴과 동시에 Optimistic Update 구조도 불러와짐
@@ -18,12 +19,15 @@ export default function CommunityPostsPage({category}){
             isError,
             isLoading
         } = InfinitePageNationData(category);
-
+        const queryClient=useQueryClient();
         const posts = data?.pages.flatMap(page => page.content) ?? [];
-
+        const [postLoading,setPostLoading]=useState(false)
+        useEffect(()=>{
+            posts
+            setPostLoading(true)
+        },[postLoading])
         if (isError) return <div>오류가 발생했습니다.</div>;
         if (isLoading && posts.length === 0) return <Loading />;
-
         return (
             <InfiniteScroll
                 dataLength={posts.length}
@@ -32,12 +36,15 @@ export default function CommunityPostsPage({category}){
                 loader={isFetchingNextPage && <Loading/>}
                 className="Community-infiniteScrolls"
                 endMessage={
-                    <p style={{ textAlign: "center" }}>
+                    <p style={{ textAlign: "center" ,margin:"0.2rem 0.4rem 0"}}>
                         <b>더 이상 게시글이 없습니다.</b>
                     </p>
                 }
             >
-                {posts.map((post) => (
+                {posts.map((post) => {
+                    const postNo=post.id
+                    queryClient.getQueryData(["postLikeStatus", postNo])
+               return (
                     <div key={post.id}>
                         <div className={"Community-UserInfo"}>
                             <Link to={"/users/profile/" + post.userNo} className={"Community-PostLink"}>
@@ -66,7 +73,7 @@ export default function CommunityPostsPage({category}){
                             </div>
                         </div>
                     </div>
-                ))}
+                )})}
             </InfiniteScroll>
     )
 }

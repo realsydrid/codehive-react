@@ -1,12 +1,12 @@
 import {CreateComments, ModifyComment} from "../CommunityUtil/CommunityCommentFetch.js";
-import {useContext, useState} from "react";
-import {Link, redirect, useNavigate} from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
 import "./CommunityTextArea.css";
 import {UseLoginUserContext} from "../../../provider/LoginUserProvider.jsx";
-import CommunityTitle from "../CommunityComponents/CommunityTitle.jsx";
-import * as PropTypes from "prop-types";
+import "/src/pages/community/CommunityComponents/Community-Component.css"
 import {useQueryClient} from "@tanstack/react-query";
+import {CommunityModal} from "../CommunityComponents/CommunityModal.jsx";
 
 function CommunityEditTitle({category}) {
     const categoryMsg={
@@ -31,50 +31,73 @@ export default function CommentForm
     const [commentCont, setCommentCont] = useState(initialContent);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const [viewModal,setViewModal]=useState(false)
+    const [modalMessage,setModalMessage]=useState("")
+    const [modalTitle,setModalTitle]=useState("게시글 작성 상황")
+    const handleSubmit = async () => {
         if (!loginUser) {
-            if(confirm("로그인이 필요합니다! 로그인 하시겠습니까?")){
-                queryClient.invalidateQueries(["commentDto", postNo])
-                queryClient.invalidateQueries(["post", postNo])
-                return navigate("/login")
-            }
+            setModalTitle("로그인 유저 없음")
+            setModalMessage("로그인 하시겠습니까?")
+            setViewModal(true)
         }
         if (commentCont.trim() === "") {
-            e.preventDefault();
-            alert("내용을 입력해주세요!");
+            setModalMessage("작성한 내용이 없습니다! \n 작성하려면 내용을 입력해주세요!")
+            setViewModal(true)
         }
-        if (commentCont.trim() === initialContent) {
-            e.preventDefault();
-            alert("수정된 내용이 없습니다!");
+        if (commentCont === initialContent) {
+            setModalMessage("수정된 내용이 없습니다!\n다시 확인해주세요!")
+            setViewModal(true)
         }
         setIsSubmitting(true);
         try {
             if (commentNo) {
                 // 댓글 번호가 있다면 수정.
                 await ModifyComment({commentNo,commentCont});
-                queryClient.invalidateQueries(["commentDto", postNo])
-                queryClient.invalidateQueries(["post", postNo])
-                alert("댓글이 수정되었습니다.");
             } else {
                 // 댓글 번호가 없을시 게시글 작성, parentNo는 nullable 이므로 null 이면 댓글, not null 이면 대댓글
                 setCommentCont("");
+                if(parentNo===null){
                 await CreateComments(postNo, commentCont, parentNo);
-                queryClient.invalidateQueries(["commentDto", postNo])
-                queryClient.invalidateQueries(["post", postNo])
-                alert("댓글이 등록되었습니다.");
+                setModalMessage("댓글이 등록되었습니다!")
+                setViewModal(true)}
+                else await CreateComments(postNo, commentCont, parentNo);
             }
         } catch (error) {
-            console.error("댓글 처리 실패:", error);
-            alert("오류가 발생했습니다.");
+            error.message
+            setViewModal(true)
         } finally {
             queryClient.invalidateQueries(["post", postNo])
             queryClient.invalidateQueries(["commentDto", postNo])
             setIsSubmitting(false);
+            navigate(`/community/posts/${postNo}`)
         }
     };
+    useEffect(() => {
+    }, [modalMessage, modalTitle, viewModal]);
   if(loginUser!==null)  return (
-        <Form onSubmit={handleSubmit}>
+      <div>
+          <CommunityModal
+              isOpen={viewModal}
+              title={modalTitle}
+              message={modalMessage}
+              onClose={() => {
+                  setViewModal(false)
+              }} // 모달 닫기가 자동으로 되도록
+              footer={
+              loginUser ?  <button className={"Community-CloseBtn"} onClick={()=>{
+                      setViewModal(false)
+              }}>닫기</button>
+                  :
+                  <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
+                      <button className={"Community-CloseBtn"} onClick={()=>{
+                          setViewModal(false)}}>닫기</button>
+                      <button className={"Community-ConfirmBtn"} onClick={()=> {
+                          navigate("/login")
+                      }}>로그인 하기</button>
+                  </div>
+              }
+          />
+        <Form>
             <Form.Group controlId="commentCont">
                 <Form.Label column={"lg"} style={{textAlign:"center",alignItems:"center"}}><CommunityEditTitle category={category}/></Form.Label>
                 <Form.Control
@@ -88,11 +111,12 @@ export default function CommentForm
             </Form.Group>
 
             <div className="d-flex justify-content-end mt-2">
-                <Button variant="primary" type="submit" disabled={isSubmitting}>
+                <Button variant="primary" type="submit" disabled={isSubmitting} onClick={handleSubmit}>
                     {isSubmitting ? "작성 중..." : "작성하기"}
                 </Button>
             </div>
         </Form>
+      </div>
     );
   if(loginUser==null)
       return (
